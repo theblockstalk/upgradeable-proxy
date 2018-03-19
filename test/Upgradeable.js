@@ -8,7 +8,9 @@
 //
 // const Registry = artifacts.require('Registry')
 const Proxy = artifacts.require('Proxy')
+const UintSimple_Interface = artifacts.require('UintSimple_Interface')
 const UintSimple_V1 = artifacts.require('UintSimple_V1')
+const UintSimple_V2 = artifacts.require('UintSimple_V2')
 
 contract('Upgradeable', function ([sender, receiver]) {
 
@@ -19,13 +21,21 @@ contract('Upgradeable', function ([sender, receiver]) {
   //     registry
   let proxy,
       uintSimple_V1,
-      uintSimple_V2;
+      uintSimple_V2,
+      uintSimple_V1byProxy,
+      uintSimple_V2byProxy;
 
   beforeEach(async function() {
       uintSimple_V1 = await UintSimple_V1.new();
       console.log('uintSimple_V1: ', uintSimple_V1.address);
+      uintSimple_V2 = await UintSimple_V2.new();
+      console.log('uintSimple_V2: ', uintSimple_V2.address);
       proxy = await Proxy.new(uintSimple_V1.address);
       console.log('proxy: ', proxy.address);
+      uintSimple_V1byProxy = UintSimple_V1.at(proxy.address);
+      uintSimple_V2byProxy = UintSimple_V2.at(proxy.address);
+
+
     // impl_v1_init = await TokenV1_Init.new()
     // impl_v1_balance = await TokenV1_Balance.new()
     // impl_v1_transfer = await TokenV1_Transfer.new()
@@ -39,7 +49,28 @@ contract('Upgradeable', function ([sender, receiver]) {
     // await registry.addImplementationFromName("1", "mint(address,uint256)", impl_v1_mint.address)
   })
 
+  it('should be able to use UintSimple_V1 like any contract', async function() {
+      const inputValue = 10;
+      await uintSimple_V1.setValue(inputValue)
+      let bigNumValue = await uintSimple_V1.getValue.call()
+      let value = bigNumValue.toNumber();
+      assert.equal(inputValue, value, "The two values should be the same")
+  })
+
+  it('should be able to use UintSimple_V2 like any contract', async function() {
+      const inputValue = 10;
+      await uintSimple_V2.setValue(inputValue)
+      let bigNumValue = await uintSimple_V2.getValue.call()
+      let value = bigNumValue.toNumber();
+      assert.equal(inputValue*2, value, "The value in the contract should be twice the input value")
+  })
+
   it('should delegate call to implementation', async function () {
+      const inputValue = 10;
+      await uintSimple_V1byProxy.setValue(inputValue)
+      let bigNumValue = await uintSimple_V1byProxy.getValue.call()
+      let value = bigNumValue.toNumber();
+      assert.equal(inputValue, value, "The two values should be the same")
     // const {logs} = await registry.create("1")
     // const {proxy} = logs.find(l => l.event === 'Created').args
     // const token = TokenV1_Interface.at(proxy)
