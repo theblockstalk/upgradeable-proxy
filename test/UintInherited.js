@@ -6,14 +6,14 @@ contract('UintInherited', function (accounts) {
 
     let proxy,
     uintInheritedV1,
-    uintSimpleOneContractV2,
+    uintInheritedV2,
     uintInheritedV1byProxy;
 
     const inputValue = 10;
 
     beforeEach(async function() {
         uintInheritedV1 = await UintInheritedV1.new();
-        uintSimpleOneContractV2 = await UintInheritedV2.new();
+        uintInheritedV2 = await UintInheritedV2.new();
         proxy = await Proxy.new(uintInheritedV1.address);
         uintInheritedV1byProxy = UintInheritedV1.at(proxy.address);
     })
@@ -24,7 +24,11 @@ contract('UintInherited', function (accounts) {
         let value = bigNumValue.toNumber();
         assert.equal(inputValue, value, "The two values should be the same")
 
-        await uintInheritedV1byProxy.upgradeTo(uintSimpleOneContractV2.address)
+        await uintInheritedV1byProxy.upgradeTo(uintInheritedV2.address)
+        bigNumValue = await uintInheritedV1byProxy.getValue.call()
+        value = bigNumValue.toNumber();
+        assert.equal(inputValue, value, "The two values should be the same")
+
         await uintInheritedV1byProxy.setValue(inputValue);
         bigNumValue = await uintInheritedV1byProxy.getValue.call()
         value = bigNumValue.toNumber();
@@ -32,16 +36,11 @@ contract('UintInherited', function (accounts) {
     })
 
     it('should emit EventUpgrade on upgrade', async function () {
-        await uintInheritedV1byProxy.setValue(inputValue)
-        let bigNumValue = await uintInheritedV1byProxy.getValue.call()
-        let value = bigNumValue.toNumber();
-        assert.equal(inputValue, value, "The two values should be the same")
-
-        let tx = await uintInheritedV1byProxy.upgradeTo(uintSimpleOneContractV2.address)
+        let tx = await uintInheritedV1byProxy.upgradeTo(uintInheritedV2.address)
         let upgradeLog = tx.logs[0]
         assert.equal(upgradeLog.event, "EventUpgrade", "First log should be EventUpgrade")
         assert.equal(upgradeLog.args.oldTarget, uintInheritedV1.address, "The old target should be the deployed UintInheritedV1 address")
-        assert.equal(upgradeLog.args.newTarget, uintSimpleOneContractV2.address, "The new target should be the deployed UintInheritedV2 address")
+        assert.equal(upgradeLog.args.newTarget, uintInheritedV2.address, "The new target should be the deployed UintInheritedV2 address")
         assert.equal(upgradeLog.args.admin, accounts[0], "The upgrade should be done by account[0]")
     })
 
@@ -52,8 +51,8 @@ contract('UintInherited', function (accounts) {
         tx = await uintInheritedV1byProxy.setValue(inputValue)
         gasCosts[1] = tx.receipt.gasUsed
 
-        await uintInheritedV1byProxy.upgradeTo(uintSimpleOneContractV2.address)
-        tx = await uintSimpleOneContractV2.setValue(inputValue)
+        await uintInheritedV1byProxy.upgradeTo(uintInheritedV2.address)
+        tx = await uintInheritedV2.setValue(inputValue)
         gasCosts[2] = tx.receipt.gasUsed
         tx = await uintInheritedV1byProxy.setValue(inputValue)
         gasCosts[3] = tx.receipt.gasUsed

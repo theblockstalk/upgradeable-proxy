@@ -46,6 +46,10 @@ contract('UintSimpleModular', function (accounts) {
         assert.equal(inputValue, value, "The two values should be the same")
 
         await uintSimpleModular_byProxy.upgradeTo(uintSimpleModularV2.address)
+        bigNumValue = await uintSimpleModular_byProxy.getValue.call()
+        value = bigNumValue.toNumber();
+        assert.equal(inputValue, value, "The two values should be the same")
+
         await uintSimpleModular_byProxy.setValue(inputValue);
         bigNumValue = await uintSimpleModular_byProxy.getValue.call()
         value = bigNumValue.toNumber();
@@ -53,11 +57,6 @@ contract('UintSimpleModular', function (accounts) {
     })
 
     it('should emit EventUpgrade on upgrade', async function () {
-        await uintSimpleModular_byProxy.setValue(inputValue)
-        let bigNumValue = await uintSimpleModular_byProxy.getValue.call()
-        let value = bigNumValue.toNumber();
-        assert.equal(inputValue, value, "The two values should be the same")
-
         let tx = await uintSimpleModular_byProxy.upgradeTo(uintSimpleModularV2.address)
         let upgradeLog = tx.logs[0]
         assert.equal(upgradeLog.event, "EventUpgrade", "First log should be EventUpgrade")
