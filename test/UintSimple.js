@@ -2,7 +2,7 @@ const Proxy = artifacts.require('Proxy')
 const UintSimpleV1_Logic = artifacts.require('UintSimpleV1_Logic')
 const UintSimpleV2_Logic = artifacts.require('UintSimpleV2_Logic')
 
-contract('Upgradeable', function (accounts) {
+contract('UintSimple', function (accounts) {
 
     let proxy,
     uintSimpleV1,
@@ -79,10 +79,10 @@ contract('Upgradeable', function (accounts) {
         tx = await uintSimple_byProxy.setValue(inputValue)
         gasCosts[3] = tx.receipt.gasUsed
 
-        console.log('the cost of calling UintSimpleV1_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[1]/gasCosts[0] - 1),
-            '% or ', gasCosts[1] - gasCosts[0], ' gas')
-        console.log('the cost of calling UintSimpleV2_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[3]/gasCosts[2] - 1),
-            '% or ', gasCosts[3] - gasCosts[2], ' gas')
+        console.log('the gas cost of calling UintSimpleV1_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[1]/gasCosts[0] - 1),
+            '% when made upgradeable, or ', gasCosts[1] - gasCosts[0], ' gas')
+        console.log('the gas cost of calling UintSimpleV2_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[3]/gasCosts[2] - 1),
+            '% when made upgradeable, or ', gasCosts[3] - gasCosts[2], ' gas')
     })
 
 })
