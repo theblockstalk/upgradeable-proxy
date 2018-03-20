@@ -1,8 +1,10 @@
 pragma solidity ^0.4.18;
 
-contract Upgradeable {
+import './Proxied.sol';
 
-  function upgradeTo(address _target) pure private {
+contract Upgradeable is Proxied {
+
+  function upgradeTo(address _target) public {
     assert(false);
   }
 }
