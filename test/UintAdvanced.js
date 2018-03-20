@@ -13,6 +13,7 @@ contract('UintAdvanced', function (accounts) {
     uintAdvancedV2c_NewEvent,
     uintAdvancedV1byProxy,
     uintAdvancedV2a_NewFunctionbyProxy,
+    uintAdvancedV2b_NewStoragebyProxy,
     uintAdvancedV2c_NewEventbyProxy;
 
     const inputValue = 10, inputValue2 = 22, inputValue3 = 33;
@@ -25,6 +26,7 @@ contract('UintAdvanced', function (accounts) {
         proxy = await Proxy.new(uintAdvancedV1.address);
         uintAdvancedV1byProxy = UintAdvancedV1.at(proxy.address);
         uintAdvancedV2a_NewFunctionbyProxy = UintAdvancedV2a_NewFunction.at(proxy.address);
+        uintAdvancedV2b_NewStoragebyProxy = UintAdvancedV2b_NewStorage.at(proxy.address);
         uintAdvancedV2c_NewEventbyProxy = UintAdvancedV2c_NewEvent.at(proxy.address);
     })
 
