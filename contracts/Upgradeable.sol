@@ -4,7 +4,7 @@ import './Proxied.sol';
 
 contract Upgradeable is Proxied {
 
-  function upgradeTo(address _target) public {
+  function upgradeTo(address) public {
     assert(false);
   }
 }

@@ -1,42 +1,24 @@
-// const TokenV1_Init = artifacts.require('TokenV1_Init')
-// const TokenV1_Balance = artifacts.require('TokenV1_Balance')
-// const TokenV1_Transfer= artifacts.require('TokenV1_Transfer')
-// const TokenV1_Mint = artifacts.require('TokenV1_Mint')
-// const TokenV1_Interface = artifacts.require('TokenV1_Interface')
-//
-// const TokenV1_1_Mint = artifacts.require('TokenV1_1_Mint')
-//
-// const Registry = artifacts.require('Registry')
 const Proxy = artifacts.require('Proxy')
-const UintSimpleV1_Interface = artifacts.require('UintSimpleV1_Interface')
 const UintSimpleV1_Logic = artifacts.require('UintSimpleV1_Logic')
 const UintSimpleV2_Logic = artifacts.require('UintSimpleV2_Logic')
 
-contract('Upgradeable', function ([sender, receiver]) {
+contract('Upgradeable', function (accounts) {
 
-    // let impl_v1_init,
-    //     impl_v1_balance,
-    //     impl_v1_transfer,
-    //     impl_v1_mint,
-    //     registry
     let proxy,
     uintSimpleV1,
     uintSimpleV2,
-    UintSimpleV1_InterfacebyProxy,
-    uintSimpleV1byProxy,
-    uintSimpleV2byProxy;
+    UintSimpleV1byProxy;
+
+    const inputValue = 10;
 
     beforeEach(async function() {
         uintSimpleV1 = await UintSimpleV1_Logic.new();
         uintSimpleV2 = await UintSimpleV2_Logic.new();
         proxy = await Proxy.new(uintSimpleV1.address);
-        uintSimpleV1_InterfacebyProxy = UintSimpleV1_Interface.at(proxy.address);
-        uintSimpleV1byProxy = UintSimpleV1_Logic.at(proxy.address);
-        uintSimpleV2byProxy = UintSimpleV2_Logic.at(proxy.address);
+        uintSimple_byProxy = UintSimpleV1_Logic.at(proxy.address);
     })
 
     it('should be able to use UintSimple_V1 like any contract', async function() {
-        const inputValue = 10;
         await uintSimpleV1.setValue(inputValue)
         let bigNumValue = await uintSimpleV1.getValue.call()
         let value = bigNumValue.toNumber();
@@ -44,7 +26,6 @@ contract('Upgradeable', function ([sender, receiver]) {
     })
 
     it('should be able to use UintSimple_V2 like any contract', async function() {
-        const inputValue = 10;
         await uintSimpleV2.setValue(inputValue)
         let bigNumValue = await uintSimpleV2.getValue.call()
         let value = bigNumValue.toNumber();
@@ -52,53 +33,56 @@ contract('Upgradeable', function ([sender, receiver]) {
     })
 
     it('should delegate call to implementation', async function () {
-        const inputValue = 10;
-        await uintSimpleV1_InterfacebyProxy.setValue(inputValue)
-        let bigNumValue = await uintSimpleV1_InterfacebyProxy.getValue.call()
+        await uintSimple_byProxy.setValue(inputValue)
+        let bigNumValue = await uintSimple_byProxy.getValue.call()
         let value = bigNumValue.toNumber();
         assert.equal(inputValue, value, "The two values should be the same")
     })
 
-    it('should upgrade the contract UintSimple', async function () {
-        const inputValue = 10;
-        await uintSimpleV1_InterfacebyProxy.setValue(inputValue)
-        let bigNumValue = await uintSimpleV1_InterfacebyProxy.getValue.call()
+    it('should upgrade the contract UintSimple to version 2 with different logic', async function () {
+        await uintSimple_byProxy.setValue(inputValue)
+        let bigNumValue = await uintSimple_byProxy.getValue.call()
         let value = bigNumValue.toNumber();
         assert.equal(inputValue, value, "The two values should be the same")
 
-        await proxy.upgradeTo(uintSimpleV2.address)
-        await uintSimpleV1_InterfacebyProxy.setValue(inputValue);
-        bigNumValue = await uintSimpleV1_InterfacebyProxy.getValue.call()
+        await uintSimple_byProxy.upgradeTo(uintSimpleV2.address)
+        await uintSimple_byProxy.setValue(inputValue);
+        bigNumValue = await uintSimple_byProxy.getValue.call()
         value = bigNumValue.toNumber();
         assert.equal(inputValue*2, value, "The value in the contract should be twice the input value")
     })
 
-    it('should upgrade the contract UintSimple using the UintSimpleV1_Logic interface', async function () {
-        const inputValue = 10;
-        await uintSimpleV1byProxy.setValue(inputValue)
-        let bigNumValue = await uintSimpleV1byProxy.getValue.call()
+    it('should emit EventUpgrade on upgrade', async function () {
+        await uintSimple_byProxy.setValue(inputValue)
+        let bigNumValue = await uintSimple_byProxy.getValue.call()
         let value = bigNumValue.toNumber();
         assert.equal(inputValue, value, "The two values should be the same")
 
-        await proxy.upgradeTo(uintSimpleV2.address)
-        await uintSimpleV1byProxy.setValue(inputValue);
-        bigNumValue = await uintSimpleV1byProxy.getValue.call()
-        value = bigNumValue.toNumber();
-        assert.equal(inputValue*2, value, "The value in the contract should be twice the input value")
+        let tx = await uintSimple_byProxy.upgradeTo(uintSimpleV2.address)
+        let upgradeLog = tx.logs[0]
+        assert.equal(upgradeLog.event, "EventUpgrade", "First log should be EventUpgrade")
+        assert.equal(upgradeLog.args.oldTarget, uintSimpleV1.address, "The old target should be the deployed UintSimpleV1_Logic address")
+        assert.equal(upgradeLog.args.newTarget, uintSimpleV2.address, "The new target should be the deployed UintSimpleV2_Logic address")
+        assert.equal(upgradeLog.args.admin, accounts[0], "The upgrade should be done by account[0]")
     })
 
-    it('should upgrade the contract UintSimple using the UintSimpleV2_Logic interface', async function () {
-        const inputValue = 10;
-        await uintSimpleV2byProxy.setValue(inputValue)
-        let bigNumValue = await uintSimpleV2byProxy.getValue.call()
-        let value = bigNumValue.toNumber();
-        assert.equal(inputValue, value, "The two values should be the same")
+    it('should determine the differece in gas cost for regular vs. upgradeable contract call', async function () {
+        let gasCosts = []
+        let tx = await uintSimpleV1.setValue(inputValue)
+        gasCosts[0] = tx.receipt.gasUsed
+        tx = await uintSimple_byProxy.setValue(inputValue)
+        gasCosts[1] = tx.receipt.gasUsed
 
-        await proxy.upgradeTo(uintSimpleV2.address)
-        await uintSimpleV2byProxy.setValue(inputValue);
-        bigNumValue = await uintSimpleV2byProxy.getValue.call()
-        value = bigNumValue.toNumber();
-        assert.equal(inputValue*2, value, "The value in the contract should be twice the input value")
+        await uintSimple_byProxy.upgradeTo(uintSimpleV2.address)
+        tx = await uintSimpleV2.setValue(inputValue)
+        gasCosts[2] = tx.receipt.gasUsed
+        tx = await uintSimple_byProxy.setValue(inputValue)
+        gasCosts[3] = tx.receipt.gasUsed
+
+        console.log('the cost of calling UintSimpleV1_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[1]/gasCosts[0] - 1),
+            '% or ', gasCosts[1] - gasCosts[0], ' gas')
+        console.log('the cost of calling UintSimpleV2_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[3]/gasCosts[2] - 1),
+            '% or ', gasCosts[3] - gasCosts[2], ' gas')
     })
 
 })
