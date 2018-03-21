@@ -50,15 +50,17 @@ See tests for contracts _UintInherited_
 
 #### 3.3.1 You can
 
+You can do the following changes on an upgraded contract and it will behave as if you have replaced the contract and kept the state.
+
 1. Change function logic of pre-existing functions so long as the signature does not change.
    - See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
 2. Add new functions to the upgraded contract.
    - See contract _UintAdvancedV2a_NewFunction_
    - **Note:** the new function can be added in out of order. See contract _UintAdvancedV2i_NewFunction_
-   - **Note:** applications or other smart contracts will need to know about the upgrade to be able to call the new function.
+   - **Note:** applications or other smart contracts will need to know about the upgrade to be able to call the new function with the new ABI.
 3. Add new events to the upgraded contract.
    - See contract _UintAdvancedV2c_NewEvent_
-   - **Note:** applications or other smart contracts will need to know about the upgrade to be able to watch for the new event.
+   - **Note:** applications or other smart contracts will need to know about the upgrade to be able to watch for the new event with the new ABI.
 4. Change the order of transactions in a function.
    - See contract _UintAdvancedV2d_ReverseFunctionOrder_
 5. Change visibility for upgraded functions.
@@ -71,17 +73,21 @@ See tests for contracts _UintInherited_
 
 #### 3.3.2 You can't
 
+You cannot do the following changes on an upgraded contract and expect that it will behave like an updated contract with the same state.
+
 1. Add in new storage variables to the upgraded smart contrat and use it in functions.
    - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_ and _UintAdvancedV2f_NewStorage_.
    - You can add add new storage variables, however, these new variables cannot be used in an of the upgraded functions.
+2. Change the order of state variables in the upgraded smart contracts
+   - See contract _DoubleUintV2_
 
 If you find a way to do any of the above, please send [me](https://twitter.com/theblockstalk) or the team at [Indorse](https://twitter.com/joinindorse) a message, or submit an issue or PR to this repo.
 
-#### Still to research
+#### 3.3.3 Still to research
 
 TODO
 * TODO: Change access modifier pure to view.
 * Change return type
-* Change the order of variables (need two variables)
+* remove events
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded
