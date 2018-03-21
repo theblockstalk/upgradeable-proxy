@@ -52,8 +52,7 @@ See tests for contracts _UintInherited_
 
 * Change function logic of pre-existing functions so long as the signature does not change. See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
 * Add new functions to the upgraded contract. See contract _UintAdvancedV2a_NewFunction_
-
-⋅⋅⋅**Note:** the new function can be added in out of order. See contract _UintAdvancedV2i_NewFunction_
+**Note:** the new function can be added in out of order. See contract _UintAdvancedV2i_NewFunction_
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to call the new function.
 * Add new events to the upgraded contract. See contract _UintAdvancedV2c_NewEvent_
 
@@ -61,7 +60,7 @@ See tests for contracts _UintInherited_
 * Change the order of transactions in a function. See contract _UintAdvancedV2d_ReverseFunctionOrder_
 * Change visibility for upgraded functions.
 
-⋅⋅⋅**Note:** Only the following changes were tested
+**Note:** Only the following changes were tested
 ⋅⋅⋅ public --> external. Functions were still callable externally. See contract _UintAdvancedV2j_ChangeVisibility_
 ⋅⋅⋅ public --> internal. Function calls could no longer be made. see contract _UintAdvancedV2k_ChangeVisibility_
 ⋅⋅⋅TODO: test this more
