@@ -158,3 +158,15 @@ contract UintAdvancedV2k_ChangeVisibility is Upgradeable {
         value = _value;
     }
 }
+
+contract UintAdvancedV2i_ChangeKeyword is Upgradeable {
+    uint value;
+
+    function getValue() pure public returns (uint) {
+        return 666;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}

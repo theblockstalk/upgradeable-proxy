@@ -62,6 +62,7 @@ See tests for UintInherited.sol
 ⋅⋅⋅ public --> external. Functions were still callable externally. See contract UintAdvancedV2j_ChangeVisibility
 ⋅⋅⋅ public --> internal. Function calls could no longer be made. see contract UintAdvancedV2k_ChangeVisibility
 ⋅⋅⋅TODO: test this more
+* Change access modifier view to pure. See contract UintAdvancedV2i_ChangeKeyword
 
 #### 3.3.2 You can't
 
@@ -72,7 +73,8 @@ So far as I can tell, you cannot do the following. If you know how to do this pl
 #### Still to research
 
 TODO
-* Change keywords on functios (pure/view)
+* TODO: Change access modifier view to pure. See contract UintAdvancedV2i_ChangeKeyword
+* Change return type
 * Change the order of variables (need two variables)
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded

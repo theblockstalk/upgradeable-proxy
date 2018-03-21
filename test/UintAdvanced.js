@@ -11,6 +11,7 @@ const UintAdvancedV2h_OverrideFunctionSetter = artifacts.require('UintAdvancedV2
 const UintAdvancedV2i_NewFunction = artifacts.require('UintAdvancedV2i_NewFunction')
 const UintAdvancedV2j_ChangeVisibility = artifacts.require('UintAdvancedV2j_ChangeVisibility')
 const UintAdvancedV2k_ChangeVisibility = artifacts.require('UintAdvancedV2k_ChangeVisibility')
+const UintAdvancedV2i_ChangeKeyword = artifacts.require('UintAdvancedV2i_ChangeKeyword')
 
 const INDENT = '        ';
 
@@ -28,7 +29,8 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2h_OverrideFunctionSetter,
         uintAdvancedV2i_NewFunction,
         uintAdvancedV2j_ChangeVisibility,
-        uintAdvancedV2k_ChangeVisibility;
+        uintAdvancedV2k_ChangeVisibility,
+        uintAdvancedV2i_ChangeKeyword;
 
     let uintAdvancedV1byProxy,
         uintAdvancedV2a_NewFunctionbyProxy,
@@ -50,6 +52,7 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2i_NewFunction = await UintAdvancedV2i_NewFunction.new();
         uintAdvancedV2j_ChangeVisibility = await UintAdvancedV2j_ChangeVisibility.new();
         uintAdvancedV2k_ChangeVisibility = await UintAdvancedV2k_ChangeVisibility.new();
+        uintAdvancedV2i_ChangeKeyword = await UintAdvancedV2i_ChangeKeyword.new();
 
         proxy = await Proxy.new(uintAdvancedV1.address);
 
@@ -221,16 +224,22 @@ contract('UintAdvanced', function (accounts) {
                 assert.equal(error.message, "VM Exception while processing transaction: revert", "setValue() was able to execute")
             }
 
-            // let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             try {
                 await uintAdvancedV1byProxy.getValue.call()
                 throw new Error("This error should not happen")
             } catch (error) {
                 assert.equal(error.message, "VM Exception while processing transaction: revert", "getValue() was able to be called")
             }
+        })
 
-            // let value = bigNumValue.toNumber();
-            // assert.equal(inputValue2, value, "The values should be equal to inputValue+2")
+        it('should upgrade the contract UintAdvanced to version 2i with a function keyword view changed to pure', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2i_ChangeKeyword.address)
+            
+            let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            let value = bigNumValue.toNumber();
+            assert.equal(666, value, "The values should be equal to 666")
         })
     })
 })
