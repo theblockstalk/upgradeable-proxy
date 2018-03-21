@@ -9,6 +9,8 @@ const UintAdvancedV2f_NewStorage = artifacts.require('UintAdvancedV2f_NewStorage
 const UintAdvancedV2g_OverrideFunctionGetter = artifacts.require('UintAdvancedV2g_OverrideFunctionGetter')
 const UintAdvancedV2h_OverrideFunctionSetter = artifacts.require('UintAdvancedV2h_OverrideFunctionSetter')
 const UintAdvancedV2i_NewFunction = artifacts.require('UintAdvancedV2i_NewFunction')
+const UintAdvancedV2j_ChangeVisibility = artifacts.require('UintAdvancedV2j_ChangeVisibility')
+const UintAdvancedV2k_ChangeVisibility = artifacts.require('UintAdvancedV2k_ChangeVisibility')
 
 const INDENT = '        ';
 
@@ -24,7 +26,9 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2f_NewStorage,
         uintAdvancedV2g_OverrideFunctionGetter,
         uintAdvancedV2h_OverrideFunctionSetter,
-        uintAdvancedV2i_NewFunction;
+        uintAdvancedV2i_NewFunction,
+        uintAdvancedV2j_ChangeVisibility,
+        uintAdvancedV2k_ChangeVisibility;
 
     let uintAdvancedV1byProxy,
         uintAdvancedV2a_NewFunctionbyProxy,
@@ -44,6 +48,8 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2g_OverrideFunctionGetter = await UintAdvancedV2g_OverrideFunctionGetter.new();
         uintAdvancedV2h_OverrideFunctionSetter = await UintAdvancedV2h_OverrideFunctionSetter.new();
         uintAdvancedV2i_NewFunction = await UintAdvancedV2i_NewFunction.new();
+        uintAdvancedV2j_ChangeVisibility = await UintAdvancedV2j_ChangeVisibility.new();
+        uintAdvancedV2k_ChangeVisibility = await UintAdvancedV2k_ChangeVisibility.new();
 
         proxy = await Proxy.new(uintAdvancedV1.address);
 
@@ -170,7 +176,6 @@ contract('UintAdvanced', function (accounts) {
 
     describe('test overwride the contract functions with new logic', () => {
         it('should upgrade the contract UintAdvanced to version 2g with a function call logic updated', async function () {
-            // console.log(INDENT, 'Note that smart contract upgrade 2g fails!!!')
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2g_OverrideFunctionGetter.address)
@@ -181,7 +186,6 @@ contract('UintAdvanced', function (accounts) {
         })
 
         it('should upgrade the contract UintAdvanced to version 2h with a function tx logic updated', async function () {
-            // console.log(INDENT, 'Note that smart contract upgrade 2g fails!!!')
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2h_OverrideFunctionSetter.address)
@@ -192,10 +196,41 @@ contract('UintAdvanced', function (accounts) {
             let value = bigNumValue.toNumber();
             assert.equal(inputValue+2, value, "The values should be equal to inputValue+2")
         })
+
+        it('should upgrade the contract UintAdvanced to version 2j with a public function visibility changed to external', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2j_ChangeVisibility.address)
+
+            await uintAdvancedV1byProxy.setValue(inputValue2)
+
+            let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            let value = bigNumValue.toNumber();
+            assert.equal(inputValue2, value, "The values should be equal to inputValue+2")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2k with a public function visibility changed to internal', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2k_ChangeVisibility.address)
+
+            try {
+                await uintAdvancedV1byProxy.setValue(inputValue2)
+                throw new Error("This error should not happen")
+            } catch (error) {
+                assert.equal(error.message, "VM Exception while processing transaction: revert", "setValue() was able to execute")
+            }
+
+            // let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            try {
+                await uintAdvancedV1byProxy.getValue.call()
+                throw new Error("This error should not happen")
+            } catch (error) {
+                assert.equal(error.message, "VM Exception while processing transaction: revert", "getValue() was able to be called")
+            }
+
+            // let value = bigNumValue.toNumber();
+            // assert.equal(inputValue2, value, "The values should be equal to inputValue+2")
+        })
     })
-
-
-
-
-
 })

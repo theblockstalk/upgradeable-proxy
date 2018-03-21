@@ -107,7 +107,6 @@ contract UintAdvancedV2g_OverrideFunctionGetter is Upgradeable {
     }
 }
 
-
 contract UintAdvancedV2h_OverrideFunctionSetter is Upgradeable {
     uint value;
 
@@ -130,8 +129,32 @@ contract UintAdvancedV2i_NewFunction is Upgradeable {
     function setDoubleValue(uint _value) public {
         value = 2*_value;
     }
-    
+
     function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+contract UintAdvancedV2j_ChangeVisibility is Upgradeable {
+    uint value;
+
+    function getValue() view external returns (uint) {
+        return value;
+    }
+
+    function setValue(uint _value) external {
+        value = _value;
+    }
+}
+
+contract UintAdvancedV2k_ChangeVisibility is Upgradeable {
+    uint value;
+
+    function getValue() view internal returns (uint) {
+        return value;
+    }
+
+    function setValue(uint _value) internal {
         value = _value;
     }
 }

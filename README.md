@@ -57,6 +57,11 @@ See tests for UintInherited.sol
 * Add new events to the upgraded contract. See contract UintAdvancedV2c_NewEvent
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to watch for the new event.
 * Change the order of transactions in a function. See contract UintAdvancedV2d_ReverseFunctionOrder
+* Change visibility for upgraded functions.
+⋅⋅⋅**Note:** Only the following changes were tested
+⋅⋅⋅ public --> external. Functions were still callable externally. See contract UintAdvancedV2j_ChangeVisibility
+⋅⋅⋅ public --> internal. Function calls could no longer be made. see contract UintAdvancedV2k_ChangeVisibility
+⋅⋅⋅TODO: test this more
 
 #### 3.3.2 You can't
 
@@ -67,8 +72,6 @@ So far as I can tell, you cannot do the following. If you know how to do this pl
 #### Still to research
 
 TODO
-* test that new function can be added in different order (put in first)
-* Change the visibility of functions (external/public/internal/private)
 * Change keywords on functios (pure/view)
 * Change the order of variables (need two variables)
 * Test upgradeability of data structures: strings, mappings, structs, arrays
