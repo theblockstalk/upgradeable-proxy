@@ -50,10 +50,14 @@ contract UintAdvancedV2d_ReverseFunctionOrder is UintAdvancedV1 {
 
 }
 
-contract UintAdvancedV2e_NewStorageGetter is UintAdvancedV1 {
+contract UintAdvancedV2e_NewStorage is UintAdvancedV1 {
     uint value2 = 100;
 
     function getValue() view public returns (uint) {
         return value + value2;
     }
+}
+
+contract UintAdvancedV2f_NewStorage is UintAdvancedV1 {
+    uint value2 = 100;
 }

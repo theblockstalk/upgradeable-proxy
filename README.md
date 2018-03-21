@@ -55,17 +55,17 @@ See tests for UintInherited.sol
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to call the new function.
 * Add new events to the upgraded contract. See UintAdvancedV2c_NewEvent.
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to watch for the new event.
+* Change the order of transactions in a function. See UintAdvancedV2d_ReverseFunctionOrder.sol
 
 #### You can't
 
 So far as I can tell, you cannot do the following. If you know how to do this please send [me](https://twitter.com/theblockstalk) or the team at [Indorse](https://twitter.com/joinindorse) a message, or submit an issue or PR to this repo.
 
-* Add in new storage variables to the upgraded smart contrat. See UintAdvancedV2b_NewStorage.sol
+* Add in new storage variables to the upgraded smart contrat and use it in functions. See UintAdvancedV2b_NewStorage.sol, UintAdvancedV2e_NewStorage.sol and  UintAdvancedV2f_NewStorage.sol. You can add add new storage variables, however, these new variables cannot be used in an of the upgraded functions.
 
 #### Still to research
 
 TODO
-* Change the order of functions
 * Overide two functions
 * Add overwridden functions with different argument
 * Change the visibility of functions (external/public/internal/private)
