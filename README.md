@@ -52,12 +52,15 @@ See tests for contracts _UintInherited_
 
 * Change function logic of pre-existing functions so long as the signature does not change. See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
 * Add new functions to the upgraded contract. See contract _UintAdvancedV2a_NewFunction_
+
 ⋅⋅⋅**Note:** the new function can be added in out of order. See contract _UintAdvancedV2i_NewFunction_
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to call the new function.
 * Add new events to the upgraded contract. See contract _UintAdvancedV2c_NewEvent_
+
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to watch for the new event.
 * Change the order of transactions in a function. See contract _UintAdvancedV2d_ReverseFunctionOrder_
 * Change visibility for upgraded functions.
+
 ⋅⋅⋅**Note:** Only the following changes were tested
 ⋅⋅⋅ public --> external. Functions were still callable externally. See contract _UintAdvancedV2j_ChangeVisibility_
 ⋅⋅⋅ public --> internal. Function calls could no longer be made. see contract _UintAdvancedV2k_ChangeVisibility_
@@ -66,9 +69,9 @@ See tests for contracts _UintInherited_
 
 #### 3.3.2 You can't
 
-So far as I can tell, you cannot do the following. If you know how to do this please send [me](https://twitter.com/theblockstalk) or the team at [Indorse](https://twitter.com/joinindorse) a message, or submit an issue or PR to this repo.
-
 * Add in new storage variables to the upgraded smart contrat and use it in functions. See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_ and _UintAdvancedV2f_NewStorage_. You can add add new storage variables, however, these new variables cannot be used in an of the upgraded functions.
+
+If you find a way to do any of the above, please send [me](https://twitter.com/theblockstalk) or the team at [Indorse](https://twitter.com/joinindorse) a message, or submit an issue or PR to this repo.
 
 #### Still to research
 
