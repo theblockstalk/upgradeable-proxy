@@ -52,6 +52,7 @@ See tests for UintInherited.sol
 
 * Change function logic of pre-existing functions so long as the signature does not change. See contracts UintSimple, UintAdvancedV2g_OverrideFunctionGetter and UintAdvancedV2h_OverrideFunctionSetter
 * Add new functions to the upgraded contract. See contract UintAdvancedV2a_NewFunction
+⋅⋅⋅**Note:** the new function can be added in out of order. See contract UintAdvancedV2i_NewFunction
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to call the new function.
 * Add new events to the upgraded contract. See contract UintAdvancedV2c_NewEvent
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to watch for the new event.

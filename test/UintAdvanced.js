@@ -8,6 +8,7 @@ const UintAdvancedV2e_NewStorage = artifacts.require('UintAdvancedV2e_NewStorage
 const UintAdvancedV2f_NewStorage = artifacts.require('UintAdvancedV2f_NewStorage')
 const UintAdvancedV2g_OverrideFunctionGetter = artifacts.require('UintAdvancedV2g_OverrideFunctionGetter')
 const UintAdvancedV2h_OverrideFunctionSetter = artifacts.require('UintAdvancedV2h_OverrideFunctionSetter')
+const UintAdvancedV2i_NewFunction = artifacts.require('UintAdvancedV2i_NewFunction')
 
 const INDENT = '        ';
 
@@ -22,11 +23,13 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2e_NewStorage,
         uintAdvancedV2f_NewStorage,
         uintAdvancedV2g_OverrideFunctionGetter,
-        uintAdvancedV2h_OverrideFunctionSetter;
+        uintAdvancedV2h_OverrideFunctionSetter,
+        uintAdvancedV2i_NewFunction;
 
     let uintAdvancedV1byProxy,
         uintAdvancedV2a_NewFunctionbyProxy,
-        uintAdvancedV2c_NewEventbyProxy;
+        uintAdvancedV2c_NewEventbyProxy,
+        uintAdvancedV2i_NewFunctionbyProxy;
 
     const inputValue = 10, inputValue2 = 21, inputValue3 = 32;
 
@@ -40,12 +43,14 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2f_NewStorage = await UintAdvancedV2f_NewStorage.new();
         uintAdvancedV2g_OverrideFunctionGetter = await UintAdvancedV2g_OverrideFunctionGetter.new();
         uintAdvancedV2h_OverrideFunctionSetter = await UintAdvancedV2h_OverrideFunctionSetter.new();
+        uintAdvancedV2i_NewFunction = await UintAdvancedV2i_NewFunction.new();
 
         proxy = await Proxy.new(uintAdvancedV1.address);
 
         uintAdvancedV1byProxy = UintAdvancedV1.at(proxy.address);
         uintAdvancedV2a_NewFunctionbyProxy = UintAdvancedV2a_NewFunction.at(proxy.address);
         uintAdvancedV2c_NewEventbyProxy = UintAdvancedV2c_NewEvent.at(proxy.address);
+        uintAdvancedV2i_NewFunctionbyProxy = UintAdvancedV2i_NewFunction.at(proxy.address);
     })
 
     describe('test adding new functions to the contract', () => {
@@ -63,6 +68,25 @@ contract('UintAdvanced', function (accounts) {
             assert.equal(inputValue2, value, "The two values should be the same")
 
             await uintAdvancedV2a_NewFunctionbyProxy.setDoubleValue(inputValue3);
+            bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            value = bigNumValue.toNumber();
+            assert.equal(inputValue3*2, value, "The value in the contract should be twice the input value")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2i with a new function in a different order', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2i_NewFunction.address)
+            bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            value = bigNumValue.toNumber();
+            assert.equal(inputValue, value, "The two values should be the same")
+
+            await uintAdvancedV1byProxy.setValue(inputValue2);
+            bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            value = bigNumValue.toNumber();
+            assert.equal(inputValue2, value, "The two values should be the same")
+
+            await uintAdvancedV2i_NewFunctionbyProxy.setDoubleValue(inputValue3);
             bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             value = bigNumValue.toNumber();
             assert.equal(inputValue3*2, value, "The value in the contract should be twice the input value")
@@ -163,7 +187,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2h_OverrideFunctionSetter.address)
 
             await uintAdvancedV1byProxy.setValue(inputValue)
-            
+
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
             assert.equal(inputValue+2, value, "The values should be equal to inputValue+2")
