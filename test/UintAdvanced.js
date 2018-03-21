@@ -6,6 +6,8 @@ const UintAdvancedV2c_NewEvent = artifacts.require('UintAdvancedV2c_NewEvent')
 const UintAdvancedV2d_ReverseFunctionOrder = artifacts.require('UintAdvancedV2d_ReverseFunctionOrder')
 const UintAdvancedV2e_NewStorage = artifacts.require('UintAdvancedV2e_NewStorage')
 const UintAdvancedV2f_NewStorage = artifacts.require('UintAdvancedV2f_NewStorage')
+const UintAdvancedV2g_OverrideFunctionGetter = artifacts.require('UintAdvancedV2g_OverrideFunctionGetter')
+const UintAdvancedV2h_OverrideFunctionSetter = artifacts.require('UintAdvancedV2h_OverrideFunctionSetter')
 
 const INDENT = '        ';
 
@@ -18,7 +20,9 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2c_NewEvent,
         uintAdvancedV2d_ReverseFunctionOrder,
         uintAdvancedV2e_NewStorage,
-        uintAdvancedV2f_NewStorage;
+        uintAdvancedV2f_NewStorage,
+        uintAdvancedV2g_OverrideFunctionGetter,
+        uintAdvancedV2h_OverrideFunctionSetter;
 
     let uintAdvancedV1byProxy,
         uintAdvancedV2a_NewFunctionbyProxy,
@@ -34,6 +38,8 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2d_ReverseFunctionOrder = await UintAdvancedV2d_ReverseFunctionOrder.new();
         uintAdvancedV2e_NewStorage = await UintAdvancedV2e_NewStorage.new();
         uintAdvancedV2f_NewStorage = await UintAdvancedV2f_NewStorage.new();
+        uintAdvancedV2g_OverrideFunctionGetter = await UintAdvancedV2g_OverrideFunctionGetter.new();
+        uintAdvancedV2h_OverrideFunctionSetter = await UintAdvancedV2h_OverrideFunctionSetter.new();
 
         proxy = await Proxy.new(uintAdvancedV1.address);
 
@@ -122,12 +128,11 @@ contract('UintAdvanced', function (accounts) {
         it('should upgrade the contract UintAdvanced to version 2d with a the order of functions reversed', async function () {
             console.log(INDENT, 'Note that smart contract upgrade 2d fails!!!')
             await uintAdvancedV1byProxy.setValue(inputValue)
-            let bigNumValue
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2d_ReverseFunctionOrder.address)
 
-            bigNumValue = await uintAdvancedV1byProxy.getValue.call()
-            value = bigNumValue.toNumber();
+            let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            let value = bigNumValue.toNumber();
             assert.equal(inputValue, value, "The two values should be the same")
 
             await uintAdvancedV1byProxy.setValue(inputValue2)
@@ -138,6 +143,34 @@ contract('UintAdvanced', function (accounts) {
 
         })
     })
+
+    describe('test overwride the contract functions with new logic', () => {
+        it('should upgrade the contract UintAdvanced to version 2g with a function call logic updated', async function () {
+            // console.log(INDENT, 'Note that smart contract upgrade 2g fails!!!')
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2g_OverrideFunctionGetter.address)
+
+            bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            value = bigNumValue.toNumber();
+            assert.equal(inputValue+2, value, "The values should be equal to inputValue+2")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2h with a function tx logic updated', async function () {
+            // console.log(INDENT, 'Note that smart contract upgrade 2g fails!!!')
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2h_OverrideFunctionSetter.address)
+
+            await uintAdvancedV1byProxy.setValue(inputValue)
+            
+            let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            let value = bigNumValue.toNumber();
+            assert.equal(inputValue+2, value, "The values should be equal to inputValue+2")
+        })
+    })
+
+
 
 
 

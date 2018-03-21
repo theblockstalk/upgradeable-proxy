@@ -94,3 +94,28 @@ contract UintAdvancedV2f_NewStorage is Upgradeable {
         value = _value;
     }
 }
+
+contract UintAdvancedV2g_OverrideFunctionGetter is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint) {
+        return value+2;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+
+contract UintAdvancedV2h_OverrideFunctionSetter is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint) {
+        return value;
+    }
+
+    function setValue(uint _value) public {
+        value = _value+2;
+    }
+}
