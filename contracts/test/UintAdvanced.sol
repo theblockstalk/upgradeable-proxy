@@ -24,8 +24,8 @@ contract UintAdvancedV2a_NewFunction is UintAdvancedV1 {
 contract UintAdvancedV2b_NewStorage is UintAdvancedV1 {
     uint value2 = 100;
 
-    function getValue() view public returns (uint) {
-        return value + value2;
+    function setValue(uint _value) public {
+        value = _value + value2;
     }
 }
 
@@ -48,4 +48,12 @@ contract UintAdvancedV2d_ReverseFunctionOrder is UintAdvancedV1 {
     }
 
 
+}
+
+contract UintAdvancedV2e_NewStorageGetter is UintAdvancedV1 {
+    uint value2 = 100;
+
+    function getValue() view public returns (uint) {
+        return value + value2;
+    }
 }

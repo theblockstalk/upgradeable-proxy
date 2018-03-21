@@ -2,6 +2,8 @@ const Proxy = artifacts.require('Proxy')
 const UintInheritedV1 = artifacts.require('UintInheritedV1')
 const UintInheritedV2 = artifacts.require('UintInheritedV2')
 
+const INDENT = '      ';
+
 contract('UintInherited', function (accounts) {
 
     let proxy,
@@ -57,9 +59,9 @@ contract('UintInherited', function (accounts) {
         tx = await uintInheritedV1byProxy.setValue(inputValue)
         gasCosts[3] = tx.receipt.gasUsed
 
-        console.log('the gas cost of calling UintInheritedV1.setValue(', inputValue, ') increased by ', 100*(gasCosts[1]/gasCosts[0] - 1),
+        console.log(INDENT, 'the gas cost of calling UintInheritedV1.setValue(', inputValue, ') increased by ', 100*(gasCosts[1]/gasCosts[0] - 1),
             '% when made upgradeable, or ', gasCosts[1] - gasCosts[0], ' gas')
-        console.log('the gas cost of calling UintInheritedV2.setValue(', inputValue, ') increased by ', 100*(gasCosts[3]/gasCosts[2] - 1),
+        console.log(INDENT, 'the gas cost of calling UintInheritedV2.setValue(', inputValue, ') increased by ', 100*(gasCosts[3]/gasCosts[2] - 1),
             '% when made upgradeable, or ', gasCosts[3] - gasCosts[2], ' gas')
     })
 

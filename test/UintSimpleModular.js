@@ -2,6 +2,8 @@ const Proxy = artifacts.require('Proxy')
 const UintSimpleModularV1_Logic = artifacts.require('UintSimpleModularV1_Logic')
 const UintSimpleModularV2_Logic = artifacts.require('UintSimpleModularV2_Logic')
 
+const INDENT = '      ';
+
 contract('UintSimpleModular', function (accounts) {
 
     let proxy,
@@ -78,9 +80,9 @@ contract('UintSimpleModular', function (accounts) {
         tx = await uintSimpleModular_byProxy.setValue(inputValue)
         gasCosts[3] = tx.receipt.gasUsed
 
-        console.log('the gas cost of calling UintSimpleModularV1_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[1]/gasCosts[0] - 1),
+        console.log(INDENT, 'the gas cost of calling UintSimpleModularV1_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[1]/gasCosts[0] - 1),
             '% when made upgradeable, or ', gasCosts[1] - gasCosts[0], ' gas')
-        console.log('the gas cost of calling UintSimpleModularV2_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[3]/gasCosts[2] - 1),
+        console.log(INDENT, 'the gas cost of calling UintSimpleModularV2_Logic.setValue(', inputValue, ') increased by ', 100*(gasCosts[3]/gasCosts[2] - 1),
             '% when made upgradeable, or ', gasCosts[3] - gasCosts[2], ' gas')
     })
 
