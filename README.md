@@ -38,42 +38,42 @@ To see the simplest way of iplementing an upgradeable smart contract, check out 
 There are several ways to structure a smart contract that will be upgradeable. The following three sections explain these different structures and their pros and cons. In each of the structures, it was found that the gas cost increase was the same (~3% or 1100 gas).
 
 #### 3.2.1 One smart contract containing all desired storage and logic
-See tests for UintSimple.sol
+See tests for contracts _UintSimple_
 
 #### 3.2.2 A modular smart contract
-See tests for UintSimpleModular.sol
+See tests for contracts _UintSimpleModular_
 
 #### 3.2.3 An inherited smart contract
-See tests for UintInherited.sol
+See tests for contracts _UintInherited_
 
 ### 3.3 What can and can't you do when upgradeing a contract with the Proxy
 
 #### 3.3.1 You can
 
-* Change function logic of pre-existing functions so long as the signature does not change. See contracts UintSimple, UintAdvancedV2g_OverrideFunctionGetter and UintAdvancedV2h_OverrideFunctionSetter
-* Add new functions to the upgraded contract. See contract UintAdvancedV2a_NewFunction
-⋅⋅⋅**Note:** the new function can be added in out of order. See contract UintAdvancedV2i_NewFunction
+* Change function logic of pre-existing functions so long as the signature does not change. See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
+* Add new functions to the upgraded contract. See contract _UintAdvancedV2a_NewFunction_
+⋅⋅⋅**Note:** the new function can be added in out of order. See contract _UintAdvancedV2i_NewFunction_
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to call the new function.
-* Add new events to the upgraded contract. See contract UintAdvancedV2c_NewEvent
+* Add new events to the upgraded contract. See contract _UintAdvancedV2c_NewEvent_
 ⋅⋅⋅**Note:** applications or other smart contracts will need to know about the upgrade to be able to watch for the new event.
-* Change the order of transactions in a function. See contract UintAdvancedV2d_ReverseFunctionOrder
+* Change the order of transactions in a function. See contract _UintAdvancedV2d_ReverseFunctionOrder_
 * Change visibility for upgraded functions.
 ⋅⋅⋅**Note:** Only the following changes were tested
-⋅⋅⋅ public --> external. Functions were still callable externally. See contract UintAdvancedV2j_ChangeVisibility
-⋅⋅⋅ public --> internal. Function calls could no longer be made. see contract UintAdvancedV2k_ChangeVisibility
+⋅⋅⋅ public --> external. Functions were still callable externally. See contract _UintAdvancedV2j_ChangeVisibility_
+⋅⋅⋅ public --> internal. Function calls could no longer be made. see contract _UintAdvancedV2k_ChangeVisibility_
 ⋅⋅⋅TODO: test this more
-* Change access modifier view to pure. See contract UintAdvancedV2i_ChangeKeyword
+* Change access modifier view to pure. See contract _UintAdvancedV2i_ChangeKeyword_
 
 #### 3.3.2 You can't
 
 So far as I can tell, you cannot do the following. If you know how to do this please send [me](https://twitter.com/theblockstalk) or the team at [Indorse](https://twitter.com/joinindorse) a message, or submit an issue or PR to this repo.
 
-* Add in new storage variables to the upgraded smart contrat and use it in functions. See contracts UintAdvancedV2b_NewStorage, UintAdvancedV2e_NewStorage and  UintAdvancedV2f_NewStorage. You can add add new storage variables, however, these new variables cannot be used in an of the upgraded functions.
+* Add in new storage variables to the upgraded smart contrat and use it in functions. See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_ and _UintAdvancedV2f_NewStorage_. You can add add new storage variables, however, these new variables cannot be used in an of the upgraded functions.
 
 #### Still to research
 
 TODO
-* TODO: Change access modifier view to pure. See contract UintAdvancedV2i_ChangeKeyword
+* TODO: Change access modifier pure to view.
 * Change return type
 * Change the order of variables (need two variables)
 * Test upgradeability of data structures: strings, mappings, structs, arrays

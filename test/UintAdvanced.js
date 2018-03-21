@@ -108,6 +108,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2b_NewStorage.address)
+
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
             assert.notEqual(inputValue+100, value, "The smart contract value should NOT be 100 more than the inputValue")
@@ -119,6 +120,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2e_NewStorage.address)
+
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber()
             assert.notEqual(inputValue+100, value, "The smart contract value should NOT be 100 more than the inputValue")
@@ -129,6 +131,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2f_NewStorage.address)
+
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber()
             assert.equal(inputValue, value, "The smart contract value should be equal to the inputValue")
@@ -141,6 +144,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2c_NewEvent.address)
+
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
             assert.equal(inputValue, value, "The two values should be the same")
@@ -159,7 +163,6 @@ contract('UintAdvanced', function (accounts) {
 
     describe('test changing the order of functions in the contract', () => {
         it('should upgrade the contract UintAdvanced to version 2d with a the order of functions reversed', async function () {
-            console.log(INDENT, 'Note that smart contract upgrade 2d fails!!!')
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2d_ReverseFunctionOrder.address)
@@ -193,11 +196,15 @@ contract('UintAdvanced', function (accounts) {
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2h_OverrideFunctionSetter.address)
 
-            await uintAdvancedV1byProxy.setValue(inputValue)
-
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
-            assert.equal(inputValue+2, value, "The values should be equal to inputValue+2")
+            assert.equal(inputValue, value, "The values should be equal to inputValue")
+
+            await uintAdvancedV1byProxy.setValue(inputValue2)
+
+            bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            value = bigNumValue.toNumber();
+            assert.equal(inputValue2+2, value, "The values should be equal to inputValue2+2")
         })
 
         it('should upgrade the contract UintAdvanced to version 2j with a public function visibility changed to external', async function () {
@@ -205,11 +212,15 @@ contract('UintAdvanced', function (accounts) {
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2j_ChangeVisibility.address)
 
-            await uintAdvancedV1byProxy.setValue(inputValue2)
-
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
-            assert.equal(inputValue2, value, "The values should be equal to inputValue+2")
+            assert.equal(inputValue, value, "The values should be equal to inputValue")
+
+            await uintAdvancedV1byProxy.setValue(inputValue2)
+
+            bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            value = bigNumValue.toNumber();
+            assert.equal(inputValue2, value, "The values should be equal to inputValue2")
         })
 
         it('should upgrade the contract UintAdvanced to version 2k with a public function visibility changed to internal', async function () {
@@ -236,7 +247,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2i_ChangeKeyword.address)
-            
+
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
             assert.equal(666, value, "The values should be equal to 666")
