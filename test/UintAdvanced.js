@@ -13,6 +13,16 @@ const UintAdvancedV2j_ChangeVisibility = artifacts.require('UintAdvancedV2j_Chan
 const UintAdvancedV2k_ChangeVisibility = artifacts.require('UintAdvancedV2k_ChangeVisibility')
 const UintAdvancedV2i_ChangeKeyword = artifacts.require('UintAdvancedV2i_ChangeKeyword')
 const UintAdvancedV2j_NewStorage = artifacts.require('UintAdvancedV2j_NewStorage')
+const UintAdvancedV2k_ChangeReturn = artifacts.require('UintAdvancedV2k_ChangeReturn')
+const UintAdvancedV2l_ChangeReturn = artifacts.require('UintAdvancedV2l_ChangeReturn')
+const UintAdvancedV2m_ChangeReturn = artifacts.require('UintAdvancedV2m_ChangeReturn')
+const UintAdvancedV2n_ChangeReturn = artifacts.require('UintAdvancedV2n_ChangeReturn')
+const UintAdvancedV2o_ChangeReturn = artifacts.require('UintAdvancedV2o_ChangeReturn')
+const UintAdvancedV2p_ChangeReturn = artifacts.require('UintAdvancedV2p_ChangeReturn')
+const UintAdvancedV2q_ChangeReturn = artifacts.require('UintAdvancedV2q_ChangeReturn')
+const UintAdvancedV2r_ChangeReturn = artifacts.require('UintAdvancedV2r_ChangeReturn')
+const UintAdvancedV2s_ChangeReturn = artifacts.require('UintAdvancedV2s_ChangeReturn')
+const UintAdvancedV2t_ChangeReturn = artifacts.require('UintAdvancedV2t_ChangeReturn')
 
 const INDENT = '        ';
 
@@ -32,13 +42,33 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2j_ChangeVisibility,
         uintAdvancedV2k_ChangeVisibility,
         uintAdvancedV2i_ChangeKeyword,
-        uintAdvancedV2j_NewStorage;
+        uintAdvancedV2j_NewStorage,
+        uintAdvancedV2k_ChangeReturn,
+        uintAdvancedV2l_ChangeReturn,
+        uintAdvancedV2m_ChangeReturn,
+        uintAdvancedV2n_ChangeReturn,
+        uintAdvancedV2o_ChangeReturn,
+        uintAdvancedV2p_ChangeReturn,
+        uintAdvancedV2q_ChangeReturn,
+        uintAdvancedV2r_ChangeReturn,
+        uintAdvancedV2s_ChangeReturn,
+        uintAdvancedV2t_ChangeReturn;
 
     let uintAdvancedV1byProxy,
         uintAdvancedV2a_NewFunctionbyProxy,
         uintAdvancedV2c_NewEventbyProxy,
         uintAdvancedV2i_NewFunctionbyProxy,
-        uintAdvancedV2j_NewStoragebyProxy;
+        uintAdvancedV2j_NewStoragebyProxy,
+        uintAdvancedV2k_ChangeReturnbyProxy,
+        uintAdvancedV2l_ChangeReturnbyProxy,
+        uintAdvancedV2m_ChangeReturnbyProxy,
+        uintAdvancedV2n_ChangeReturnbyProxy,
+        uintAdvancedV2o_ChangeReturnbyProxy,
+        uintAdvancedV2p_ChangeReturnbyProxy,
+        uintAdvancedV2q_ChangeReturnbyProxy,
+        uintAdvancedV2r_ChangeReturnbyProxy,
+        uintAdvancedV2s_ChangeReturnbyProxy,
+        uintAdvancedV2t_ChangeReturnbyProxy;
 
     const inputValue = 10, inputValue2 = 21, inputValue3 = 32;
 
@@ -57,6 +87,16 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2k_ChangeVisibility = await UintAdvancedV2k_ChangeVisibility.new();
         uintAdvancedV2i_ChangeKeyword = await UintAdvancedV2i_ChangeKeyword.new();
         uintAdvancedV2j_NewStorage = await UintAdvancedV2j_NewStorage.new();
+        uintAdvancedV2k_ChangeReturn = await UintAdvancedV2k_ChangeReturn.new();
+        uintAdvancedV2l_ChangeReturn = await UintAdvancedV2l_ChangeReturn.new();
+        uintAdvancedV2m_ChangeReturn = await UintAdvancedV2m_ChangeReturn.new();
+        uintAdvancedV2n_ChangeReturn = await UintAdvancedV2n_ChangeReturn.new();
+        uintAdvancedV2o_ChangeReturn = await UintAdvancedV2o_ChangeReturn.new();
+        uintAdvancedV2p_ChangeReturn = await UintAdvancedV2p_ChangeReturn.new();
+        uintAdvancedV2q_ChangeReturn = await UintAdvancedV2q_ChangeReturn.new();
+        uintAdvancedV2r_ChangeReturn = await UintAdvancedV2r_ChangeReturn.new();
+        uintAdvancedV2s_ChangeReturn = await UintAdvancedV2s_ChangeReturn.new();
+        uintAdvancedV2t_ChangeReturn = await UintAdvancedV2t_ChangeReturn.new();
 
         proxy = await Proxy.new(uintAdvancedV1.address);
 
@@ -65,6 +105,16 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2c_NewEventbyProxy = UintAdvancedV2c_NewEvent.at(proxy.address);
         uintAdvancedV2i_NewFunctionbyProxy = UintAdvancedV2i_NewFunction.at(proxy.address);
         uintAdvancedV2j_NewStoragebyProxy = UintAdvancedV2j_NewStorage.at(proxy.address);
+        uintAdvancedV2k_ChangeReturnbyProxy = UintAdvancedV2k_ChangeReturn.at(proxy.address);
+        uintAdvancedV2l_ChangeReturnbyProxy = UintAdvancedV2l_ChangeReturn.at(proxy.address);
+        uintAdvancedV2m_ChangeReturnbyProxy = UintAdvancedV2m_ChangeReturn.at(proxy.address);
+        uintAdvancedV2n_ChangeReturnbyProxy = UintAdvancedV2n_ChangeReturn.at(proxy.address);
+        uintAdvancedV2o_ChangeReturnbyProxy = UintAdvancedV2o_ChangeReturn.at(proxy.address);
+        uintAdvancedV2p_ChangeReturnbyProxy = UintAdvancedV2p_ChangeReturn.at(proxy.address);
+        uintAdvancedV2q_ChangeReturnbyProxy = UintAdvancedV2q_ChangeReturn.at(proxy.address);
+        uintAdvancedV2r_ChangeReturnbyProxy = UintAdvancedV2r_ChangeReturn.at(proxy.address);
+        uintAdvancedV2s_ChangeReturnbyProxy = UintAdvancedV2s_ChangeReturn.at(proxy.address);
+        uintAdvancedV2t_ChangeReturnbyProxy = UintAdvancedV2t_ChangeReturn.at(proxy.address);
     })
 
     describe('test adding new functions to the contract', () => {
@@ -178,6 +228,109 @@ contract('UintAdvanced', function (accounts) {
             bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             value = bigNumValue.toNumber();
             assert.equal(inputValue2, value, "The two values should be the same")
+        })
+    })
+
+    describe('test changing the return value(s) of a function', () => {
+        it('should upgrade the contract UintAdvanced to version 2k with return value of address', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2k_ChangeReturn.address)
+
+            let returnVal = await uintAdvancedV2k_ChangeReturnbyProxy.getValue.call()
+            assert.equal(returnVal, "0x7a87cb6f8f5971cd2ce63f90b99453f0a5631315", "Should return the address string")
+            assert.equal(typeof(returnVal), 'string', "Should be a string")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2l with return string', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2l_ChangeReturn.address)
+
+            let returnVal = await uintAdvancedV2l_ChangeReturnbyProxy.getValue.call()
+            assert.equal(returnVal, "I am a happy string", "Should return the string")
+            assert.equal(typeof(returnVal), 'string', "Should be a string")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2m with return boolean', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2m_ChangeReturn.address)
+
+            let returnVal = await uintAdvancedV2m_ChangeReturnbyProxy.getValue.call()
+            assert.equal(returnVal, true, "Should return the boolean")
+            assert.equal(typeof(returnVal), 'boolean', "Should be a boolean")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2n with return bytes32', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2n_ChangeReturn.address)
+
+            let returnVal = await uintAdvancedV2n_ChangeReturnbyProxy.getValue.call()
+            assert.equal(returnVal, '0x30ed9383ab64b27cb4b70035e743294fe1a1c83eaf57eca05033b523d1fa4261', "Should return the bytes32")
+            assert.equal(typeof(returnVal), 'string', "Should be a boolean")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2o with return int', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2o_ChangeReturn.address)
+
+            let returnVal = await uintAdvancedV2o_ChangeReturnbyProxy.getValue.call()
+            assert.equal(returnVal.toNumber(), -3, "Should return the integer -3")
+            assert.equal(typeof(returnVal), 'object', "Should be an object")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2p with return uint8', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2p_ChangeReturn.address)
+
+            let returnVal = await uintAdvancedV2p_ChangeReturnbyProxy.getValue.call()
+            assert.equal(returnVal.toNumber(), 255, "Should return the last uint: 255")
+            assert.equal(typeof(returnVal), 'object', "Should be an object")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2q with return (uint, string)', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2q_ChangeReturn.address)
+
+            let [uintValue, stringValue] = await uintAdvancedV2q_ChangeReturnbyProxy.getValue.call()
+            assert.equal(uintValue.toNumber(), inputValue, "Should return the inputValue")
+            assert.equal(stringValue, 'I am a happy string', "Should also return a string")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2r with return dynamic array', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2r_ChangeReturn.address)
+
+            let returnArray = await uintAdvancedV2r_ChangeReturnbyProxy.getValue.call()
+            assert.equal(returnArray[0].toNumber(), inputValue, "Should return the inputValue in the first array slot")
+            assert.equal(returnArray[1].toNumber(), 2*inputValue, "Should return the 2*inputValue in the second array slot")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2s with return fixed size array', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2s_ChangeReturn.address)
+
+            let returnArray = await uintAdvancedV2s_ChangeReturnbyProxy.getValue.call()
+            assert.equal(returnArray[0].toNumber(), inputValue, "Should return the inputValue in the first array slot")
+            assert.equal(returnArray[1].toNumber(), 2*inputValue, "Should return the 2*inputValue in the second array slot")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2t with return struct', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2t_ChangeReturn.address)
+
+            // let returnStruct = await uintAdvancedV2t_ChangeReturnbyProxy.getValue.call()
+            // console.log(returnStruct)
+            // assert.equal(returnArray[0].toNumber(), inputValue, "Should return the inputValue in the first array slot")
+            // assert.equal(returnArray[1].toNumber(), 2*inputValue, "Should return the 2*inputValue in the second array slot")
         })
     })
 

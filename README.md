@@ -109,6 +109,12 @@ You can do the following changes on an upgraded contract and it will behave as i
    - See contract _UintAdvancedV2i_ChangeKeyword_
 7. Remove events from the contract
    - See contract _UintEventV2a_RemovedEvent_
+8. Change the return type for function calls.
+   - Changing to return solidity value types (uint, string etc), as well as arrays and tupples were sucessful
+   - See contracts _UintAdvancedV2k_ChangeReturn_ to _UintAdvancedV2s_ChangeReturn_ (all letters k-s)
+   - Changing to return structs was not tested due to limitations of javascript web3 object at the time. See contract _UintAdvancedV2t_ChangeReturn_
+   - **TODO** do above test when web3.js is updated
+   - **Note:** applications or other smart contracts will need to know about the upgrade to be able to correctly interperate the new return values with the new ABI.
 
 #### 3.3.2 You can't
 
@@ -128,7 +134,6 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 
 **TODO**
 * Change access modifier pure to view.
-* Change return type
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded
 * do a spellcheck of this readme.

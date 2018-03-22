@@ -191,3 +191,139 @@ contract UintAdvancedV2j_NewStorage is Upgradeable {
         value2 = _value2;
     }
 }
+
+contract UintAdvancedV2k_ChangeReturn is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (address) {
+        return 0x7a87cb6f8f5971cd2ce63f90b99453f0a5631315;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+
+contract UintAdvancedV2l_ChangeReturn is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (string) {
+        return 'I am a happy string';
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+
+contract UintAdvancedV2m_ChangeReturn is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (bool) {
+        return true;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+contract UintAdvancedV2n_ChangeReturn is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (bytes32) {
+        return 0x30ed9383ab64b27cb4b70035e743294fe1a1c83eaf57eca05033b523d1fa4261;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+contract UintAdvancedV2o_ChangeReturn is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (int) {
+        return -3;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+contract UintAdvancedV2p_ChangeReturn is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint8) {
+        return uint8(-1);
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+contract UintAdvancedV2q_ChangeReturn is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint , string) {
+        return (value, 'I am a happy string');
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+contract UintAdvancedV2r_ChangeReturn is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint[]) {
+        uint[] memory x = new uint[](2);
+        x[0] = value;
+        x[1] = 2*value;
+        return x;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+contract UintAdvancedV2s_ChangeReturn is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint[2]) {
+        uint[2] memory x;
+        x[0] = value;
+        x[1] = 2*value;
+        return x;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+
+contract UintAdvancedV2t_ChangeReturn is Upgradeable {
+    uint value;
+
+    struct MyStruct {
+        uint uintValue;
+        string stringValue;
+    }
+
+    function getValue() view public returns (MyStruct) {
+        MyStruct myStruct;
+        myStruct.uintValue = value;
+        myStruct.stringValue = 'I am a happy string';
+        return myStruct;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
