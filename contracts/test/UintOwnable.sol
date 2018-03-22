@@ -1,8 +1,8 @@
 pragma solidity ^0.4.18;
 
-import "../Upgradeable.sol";
+import "../ownable/OwnableUpgradeable.sol";
 
-contract UintInheritedV1 is Upgradeable {
+contract UintSimpleV1 is OwnableUpgradeable {
     uint value;
 
     function getValue() view public returns (uint) {
@@ -14,7 +14,13 @@ contract UintInheritedV1 is Upgradeable {
     }
 }
 
-contract UintInheritedV2 is UintInheritedV1 {
+contract UintSimpleV2 is OwnableUpgradeable {
+    uint value;
+
+    function getValue() view public returns (uint) {
+        return value;
+    }
+
     function setValue(uint _value) public {
         value = 2*_value;
     }

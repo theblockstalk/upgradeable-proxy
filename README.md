@@ -35,16 +35,53 @@ Please see in-code contract and function descriptions for how these contract all
 
 To see the simplest way of iplementing an upgradeable smart contract, check out UintSimple.sol and it's test suite.
 
-There are several ways to structure a smart contract that will be upgradeable. The following three sections explain these different structures and their pros and cons. In each of the structures, it was found that the gas cost increase was the same (~3% or 1100 gas).
+There are several ways to structure a smart contract that will be upgradeable. The following three sections explain these different structures and their pros and cons. In each of the structures, it was found that the gas cost increase was the same (~3% or 1100 gas). For each mechanism, the following smart contract will be upgraded with new logic for the setValue() function:
+```
+contract UintSimpleV1 is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint) {
+        return value;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+}
+```
 
 #### 3.2.1 One smart contract containing all desired storage and logic
 See tests for contracts _UintSimple_
 
-#### 3.2.2 A modular smart contract
+```
+contract UintSimpleV2 is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint) {
+        return value;
+    }
+
+    function setValue(uint _value) public {
+        value = 2*_value;
+    }
+}
+```
+
+#### 3.2.2 A modular smart contract design
 See tests for contracts _UintSimpleModular_
+
+See [UintSimpleModular.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/test/UintSimpleModular.sol)
 
 #### 3.2.3 An inherited smart contract
 See tests for contracts _UintInherited_
+
+```
+contract UintInheritedV2 is UintInheritedV1 {
+    function setValue(uint _value) public {
+        value = 2*_value;
+    }
+}
+```
 
 ### 3.3 What can and can't you do when upgradeing a contract with the Proxy
 
@@ -86,7 +123,8 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 #### 3.3.3 Still to research
 
 TODO
-* TODO: Change access modifier pure to view.
+* Change access modifier pure to view.
+* Ownable Proxy
 * Change return type
 * remove events
 * Test upgradeability of data structures: strings, mappings, structs, arrays

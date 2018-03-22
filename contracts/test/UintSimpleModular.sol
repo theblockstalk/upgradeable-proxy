@@ -1,6 +1,6 @@
 pragma solidity ^0.4.18;
 
-import "../../contracts/Upgradeable.sol";
+import "../Upgradeable.sol";
 
 contract UintSimpleModularV1_Events {
 
