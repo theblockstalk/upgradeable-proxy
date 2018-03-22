@@ -7,8 +7,7 @@ This repository tests the proxy upgradeability mechanism. It is a simplified ver
 
 To get up to speed on upgradeable smart contract strategies, please read [Summary of Ethereum Upgradeable Smart Contract R&D](https://blog.indorse.io/ethereum-upgradeable-smart-contract-strategies-456350d0557c).
 
-As noted in the article, **implementing an upgradeable smart contract requires a well thought out governance strategy**. This github repo will **not** explor this aspect of upgradeable contracts.
-
+As noted in the article, **implementing an upgradeable smart contract requires a well thought out governance strategy**. Section 3.4 advise on how this can be done.
 
 ## 2. Running the tests
 
@@ -124,8 +123,14 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 
 TODO
 * Change access modifier pure to view.
-* Ownable Proxy
 * Change return type
 * remove events
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded
+* do a spellcheck of this readme.
+
+### 3.4 Creating a permissioned (Ownable) proxy upgrade
+
+The proxy upgrade mechanism was combined with the Zepplin [Ownable](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) contract standard to allow for the upgradeTo() function to only be called by the owner. The owneer of the proxy can be set as a multisig or DAO-like contract to provide distributed governance.
+
+The permissioned upgradeable contracts can be seen in the /contracts/ownable folder. Please see UintOwnable tests for details.

@@ -2,7 +2,7 @@ pragma solidity ^0.4.18;
 
 import "../ownable/OwnableUpgradeable.sol";
 
-contract UintSimpleV1 is OwnableUpgradeable {
+contract UintOwnableV1 is OwnableUpgradeable {
     uint value;
 
     function getValue() view public returns (uint) {
@@ -14,7 +14,7 @@ contract UintSimpleV1 is OwnableUpgradeable {
     }
 }
 
-contract UintSimpleV2 is OwnableUpgradeable {
+contract UintOwnableV2 is OwnableUpgradeable {
     uint value;
 
     function getValue() view public returns (uint) {

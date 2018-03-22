@@ -3,11 +3,12 @@ pragma solidity ^0.4.18;
 import './OwnableProxied.sol';
 
 contract OwnableProxy is OwnableProxied {
-    function Proxy(address _target) public {
+    function OwnableProxy(address _target) public {
         upgradeTo(_target);
     }
 
-    function upgradeTo(address _target) public {
+    // onlyOwner moifier has been applied to function
+    function upgradeTo(address _target) public onlyOwner {
         EventUpgrade(_target, target, msg.sender);
         target = _target;
     }
