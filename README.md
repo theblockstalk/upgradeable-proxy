@@ -112,8 +112,10 @@ You can do the following changes on an upgraded contract and it will behave as i
 You cannot do the following changes on an upgraded contract and expect that it will behave like an updated contract with the same state.
 
 1. Add in new storage variables to the upgraded smart contrat and use it in functions.
-   - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_ and _UintAdvancedV2f_NewStorage_.
-   - You can add add new storage variables, however, these new variables cannot be used in an of the upgraded functions.
+   - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_, _UintAdvancedV2f_NewStorage_ and _UintAdvancedV2j_NewStorage_.
+   - You can add add new storage variables, however, these new variables cannot be used in **any** of the contract's pre-existing functions. They can be used in any new function.
+   - **Note:** a workaround for this would be to create a another [separate] contract with new state variable which can be called by the new contract. The initial upgradeable contract would have to have a pre-existing address in place so that this could be used to point to such a separate smart contract...
+   - TODO: test workaround as stated above
 2. Change the order of state variables in the upgraded smart contracts
    - See contract _DoubleUintV2_
 
@@ -122,6 +124,7 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 #### 3.3.3 Still to research
 
 TODO
+* Test if a new storage variable can be used in new functions (not pre-existing functions)
 * Change access modifier pure to view.
 * Change return type
 * remove events

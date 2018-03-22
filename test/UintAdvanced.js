@@ -12,6 +12,7 @@ const UintAdvancedV2i_NewFunction = artifacts.require('UintAdvancedV2i_NewFuncti
 const UintAdvancedV2j_ChangeVisibility = artifacts.require('UintAdvancedV2j_ChangeVisibility')
 const UintAdvancedV2k_ChangeVisibility = artifacts.require('UintAdvancedV2k_ChangeVisibility')
 const UintAdvancedV2i_ChangeKeyword = artifacts.require('UintAdvancedV2i_ChangeKeyword')
+const UintAdvancedV2j_NewStorage = artifacts.require('UintAdvancedV2j_NewStorage')
 
 const INDENT = '        ';
 
@@ -30,12 +31,14 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2i_NewFunction,
         uintAdvancedV2j_ChangeVisibility,
         uintAdvancedV2k_ChangeVisibility,
-        uintAdvancedV2i_ChangeKeyword;
+        uintAdvancedV2i_ChangeKeyword,
+        uintAdvancedV2j_NewStorage;
 
     let uintAdvancedV1byProxy,
         uintAdvancedV2a_NewFunctionbyProxy,
         uintAdvancedV2c_NewEventbyProxy,
-        uintAdvancedV2i_NewFunctionbyProxy;
+        uintAdvancedV2i_NewFunctionbyProxy,
+        uintAdvancedV2j_NewStoragebyProxy;
 
     const inputValue = 10, inputValue2 = 21, inputValue3 = 32;
 
@@ -53,6 +56,7 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2j_ChangeVisibility = await UintAdvancedV2j_ChangeVisibility.new();
         uintAdvancedV2k_ChangeVisibility = await UintAdvancedV2k_ChangeVisibility.new();
         uintAdvancedV2i_ChangeKeyword = await UintAdvancedV2i_ChangeKeyword.new();
+        uintAdvancedV2j_NewStorage = await UintAdvancedV2j_NewStorage.new();
 
         proxy = await Proxy.new(uintAdvancedV1.address);
 
@@ -60,6 +64,7 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2a_NewFunctionbyProxy = UintAdvancedV2a_NewFunction.at(proxy.address);
         uintAdvancedV2c_NewEventbyProxy = UintAdvancedV2c_NewEvent.at(proxy.address);
         uintAdvancedV2i_NewFunctionbyProxy = UintAdvancedV2i_NewFunction.at(proxy.address);
+        uintAdvancedV2j_NewStoragebyProxy = UintAdvancedV2j_NewStorage.at(proxy.address);
     })
 
     describe('test adding new functions to the contract', () => {
@@ -127,7 +132,7 @@ contract('UintAdvanced', function (accounts) {
             assert.equal(inputValue, value, "The smart contract value should be equal to the inputValue")
         })
 
-        it('should upgrade the contract UintAdvanced to version 2f with new storage that is not used in any new functions', async function () {
+        it('should upgrade the contract UintAdvanced to version 2f with new storage that is not used in any old or new functions', async function () {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2f_NewStorage.address)
@@ -135,6 +140,21 @@ contract('UintAdvanced', function (accounts) {
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber()
             assert.equal(inputValue, value, "The smart contract value should be equal to the inputValue")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2j with new storage that is only used in any new functions', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2j_NewStorage.address)
+
+            let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
+            let value = bigNumValue.toNumber()
+            assert.equal(inputValue, value, "The smart contract value should be equal to the inputValue")
+
+            await uintAdvancedV2j_NewStoragebyProxy.setValue2(inputValue2);
+            bigNumValue = await uintAdvancedV2j_NewStoragebyProxy.getValue2.call()
+            value = bigNumValue.toNumber()
+            assert.equal(inputValue2, value, "The smart contract value2 should be equal to the inputValue2")
         })
 
     })
