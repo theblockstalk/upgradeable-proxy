@@ -23,7 +23,7 @@ contract DoubleUintV1 is Upgradeable {
     }
 }
 
-contract DoubleUintV2 is Upgradeable {
+contract DoubleUintV2a_NewStorage is Upgradeable {
     uint value2;
     uint value;
 

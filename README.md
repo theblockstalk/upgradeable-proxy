@@ -3,6 +3,8 @@
 This repository tests the proxy upgradeability mechanism. It is a simplified version of the system being used by the
 [AragonOS](https://github.com/aragon/aragonOS) and [ZepplinOS](https://github.com/zeppelinos/core) system. The core upgradeability mechanism has been copied and a few features have been removed.
 
+The results of tests will be summarised here. The contributions of this repository are made for general knowledge only. No contributors are to be help liable for any damages occured from using code or information from this repository. Do your own thorough testing before depoloying any ubgradeable smart contract mechanisms.
+
 ## 1. Getting started
 
 To get up to speed on upgradeable smart contract strategies, please read [Summary of Ethereum Upgradeable Smart Contract R&D](https://blog.indorse.io/ethereum-upgradeable-smart-contract-strategies-456350d0557c).
@@ -26,9 +28,8 @@ The three main contracts that are used in the upgradeable proxy mechanism are:
 2. [Proxy.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Proxy.sol)
 3. [Upgradeable.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Upgradeable.sol)
 
-TODO: write descriptions of contracts above into code...
-
 Please see in-code contract and function descriptions for how these contract allow you to make an upgradeable smart contract.
+**TODO:** write descriptions of contracts above into code...
 
 ### 3.2 How to make a simple Uint getter/setter smart contract upgradeable
 
@@ -103,9 +104,11 @@ You can do the following changes on an upgraded contract and it will behave as i
    - **Note:** Only the following changes were tested
      - public --> external. Functions were still callable externally. See contract _UintAdvancedV2j_ChangeVisibility_
      - public --> internal. Function calls could no longer be made. see contract _UintAdvancedV2k_ChangeVisibility_
-   - TODO: test this more
+   - **TODO:** test this more
 6. Change access modifier view to pure.
    - See contract _UintAdvancedV2i_ChangeKeyword_
+7. Remove events from the contract
+   - See contract _UintEventV2a_RemovedEvent_
 
 #### 3.3.2 You can't
 
@@ -115,7 +118,7 @@ You cannot do the following changes on an upgraded contract and expect that it w
    - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_, _UintAdvancedV2f_NewStorage_ and _UintAdvancedV2j_NewStorage_.
    - You can add add new storage variables, however, these new variables cannot be used in **any** of the contract's pre-existing functions. They can be used in any new function.
    - **Note:** a workaround for this would be to create a another [separate] contract with new state variable which can be called by the new contract. The initial upgradeable contract would have to have a pre-existing address in place so that this could be used to point to such a separate smart contract...
-   - TODO: test workaround as stated above
+   - **TODO:** test workaround as stated above
 2. Change the order of state variables in the upgraded smart contracts
    - See contract _DoubleUintV2_
 
@@ -123,11 +126,9 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 
 #### 3.3.3 Still to research
 
-TODO
-* Test if a new storage variable can be used in new functions (not pre-existing functions)
+**TODO**
 * Change access modifier pure to view.
 * Change return type
-* remove events
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded
 * do a spellcheck of this readme.

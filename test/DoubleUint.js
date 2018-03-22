@@ -1,6 +1,6 @@
 const Proxy = artifacts.require('Proxy')
 const DoubleUintV1 = artifacts.require('DoubleUintV1')
-const DoubleUintV2 = artifacts.require('DoubleUintV2')
+const DoubleUintV2a_NewStorage = artifacts.require('DoubleUintV2a_NewStorage')
 
 const INDENT = '      ';
 
@@ -8,24 +8,24 @@ contract('DoubleUint', function (accounts) {
 
     let proxy,
     doubleUintV1,
-    doubleUintV2,
+    doubleUintV2a_NewStorage,
     doubleUintV1byProxy;
 
     const inputValue = 10, inputValue2 = 21, inputValue3 = 32, inputValue4 = 43;
 
     beforeEach(async function() {
         doubleUintV1 = await DoubleUintV1.new();
-        doubleUintV2 = await DoubleUintV2.new();
+        doubleUintV2a_NewStorage = await DoubleUintV2a_NewStorage.new();
         proxy = await Proxy.new(doubleUintV1.address);
         doubleUintV1byProxy = DoubleUintV1.at(proxy.address);
     })
 
     it('should upgrade the contract DoubleUint to version 2 with variables in reverse order', async function () {
-        console.log(INDENT, 'Note that smart contract upgrade 2 fails!!!')
+        console.log(INDENT, 'Note that smart contract upgrade 2a fails!!!')
         await doubleUintV1byProxy.setValue(inputValue)
         await doubleUintV1byProxy.setValue2(inputValue2)
 
-        await doubleUintV1byProxy.upgradeTo(doubleUintV2.address)
+        await doubleUintV1byProxy.upgradeTo(doubleUintV2a_NewStorage.address)
 
         let bigNumValue = await doubleUintV1byProxy.getValue.call()
         let value = bigNumValue.toNumber();
