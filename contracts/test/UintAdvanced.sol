@@ -12,8 +12,6 @@ contract UintAdvancedV1 is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2a_NewFunction is Upgradeable {
@@ -26,8 +24,6 @@ contract UintAdvancedV2a_NewFunction is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 
     function setDoubleValue(uint _value) public {
         value = 2*_value;
@@ -46,7 +42,9 @@ contract UintAdvancedV2b_NewStorage is Upgradeable {
         value = _value + value2;
     }
 
-    function initialize() internal {
+    function initialize() public {
+        assert(!initialized);
+        initialized = true;
         value2 = 100;
     }
 }
@@ -63,14 +61,10 @@ contract UintAdvancedV2c_NewEvent is Upgradeable {
         EventSetValue(_value, value);
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2d_ReverseFunctionOrder is Upgradeable {
     uint value;
-
-    function initialize() internal {}
 
     function setValue(uint _value) public {
         value = _value;
@@ -93,7 +87,9 @@ contract UintAdvancedV2e_NewStorage is Upgradeable {
         value = _value;
     }
 
-    function initialize() internal {
+    function initialize() public {
+        assert(!initialized);
+        initialized = true;
         value2 = 100;
     }
 }
@@ -110,7 +106,9 @@ contract UintAdvancedV2f_NewStorage is Upgradeable {
         value = _value;
     }
 
-    function initialize() internal {
+    function initialize() public {
+        assert(!initialized);
+        initialized = true;
         value2 = 100;
     }
 }
@@ -125,8 +123,6 @@ contract UintAdvancedV2g_OverrideFunctionGetter is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2h_OverrideFunctionSetter is Upgradeable {
@@ -139,8 +135,6 @@ contract UintAdvancedV2h_OverrideFunctionSetter is Upgradeable {
     function setValue(uint _value) public {
         value = _value+2;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2i_NewFunction is Upgradeable {
@@ -157,8 +151,6 @@ contract UintAdvancedV2i_NewFunction is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2j_ChangeVisibility is Upgradeable {
@@ -171,8 +163,6 @@ contract UintAdvancedV2j_ChangeVisibility is Upgradeable {
     function setValue(uint _value) external {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2k_ChangeVisibility is Upgradeable {
@@ -185,8 +175,6 @@ contract UintAdvancedV2k_ChangeVisibility is Upgradeable {
     function setValue(uint _value) internal {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2i_ChangeKeyword is Upgradeable {
@@ -199,8 +187,6 @@ contract UintAdvancedV2i_ChangeKeyword is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2j_NewStorage is Upgradeable {
@@ -215,7 +201,9 @@ contract UintAdvancedV2j_NewStorage is Upgradeable {
         value = _value;
     }
 
-    function initialize() internal {
+    function initialize() public {
+        assert(!initialized);
+        initialized = true;
         value2 = 100;
     }
 
@@ -238,8 +226,6 @@ contract UintAdvancedV2k_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 
@@ -253,8 +239,6 @@ contract UintAdvancedV2l_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 
@@ -268,8 +252,6 @@ contract UintAdvancedV2m_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2n_ChangeReturn is Upgradeable {
@@ -282,8 +264,6 @@ contract UintAdvancedV2n_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2o_ChangeReturn is Upgradeable {
@@ -296,8 +276,6 @@ contract UintAdvancedV2o_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2p_ChangeReturn is Upgradeable {
@@ -310,8 +288,6 @@ contract UintAdvancedV2p_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2q_ChangeReturn is Upgradeable {
@@ -324,8 +300,6 @@ contract UintAdvancedV2q_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2r_ChangeReturn is Upgradeable {
@@ -341,8 +315,6 @@ contract UintAdvancedV2r_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2s_ChangeReturn is Upgradeable {
@@ -358,8 +330,6 @@ contract UintAdvancedV2s_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintAdvancedV2t_ChangeReturn is Upgradeable {
@@ -380,6 +350,4 @@ contract UintAdvancedV2t_ChangeReturn is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }

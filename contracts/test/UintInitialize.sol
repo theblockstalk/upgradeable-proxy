@@ -8,11 +8,9 @@ contract UintInitializeV1a_NotInitialized is Upgradeable {
     function getValue() view public returns (uint) {
         return value;
     }
-
-    function initialize() internal {}
 }
 
-contract UintInitializeV1b_Initialized is Upgradeable2 {
+contract UintInitializeV1b_Initialized is Upgradeable {
     uint value;
 
     function getValue() view public returns (uint) {
@@ -20,13 +18,11 @@ contract UintInitializeV1b_Initialized is Upgradeable2 {
     }
     event EventInitialized();
     function initialize() public {
+        assert(!initialized);
+        initialized = true;
         value = 111;
         EventInitialized();
     }
-
-    /*function initializePublic() public {
-        initialize();
-    }*/
 }
 
 contract UintInitializeV2 is Upgradeable {
@@ -36,7 +32,9 @@ contract UintInitializeV2 is Upgradeable {
         return value;
     }
 
-    function initialize() internal {
+    function initialize() public {
+        assert(!initialized);
+        initialized = true;
         value = 222;
     }
 }

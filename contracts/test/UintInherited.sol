@@ -12,8 +12,6 @@ contract UintInheritedV1 is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintInheritedV2 is UintInheritedV1 {

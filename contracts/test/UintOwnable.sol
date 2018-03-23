@@ -12,8 +12,6 @@ contract UintOwnableV1 is OwnableUpgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
-
-    function initialize() internal {}
 }
 
 contract UintOwnableV2 is OwnableUpgradeable {
@@ -26,6 +24,4 @@ contract UintOwnableV2 is OwnableUpgradeable {
     function setValue(uint _value) public {
         value = 2*_value;
     }
-
-    function initialize() internal {}
 }

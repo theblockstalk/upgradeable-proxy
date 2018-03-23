@@ -125,11 +125,11 @@ You cannot do the following changes on an upgraded contract and expect that it w
    - You can add new storage variables, however, these new variables cannot be used in **any** of the contract's pre-existing functions. They can be used in any new function.
    - **Note:** a workaround for this would be to create another [separate] contract with new state variable which can be called by the new contract. The initial upgradeable contract would have to have a pre-existing address in place so that this could be used to point to such a separate smart contract...
    - **TODO:** test workaround as stated above
-2. Change the order of state variables in the upgraded smart contracts
+2. Change the order of previously defined state variables in the next version upgraded smart contracts
    - See contract _DoubleUintV2_
-3. Declare any variables with initialized values. Declare any constant state variables keyword.
-   - See contract _UintInherited_
+3. Declare any variables with initialized values `uint variable1 = 8`. This includes declare any constant state variables `uint constant variable1 = 8`.
    - **Note:** state variables must be initialized using the intialize() function.
+   - See contract _UintInitialize_
 
 If you find a way to do any of the above, please send [me](https://twitter.com/theblockstalk) or the team at [Indorse](https://twitter.com/joinindorse) a message, or submit an issue or PR to this repo.
 
@@ -139,6 +139,7 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 * initialized variables in the target are not initialized in the target.
 * CHECK WHY CONTRACTS THAT DO HAVE INITIALIZED VARIABLES ARE WORKING
 * apply any intialize() functions to ownable contract as well
+* check that sending Ether works
 * Change access modifier pure to view.
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded
