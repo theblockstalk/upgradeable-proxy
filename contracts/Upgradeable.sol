@@ -25,3 +25,12 @@ contract Upgradeable is Proxied {
      */
     function initialize() internal;
 }
+
+contract Upgradeable2 is Proxied {
+
+    function upgradeTo(address) public {
+        assert(false);
+    }
+
+    function initialize() public;
+}

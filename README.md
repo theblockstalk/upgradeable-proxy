@@ -127,6 +127,9 @@ You cannot do the following changes on an upgraded contract and expect that it w
    - **TODO:** test workaround as stated above
 2. Change the order of state variables in the upgraded smart contracts
    - See contract _DoubleUintV2_
+3. Declare any variables with initialized values. Declare any constant state variables keyword.
+   - See contract _UintInherited_
+   - **Note:** state variables must be initialized using the intialize() function.
 
 If you find a way to do any of the above, please send [me](https://twitter.com/theblockstalk) or the team at [Indorse](https://twitter.com/joinindorse) a message, or submit an issue or PR to this repo.
 
@@ -134,7 +137,8 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 
 **TODO:**
 * initialized variables in the target are not initialized in the target.
-* CHECK WHY CONTRACTS THAT DO HAVE INITIALIZED VARIABLES ARE WORKING???
+* CHECK WHY CONTRACTS THAT DO HAVE INITIALIZED VARIABLES ARE WORKING
+* apply any intialize() functions to ownable contract as well
 * Change access modifier pure to view.
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded

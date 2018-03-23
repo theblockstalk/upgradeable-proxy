@@ -32,7 +32,7 @@ contract('UintInitialize', function (accounts) {
         proxy = await Proxy.new(uintInitializeV1b_Initialized.address);
         uintInitializebyProxy = UintInitializeV1b_Initialized.at(proxy.address);
 
-        await uintInitializebyProxy.initializePublic();
+        // await uintInitializebyProxy.initializePublic();
         let value = await uintInitializebyProxy.getValue.call()
 
         assert.equal(value.toNumber(), 111, "value should be initialized")

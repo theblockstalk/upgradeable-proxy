@@ -12,20 +12,21 @@ contract UintInitializeV1a_NotInitialized is Upgradeable {
     function initialize() internal {}
 }
 
-contract UintInitializeV1b_Initialized is Upgradeable {
+contract UintInitializeV1b_Initialized is Upgradeable2 {
     uint value;
 
     function getValue() view public returns (uint) {
         return value;
     }
-
-    function initialize() internal {
+    event EventInitialized();
+    function initialize() public {
         value = 111;
+        EventInitialized();
     }
 
-    function initializePublic() public {
+    /*function initializePublic() public {
         initialize();
-    }
+    }*/
 }
 
 contract UintInitializeV2 is Upgradeable {

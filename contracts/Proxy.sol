@@ -12,14 +12,17 @@ contract Proxy is Proxied {
 /*contract Proxy is Proxied, Initializeable {*/
     function Proxy(address _target) public {
         upgradeTo(_target);
-        this.call(keccak256("initialize()"));
-        /*Initializeable(this).initialize();*/
-        /*initialize();*/
     }
 
     function upgradeTo(address _target) public {
         EventUpgrade(_target, target, msg.sender);
         target = _target;
+        /*this.call(keccak256("initialize()"));*/
+        assert(this.call(bytes4(keccak256("initialize()"))));
+        /*address(this).call(bytes4(keccak256("initialize()")));*/
+        /*assert(address(this).call(bytes4(keccak256("initialize()"))));*/
+        /*Initializeable(this).initialize();*/
+        /*initialize();*/
     }
 
     function () payable public {
