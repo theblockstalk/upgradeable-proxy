@@ -1,10 +1,20 @@
 pragma solidity ^0.4.18;
 
 import './Proxied.sol';
+/*import './Upgradeable.sol';*/
+
+/*interface Initializeable {
+    function initialize() internal;
+}*/
+
 
 contract Proxy is Proxied {
+/*contract Proxy is Proxied, Initializeable {*/
     function Proxy(address _target) public {
         upgradeTo(_target);
+        this.call(keccak256("initialize()"));
+        /*Initializeable(this).initialize();*/
+        /*initialize();*/
     }
 
     function upgradeTo(address _target) public {

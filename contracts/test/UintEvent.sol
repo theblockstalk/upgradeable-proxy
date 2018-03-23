@@ -14,6 +14,8 @@ contract UintEventV1 is Upgradeable {
         EventValueChanged(_value);
         value = _value;
     }
+
+    function initialize() internal {}
 }
 
 contract UintEventV2a_RemovedEvent is Upgradeable {
@@ -26,4 +28,6 @@ contract UintEventV2a_RemovedEvent is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
+
+    function initialize() internal {}
 }

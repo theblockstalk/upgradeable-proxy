@@ -238,7 +238,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2k_ChangeReturn.address)
 
             let returnVal = await uintAdvancedV2k_ChangeReturnbyProxy.getValue.call()
-            assert.equal(returnVal, "0x7a87cb6f8f5971cd2ce63f90b99453f0a5631315", "Should return the address string")
+            assert.equal(returnVal, "0xffbf5ce297a5456a2f8fec4f5961dd0d898b29a7", "Should return the address string")
             assert.equal(typeof(returnVal), 'string', "Should be a string")
         })
 

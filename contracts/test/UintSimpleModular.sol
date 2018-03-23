@@ -23,6 +23,8 @@ contract UintSimpleModularV1_Logic is UintSimpleModularV1_Storage {
   function setValue(uint _value) public {
       value = _value;
   }
+
+  function initialize() internal {}
 }
 
 contract UintSimpleModularV2_Logic is UintSimpleModularV1_Storage {
@@ -33,4 +35,6 @@ contract UintSimpleModularV2_Logic is UintSimpleModularV1_Storage {
   function setValue(uint _value) public {
       value = 2*_value;
   }
+
+  function initialize() internal {}
 }

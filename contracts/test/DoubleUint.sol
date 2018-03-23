@@ -14,6 +14,8 @@ contract DoubleUintV1 is Upgradeable {
         value = _value;
     }
 
+    function initialize() internal {}
+
     function getValue2() view public returns (uint) {
         return value2;
     }
@@ -34,6 +36,8 @@ contract DoubleUintV2a_NewStorage is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
+
+    function initialize() internal {}
 
     function getValue2() view public returns (uint) {
         return value2;

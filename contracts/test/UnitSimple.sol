@@ -12,6 +12,8 @@ contract UintSimpleV1 is Upgradeable {
     function setValue(uint _value) public {
         value = _value;
     }
+
+    function initialize() internal {}
 }
 
 contract UintSimpleV2 is Upgradeable {
@@ -24,4 +26,6 @@ contract UintSimpleV2 is Upgradeable {
     function setValue(uint _value) public {
         value = 2*_value;
     }
+
+    function initialize() internal {}
 }

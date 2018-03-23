@@ -1,7 +1,7 @@
 # Upgradeable Proxy
 
 This repository tests the proxy upgradeability mechanism. It is a simplified version of the system being used by the
-[AragonOS](https://github.com/aragon/aragonOS) and [ZepplinOS](https://github.com/zeppelinos/core) system. The core upgradeability mechanism has been copied and a few features have been removed.
+[AragonOS](https://github.com/aragon/aragonOS), [Level K](https://github.com/levelkdev/master-storage) and [ZepplinOS](https://github.com/zeppelinos/core) systems. The core upgradeability mechanism has been copied and a few features have been removed.
 
 The results of tests will be summarised here. The contributions of this repository are made for general knowledge only. No contributors are to be held liable for any damages occurred from using code or information from this repository. Do your own thorough testing before deploying any upgradeable smart contract mechanisms.
 
@@ -133,6 +133,8 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 #### 3.3.3 Still to research
 
 **TODO:**
+* initialized variables in the target are not initialized in the target.
+* CHECK WHY CONTRACTS THAT DO HAVE INITIALIZED VARIABLES ARE WORKING???
 * Change access modifier pure to view.
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded
