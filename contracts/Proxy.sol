@@ -8,6 +8,9 @@ contract Proxy is Proxied {
     }
 
     function upgradeTo(address _target) public {
+        /*
+        TODO: assert(target != _target);
+        assert(isContract(_target));*/
         address oldTarget = target;
         target = _target;
         bytes4 initializeSig = bytes4(keccak256("initialize()"));

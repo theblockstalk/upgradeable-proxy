@@ -138,7 +138,11 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 #### 3.3.3 Still to research
 
 **TODO:**
+* finish initialize tests
 * apply any intialize() functions to ownable contract as well
+* test change order of events
+* test using libraries
+* changing from/to using payable keyword
 * check that sending Ether works
 * Change access modifier pure to view.
 * Test upgradeability of data structures: strings, mappings, structs, arrays

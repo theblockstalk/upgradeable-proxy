@@ -1,7 +1,7 @@
 const Proxy = artifacts.require('Proxy')
 const UintInitializeV1a_NotInitialized = artifacts.require('UintInitializeV1a_NotInitialized')
 const UintInitializeV1b_Initialized = artifacts.require('UintInitializeV1b_Initialized')
-// const DoubleUintV2a_NewStorage = artifacts.require('DoubleUintV2a_NewStorage')
+const UintInitializeV2 = artifacts.require('UintInitializeV2')
 
 const INDENT = '      ';
 
@@ -10,6 +10,7 @@ contract('UintInitialize', function (accounts) {
     let proxy,
     uintInitializeV1a_NotInitialized,
     uintInitializeV1b_Initialized,
+    uintInitializeV2,
     uintInitializebyProxy;
 
     const inputValue = 10, inputValue2 = 21, inputValue3 = 32, inputValue4 = 43;
@@ -17,6 +18,7 @@ contract('UintInitialize', function (accounts) {
     beforeEach(async function() {
         uintInitializeV1a_NotInitialized = await UintInitializeV1a_NotInitialized.new();
         uintInitializeV1b_Initialized = await UintInitializeV1b_Initialized.new();
+        uintInitializeV2 = await UintInitializeV2.new()
 
         proxy = await Proxy.new(uintInitializeV1a_NotInitialized.address);
         uintInitializebyProxy = UintInitializeV1a_NotInitialized.at(proxy.address);
@@ -24,7 +26,6 @@ contract('UintInitialize', function (accounts) {
 
     it('should not initialize if the variable is set in the contract', async function () {
         let value = await uintInitializebyProxy.getValue.call()
-
         assert.equal(value.toNumber(), 0, "value should not be initialized")
     })
 
@@ -32,47 +33,61 @@ contract('UintInitialize', function (accounts) {
         proxy = await Proxy.new(uintInitializeV1b_Initialized.address);
         uintInitializebyProxy = UintInitializeV1b_Initialized.at(proxy.address);
 
-        // await uintInitializebyProxy.initializePublic();
         let value = await uintInitializebyProxy.getValue.call()
 
         assert.equal(value.toNumber(), 111, "value should be initialized")
     })
 
+
+    it('should initialize value on upgrade', async function () {
+        await uintInitializebyProxy.upgradeTo(uintInitializeV1b_Initialized.address)
+
+        let value = await uintInitializebyProxy.getValue.call()
+
+        assert.equal(value.toNumber(), 111, "value should be initialized")
+    })
+
+    async function getEvents(eventFilter) {
+        return new Promise((res, rej) => {
+            eventFilter.get(function(error, result) {
+                if (error) rej(err)
+                else res(result)
+            })
+        })
+    }
+
+    it('should emmit EventInitialized when creating Proxy and calling upgradeTo()', async function () {
+        proxy = await Proxy.new(uintInitializeV1a_NotInitialized.address);
+        let deploymetTx = proxy.transactionHash
+        let tx = await web3.eth.getTransaction(deploymetTx)
+        let deploymentBlock = tx.blockNumber
+        let eventFilter = proxy.EventInitialized({target: uintInitializeV1a_NotInitialized.address},
+            { fromBlock: deploymentBlock, toBlock: deploymentBlock })
+        let events = await getEvents(eventFilter)
+        assert.equal(events[0].event, 'EventInitialized', 'Should initialize contract on create')
+        assert.equal(events[0].args.target, uintInitializeV1a_NotInitialized.address, 'Should initialize the Uint v1a contract')
+
+        tx = await proxy.upgradeTo(uintInitializeV1b_Initialized.address)
+        assert.equal(tx.logs[0].event, 'EventInitialized', 'Should initialize contract on upgradeTo()')
+        assert.equal(tx.logs[0].args.target, uintInitializeV1b_Initialized.address, 'Should initialize the Uint v1b contract')
+    })
+
     it('should only be able to initialize the contract through the proxy once', async function() {
-        // TODO: 
-    })
-
-    it('should be able to switch back to a previous version of a contrac, which will not be initialized', async function () {
         // TODO:
+
+        await uintInitializebyProxy.upgradeTo(uintInitializeV1b_Initialized.address) // upgrade to 1b
+        let tx = await uintInitializebyProxy.upgradeTo(uintInitializeV1a_NotInitialized.address) // revert back to v1a
+        assert.equal(tx.logs.length, 1, 'There should only be one event')
+        assert.equal(tx.logs[0].event, 'EventUpgrade', 'The only event should be EventUpgrade')
     })
 
-    it('should upgrade the contract DoubleUint to version 2 with variables in reverse order', async function () {
-        // console.log(INDENT, 'Note that smart contract upgrade 2a fails!!!')
-        // await doubleUintV1byProxy.setValue(inputValue)
-        // await doubleUintV1byProxy.setValue2(inputValue2)
-        //
-        // await doubleUintV1byProxy.upgradeTo(doubleUintV2a_NewStorage.address)
-        //
-        // let bigNumValue = await doubleUintV1byProxy.getValue.call()
-        // let value = bigNumValue.toNumber();
-        // assert.notEqual(inputValue, value, "The value should not be equal to inputValue, as expected")
-        // assert.equal(inputValue2, value, "The value should be equal to inputValue2 as the variable order was changed")
-        //
-        // bigNumValue = await doubleUintV1byProxy.getValue2.call()
-        // value = bigNumValue.toNumber();
-        // assert.notEqual(inputValue2, value, "The value should not be equal to inputValue2, as expected")
-        // assert.equal(inputValue, value, "The value should be equal to inputValue as the variable order was changed")
-        //
-        // await doubleUintV1byProxy.setValue(inputValue3)
-        // await doubleUintV1byProxy.setValue2(inputValue4)
-        //
-        // bigNumValue = await doubleUintV1byProxy.getValue.call()
-        // value = bigNumValue.toNumber();
-        // assert.equal(inputValue3, value, "The value should be equal to inputValue3 as the variable order was changed on the setter and the getter")
-        //
-        // bigNumValue = await doubleUintV1byProxy.getValue2.call()
-        // value = bigNumValue.toNumber();
-        // assert.equal(inputValue4, value, "The value should be equal to inputValue4 as the variable order was changed on the setter and the getter")
+    it('should not initialize a contract values again on being upgraded to again', async function() {
+        await uintInitializebyProxy.upgradeTo(uintInitializeV1b_Initialized.address)
+        await uintInitializebyProxy.upgradeTo(uintInitializeV2.address)
+        await uintInitializebyProxy.upgradeTo(uintInitializeV1b_Initialized.address) // should not initialize again
+
+        let value = await uintInitializebyProxy.getValue.call()
+        assert.equal(value.toNumber(), 222, "value should be what was initialized by UintInitializeV2")
     })
 
 })
