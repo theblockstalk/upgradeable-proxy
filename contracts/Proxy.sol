@@ -15,6 +15,8 @@ contract Proxy is Proxied {
     }
 
     function upgradeTo(address _target) public {
+        address oldTarget = _target;
+        target = _target;
         /*if (!initialized[_target]) {*/
             bytes4 initializeSig = bytes4(keccak256("initialize()"));
             /*delegatedFwd2(initializeSig);*/
@@ -26,10 +28,10 @@ contract Proxy is Proxied {
             /*initialized[_target] = true;*/
         /*}*/
         /*require(isContract(_target));*/
-        EventUpgrade(_target, target, msg.sender);
-        target = _target;
+        // target = _target;
         /*this.call(keccak256("initialize()"));*/
         /*assert(this.call(bytes4(keccak256("initialize()"))));*/
+        EventUpgrade(_target, oldTarget, msg.sender);
 
     }
 

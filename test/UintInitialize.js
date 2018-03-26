@@ -38,6 +38,14 @@ contract('UintInitialize', function (accounts) {
         assert.equal(value.toNumber(), 111, "value should be initialized")
     })
 
+    it('should only be able to initialize the contract through the proxy once', async function() {
+        // TODO: 
+    })
+
+    it('should be able to switch back to a previous version of a contrac, which will not be initialized', async function () {
+        // TODO:
+    })
+
     it('should upgrade the contract DoubleUint to version 2 with variables in reverse order', async function () {
         // console.log(INDENT, 'Note that smart contract upgrade 2a fails!!!')
         // await doubleUintV1byProxy.setValue(inputValue)

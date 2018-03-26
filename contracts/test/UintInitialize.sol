@@ -20,8 +20,8 @@ contract UintInitializeV1b_Initialized is Upgradeable {
     function initialize() public {
         /*assert(!initialized);
         initialized = true;*/
-        assert(!initialized[this]);
-        initialized[this] = true;
+        assert(!initialized[target]);
+        initialized[target] = true;
         value = 111;
         /*EventInitialized();*/
     }
@@ -37,8 +37,8 @@ contract UintInitializeV2 is Upgradeable {
     function initialize() public {
         /*assert(!initialized);
         initialized = true;*/
-        assert(!initialized[this]);
-        initialized[this] = true;
+        assert(!initialized[target]);
+        initialized[target] = true;
         value = 222;
     }
 }

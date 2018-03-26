@@ -24,8 +24,8 @@ contract Upgradeable is Proxied {
      * initialize any of the upgradeable child contract's variables when the target is set
      */
     function initialize() public {
-        assert(!initialized[this]);
-        initialized[this] = true;
+        assert(!initialized[target]);
+        initialized[target] = true;
         /*initialized[this] = true;*/
     }
 }
