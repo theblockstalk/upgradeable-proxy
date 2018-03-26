@@ -24,17 +24,17 @@ contract Upgradeable is Proxied {
      * initialize any of the upgradeable child contract's variables when the target is set
      */
     function initialize() public {
-        assert(!initialized[target]);
-        initialized[target] = true;
-        /*initialized[this] = true;*/
+        if(initializeUpgradeable(target)) {
+            // initialize contract here
+        }
+    }
+
+    function initializeUpgradeable(address target) internal returns (bool) {
+        if(!initialized[target]) {
+            initialized[target] = true;
+            EventInitialized(target);
+            return true;
+        }
+        else return false;
     }
 }
-
-/*contract Upgradeable2 is Proxied {
-
-    function upgradeTo(address) public {
-        assert(false);
-    }
-
-    function initialize() public;
-}*/

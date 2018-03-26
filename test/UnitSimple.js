@@ -39,7 +39,7 @@ contract('UintSimple', function (accounts) {
 
     it('should emit EventUpgrade on upgrade', async function () {
         let tx = await uintSimpleV1byProxy.upgradeTo(uintSimpleV2.address)
-        let upgradeLog = tx.logs[0]
+        let upgradeLog = tx.logs[1]
         assert.equal(upgradeLog.event, "EventUpgrade", "First log should be EventUpgrade")
         assert.equal(upgradeLog.args.oldTarget, uintSimpleV1.address, "The old target should be the deployed UintSimpleV1 address")
         assert.equal(upgradeLog.args.newTarget, uintSimpleV2.address, "The new target should be the deployed UintSimpleV2 address")

@@ -171,15 +171,13 @@ contract('UintAdvanced', function (accounts) {
         })
 
         it('should upgrade the contract UintAdvanced to version 2e with new storage BUT THEN FAIL at changing behaviour of getter due to new storage', async function () {
-            console.log(INDENT, 'Note that smart contract upgrade 2e fails!!!')
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2e_NewStorage.address)
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber()
-            assert.notEqual(inputValue+100, value, "The smart contract value should NOT be 100 more than the inputValue")
-            assert.equal(inputValue, value, "The smart contract value should be equal to the inputValue")
+            assert.equal(inputValue+100, value, "The smart contract value should be equal to the inputValue+100")
         })
 
         it('should upgrade the contract UintAdvanced to version 2f with new storage that is not used in any old or new functions', async function () {

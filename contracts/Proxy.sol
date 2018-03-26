@@ -1,36 +1,18 @@
 pragma solidity ^0.4.18;
 
 import './Proxied.sol';
-/*import './Upgradeable.sol';*/
-
-/*interface Initializeable {
-    function initialize() internal;
-}*/
-
 
 contract Proxy is Proxied {
-/*contract Proxy is Proxied, Initializeable {*/
     function Proxy(address _target) public {
         upgradeTo(_target);
     }
 
     function upgradeTo(address _target) public {
-        address oldTarget = _target;
+        address oldTarget = target;
         target = _target;
-        /*if (!initialized[_target]) {*/
-            bytes4 initializeSig = bytes4(keccak256("initialize()"));
-            /*delegatedFwd2(initializeSig);*/
-            assert(target.delegatecall(initializeSig));
-            /*address(this).call(bytes4(keccak256("initialize()")));*/
-            /*assert(address(this).call(bytes4(keccak256("initialize()"))));*/
-            /*Initializeable(this).initialize();*/
-            /*initialize();*/
-            /*initialized[_target] = true;*/
-        /*}*/
-        /*require(isContract(_target));*/
-        // target = _target;
-        /*this.call(keccak256("initialize()"));*/
-        /*assert(this.call(bytes4(keccak256("initialize()"))));*/
+        bytes4 initializeSig = bytes4(keccak256("initialize()"));
+        assert(target.delegatecall(initializeSig));
+
         EventUpgrade(_target, oldTarget, msg.sender);
 
     }

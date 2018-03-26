@@ -122,7 +122,7 @@ You cannot do the following changes on an upgraded contract and expect that it w
 
 1. Add in new storage variables to the upgraded smart contract and use it in functions.
    - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_, _UintAdvancedV2f_NewStorage_ and _UintAdvancedV2j_NewStorage_.
-   - You can add new storage variables, however, these new variables cannot be used in **any** of the contract's pre-existing functions. They can be used in any new function.
+   - You can add new storage variables, however, these new variables cannot be used in any state change operations. They can be read and set, but cannot be used in conjunction with **any** of the contract's pre-existing variables. They can be used in any new function.
    - **Note:** a workaround for this would be to create another [separate] contract with new state variable which can be called by the new contract. The initial upgradeable contract would have to have a pre-existing address in place so that this could be used to point to such a separate smart contract...
    - **TODO:** test workaround as stated above
 2. Change the order of previously defined state variables in the next version upgraded smart contracts
