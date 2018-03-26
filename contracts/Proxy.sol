@@ -10,14 +10,15 @@ contract Proxy is Proxied {
     function upgradeTo(address _target) public {
         /*
         TODO: assert(target != _target);
-        assert(isContract(_target));*/
+        assert(isContract(_target));
+        TODO: put above features in Ownable
+        */
         address oldTarget = target;
         target = _target;
-        bytes4 initializeSig = bytes4(keccak256("initialize()"));
-        assert(target.delegatecall(initializeSig));
+        bytes4 initializeSignature = bytes4(keccak256("initialize()"));
+        assert(target.delegatecall(initializeSignature));
 
         EventUpgrade(_target, oldTarget, msg.sender);
-
     }
 
     function () payable public {

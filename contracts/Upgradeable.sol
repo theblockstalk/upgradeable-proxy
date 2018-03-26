@@ -25,7 +25,7 @@ contract Upgradeable is Proxied {
      */
     function initialize() public {
         if(initializeUpgradeable(target)) {
-            // initialize contract here
+            // initialize contract variables here
         }
     }
 

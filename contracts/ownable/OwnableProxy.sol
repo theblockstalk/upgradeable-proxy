@@ -9,8 +9,17 @@ contract OwnableProxy is OwnableProxied {
 
     // onlyOwner moifier has been applied to function
     function upgradeTo(address _target) public onlyOwner {
-        EventUpgrade(_target, target, msg.sender);
+        /*
+        TODO: assert(target != _target);
+        assert(isContract(_target));
+        TODO: put above features in Ownable
+        */
+        address oldTarget = target;
         target = _target;
+        bytes4 initializeSignature = bytes4(keccak256("initialize()"));
+        assert(target.delegatecall(initializeSignature));
+
+        EventUpgrade(_target, oldTarget, msg.sender);
     }
 
     function () payable public {
