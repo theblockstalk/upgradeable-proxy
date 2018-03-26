@@ -1,6 +1,7 @@
 pragma solidity ^0.4.18;
 
 import './Proxied.sol';
+import './Upgradeable.sol';
 
 contract Proxy is Proxied {
     function Proxy(address _target) public {
@@ -8,11 +9,11 @@ contract Proxy is Proxied {
     }
 
     function upgradeTo(address _target) public {
-        /*
-        TODO: assert(target != _target);
+        assert(target != _target);
         assert(isContract(_target));
-        TODO: put above features in Ownable
-        */
+        assert(isUpgradeable(_target));
+        /*TODO: put above features in Ownable*/
+
         address oldTarget = target;
         target = _target;
         bytes4 initializeSignature = bytes4(keccak256("initialize()"));
@@ -36,5 +37,15 @@ contract Proxy is Proxied {
             case 0 { revert(ptr, size) }
             default { return(ptr, size) }
         }
+    }
+
+    function isContract(address _target) internal view returns (bool) {
+        uint256 size;
+        assembly { size := extcodesize(_target) }
+        return size > 0;
+    }
+
+    function isUpgradeable(address _target) internal view returns (bool) {
+        return Upgradeable(_target).call(bytes4(keccak256("upgradeTo(address)")), address(this));
     }
 }

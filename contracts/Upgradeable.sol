@@ -10,12 +10,15 @@ import './Proxied.sol';
  */
 contract Upgradeable is Proxied {
 
+    function Upgradeable() public {
+        target = address(this); // this is used by isUpgradeable() in Proxy
+    }
     /**
      * This function, as it is here, will never be executed. The function that will execute will be
      * Proxy.upgradeTo(address)
      */
     function upgradeTo(address) public {
-        assert(false);
+        assert(true); // this is used by isUpgradeable() in Proxy
     }
 
     /**
