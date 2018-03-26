@@ -12,7 +12,6 @@ contract Proxy is Proxied {
         assert(target != _target);
         assert(isContract(_target));
         assert(isUpgradeable(_target));
-        /*TODO: put above features in Ownable*/
 
         address oldTarget = target;
         target = _target;

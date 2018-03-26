@@ -92,7 +92,7 @@ You can do the following changes on an upgraded contract and it will behave as i
 1. Add (append) in new storage variables to the upgraded smart contract and use it in functions.
    - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_, _UintAdvancedV2f_NewStorage_ and _UintAdvancedV2j_NewStorage_.
    - You can add new storage variables, however, these new variables cannot be used in any state change operations. They can be read and set, but cannot be used in conjunction with **any** of the contract's pre-existing variables. They can be used in any new function.
-   - **Note:** new variables must be appended to not change the existing order of variables. Soo point 1 of Section 3.3.2 You can't below
+   - **Note:** new variables must be appended to not change the existing order of variables. See point 1 of Section 3.3.2 You can't below
 2. Change function logic of pre-existing functions so long as the signature does not change.
    - See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
 3. Add new functions to the upgraded contract.

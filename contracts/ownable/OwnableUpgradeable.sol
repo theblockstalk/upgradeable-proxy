@@ -9,7 +9,7 @@ contract OwnableUpgradeable is OwnableProxied {
      * Proxy.upgradeTo(address)
      */
     function upgradeTo(address) public {
-        assert(false);
+        assert(true);
     }
 
     /**
