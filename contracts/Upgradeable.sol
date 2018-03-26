@@ -9,7 +9,7 @@ import './Proxied.sol';
  * any state variables, can be upgraded by calling Proxy.upgradeTo(address)
  */
 contract Upgradeable is Proxied {
-    
+
     /**
      * This function, as it is here, will never be executed. The function that will execute will be
      * Proxy.upgradeTo(address)
@@ -24,8 +24,9 @@ contract Upgradeable is Proxied {
      * initialize any of the upgradeable child contract's variables when the target is set
      */
     function initialize() public {
-        assert(!initialized);
-        initialized = true;
+        assert(!initialized[this]);
+        initialized[this] = true;
+        /*initialized[this] = true;*/
     }
 }
 
