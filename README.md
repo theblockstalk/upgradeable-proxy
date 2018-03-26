@@ -122,6 +122,13 @@ You can do the following changes on an upgraded contract and it will behave as i
    - **TODO** do above test when web3.js is updated
    - **Note:** applications or other smart contracts will need to know about the upgrade to be able to correctly interpret the new return values with the new ABI.
    - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
+10. Change the order of events
+    - See contract _UintEventV2b_EventReordered_
+11. Send Ether to a payable function in an upgradeable contract
+    - See contract _UintEther_
+12. Change functions from payable to non-payable and non-payable to payable
+    - See contract _UintEther_
+    - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
 
 #### 3.3.2 You can't
 
@@ -138,12 +145,7 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 #### 3.3.3 Still to research
 
 **TODO:**
-* finish initialize tests
-* apply any intialize() functions to ownable contract as well
-* test change order of events
 * test using libraries
-* changing from/to using payable keyword
-* check that sending Ether works
 * Change access modifier pure to view.
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded

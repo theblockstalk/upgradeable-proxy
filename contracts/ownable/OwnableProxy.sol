@@ -1,6 +1,7 @@
 pragma solidity ^0.4.18;
 
 import './OwnableProxied.sol';
+import './OwnableUpgradeable.sol';
 
 contract OwnableProxy is OwnableProxied {
     function OwnableProxy(address _target) public {
@@ -45,6 +46,6 @@ contract OwnableProxy is OwnableProxied {
     }
 
     function isUpgradeable(address _target) internal view returns (bool) {
-        return Upgradeable(_target).call(bytes4(keccak256("upgradeTo(address)")), address(this));
+        return OwnableUpgradeable(_target).call(bytes4(keccak256("upgradeTo(address)")), address(this));
     }
 }
