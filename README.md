@@ -89,45 +89,47 @@ contract UintInheritedV2 is UintSimpleV1 {
 
 You can do the following changes on an upgraded contract and it will behave as if you have replaced the contract and kept the state.
 
-1. Change function logic of pre-existing functions so long as the signature does not change.
+1. Add (append) in new storage variables to the upgraded smart contract and use it in functions.
+   - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_, _UintAdvancedV2f_NewStorage_ and _UintAdvancedV2j_NewStorage_.
+   - You can add new storage variables, however, these new variables cannot be used in any state change operations. They can be read and set, but cannot be used in conjunction with **any** of the contract's pre-existing variables. They can be used in any new function.
+   - **Note:** new variables must be appended to not change the existing order of variables. Soo point 1 of Section 3.3.2 You can't below
+2. Change function logic of pre-existing functions so long as the signature does not change.
    - See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
-2. Add new functions to the upgraded contract.
+3. Add new functions to the upgraded contract.
    - See contract _UintAdvancedV2a_NewFunction_
    - **Note:** the new function can be added in any place in the contract. It does not need to be added as the last function. See contract _UintAdvancedV2i_NewFunction_
    - **Note:** applications or other smart contracts will need to know about the upgrade to be able to call the new function with the new ABI.
-3. Add new events to the upgraded contract.
+4. Add new events to the upgraded contract.
    - See contract _UintAdvancedV2c_NewEvent_
    - **Note:** applications or other smart contracts will need to know about the upgrade to be able to watch for the new event with the new ABI.
-4. Change the order of transactions in a function.
+5. Change the order of transactions in a function.
    - See contract _UintAdvancedV2d_ReverseFunctionOrder_
-5. Change visibility for upgraded functions.
+6. Change visibility for upgraded functions.
    - **Note:** Only the following changes were tested
      - public --> external. Functions were still callable externally. See contract _UintAdvancedV2j_ChangeVisibility_
      - public --> internal. Function calls could no longer be made. see contract _UintAdvancedV2k_ChangeVisibility_
    - **TODO:** test this more
-6. Change access modifier view to pure.
+   - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution.
+7. Change access modifier view to pure.
    - See contract _UintAdvancedV2i_ChangeKeyword_
-7. Remove events from the contract
+   - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
+8. Remove events from the contract
    - See contract _UintEventV2a_RemovedEvent_
-8. Change the return type for function calls.
+9. Change the return type for function calls.
    - Changing to return solidity value types (uint, string etc), as well as arrays and tuples were successful
    - See contracts _UintAdvancedV2k_ChangeReturn_ to _UintAdvancedV2s_ChangeReturn_ (all letters k-s)
    - Changing to return structs was not tested due to limitations of the javascript web3 object at the time. See contract _UintAdvancedV2t_ChangeReturn_
    - **TODO** do above test when web3.js is updated
    - **Note:** applications or other smart contracts will need to know about the upgrade to be able to correctly interpret the new return values with the new ABI.
+   - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
 
 #### 3.3.2 You can't
 
 You cannot do the following changes on an upgraded contract and expect that it will behave like an updated contract with the same state.
 
-1. Add in new storage variables to the upgraded smart contract and use it in functions.
-   - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_, _UintAdvancedV2f_NewStorage_ and _UintAdvancedV2j_NewStorage_.
-   - You can add new storage variables, however, these new variables cannot be used in any state change operations. They can be read and set, but cannot be used in conjunction with **any** of the contract's pre-existing variables. They can be used in any new function.
-   - **Note:** a workaround for this would be to create another [separate] contract with new state variable which can be called by the new contract. The initial upgradeable contract would have to have a pre-existing address in place so that this could be used to point to such a separate smart contract...
-   - **TODO:** test workaround as stated above
-2. Change the order of previously defined state variables in the next version upgraded smart contracts
+1. Change the order of previously defined state variables in the next version upgraded smart contracts
    - See contract _DoubleUintV2_
-3. Declare any variables with initialized values `uint variable1 = 8`. This includes declare any constant state variables `uint constant variable1 = 8`.
+2. Declare any variables with initialized values `uint variable1 = 8`. This includes declare any constant state variables `uint constant variable1 = 8`.
    - **Note:** state variables must be initialized using the intialize() function.
    - See contract _UintInitialize_
 
@@ -136,8 +138,6 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 #### 3.3.3 Still to research
 
 **TODO:**
-* initialized variables in the target are not initialized in the target.
-* CHECK WHY CONTRACTS THAT DO HAVE INITIALIZED VARIABLES ARE WORKING
 * apply any intialize() functions to ownable contract as well
 * check that sending Ether works
 * Change access modifier pure to view.
