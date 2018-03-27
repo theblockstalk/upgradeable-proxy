@@ -5,6 +5,8 @@ This repository tests the proxy upgradeability mechanism. It is a simplified ver
 
 The results of tests will be summarised here. The contributions of this repository are made for general knowledge only. No contributors are to be held liable for any damages occurred from using code or information from this repository. Do your own thorough testing before deploying any upgradeable smart contract mechanisms.
 
+That said, there are **over 70 unit tests** in this repository that try to put each different way you could use the proxy upgradeable mechanism to the test.
+
 ## 1. Getting started
 
 To get up to speed on upgradeable smart contract strategies, please read [Summary of Ethereum Upgradeable Smart Contract R&D](https://blog.indorse.io/ethereum-upgradeable-smart-contract-strategies-456350d0557c).
@@ -91,7 +93,6 @@ You can do the following changes on an upgraded contract and it will behave as i
 
 1. Add (append) in new storage variables to the upgraded smart contract and use it in functions.
    - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_, _UintAdvancedV2f_NewStorage_ and _UintAdvancedV2j_NewStorage_.
-   - You can add new storage variables, however, these new variables cannot be used in any state change operations. They can be read and set, but cannot be used in conjunction with **any** of the contract's pre-existing variables. They can be used in any new function.
    - **Note:** new variables must be appended to not change the existing order of variables. See point 1 of Section 3.3.2 You can't below
 2. Change function logic of pre-existing functions so long as the signature does not change.
    - See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
@@ -119,7 +120,6 @@ You can do the following changes on an upgraded contract and it will behave as i
    - Changing to return solidity value types (uint, string etc), as well as arrays and tuples were successful
    - See contracts _UintAdvancedV2k_ChangeReturn_ to _UintAdvancedV2s_ChangeReturn_ (all letters k-s)
    - Changing to return structs was not tested due to limitations of the javascript web3 object at the time. See contract _UintAdvancedV2t_ChangeReturn_
-   - **TODO** do above test when web3.js is updated
    - **Note:** applications or other smart contracts will need to know about the upgrade to be able to correctly interpret the new return values with the new ABI.
    - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
 10. Change the order of events
@@ -131,6 +131,9 @@ You can do the following changes on an upgraded contract and it will behave as i
     - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
 13. Create upgradeable fallback functions (). You can have payable fallback functions and you can upgrade and change from payable to not-payable and visa-versa.
     - See contract _UintFallback_
+14. Overload functions in the upgraded contract
+    - See contracts _UintAdvancedV2x_Overloaded_ and _UintAdvancedV2y_Overloaded_
+    **Note:** This was not fully tested due to limitations of the web3 object.
 
 #### 3.3.2 You can't
 
@@ -148,12 +151,15 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 
 **TODO:**
 * test using libraries
-* test overloading functions with more / different arguments
 * test bytecode optimizations
 * Change access modifier pure to view.
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded
 * do a spellcheck of this readme.
+
+**TODO when web3 is updated:**
+* Fix test of Struct changed return value _UintAdvancedV2w_ChangeReturn_
+* Fix test of overloaded functions in _UintAdvancedV2x_Overloaded_
 
 ### 3.4 Upgrade safety
 

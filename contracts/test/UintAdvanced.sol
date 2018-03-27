@@ -177,7 +177,6 @@ contract UintAdvancedV2k_ChangeVisibility is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2i_ChangeKeyword is Upgradeable {*/
 contract UintAdvancedV2l_ChangeKeyword is Upgradeable {
     uint value;
 
@@ -190,7 +189,6 @@ contract UintAdvancedV2l_ChangeKeyword is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2j_NewStorage is Upgradeable {*/
 contract UintAdvancedV2m_NewStorage is Upgradeable {
     uint value;
     uint value2;
@@ -218,7 +216,6 @@ contract UintAdvancedV2m_NewStorage is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2k_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2n_ChangeReturn is Upgradeable {
     uint value;
 
@@ -231,8 +228,6 @@ contract UintAdvancedV2n_ChangeReturn is Upgradeable {
     }
 }
 
-// __________________________________
-/*contract UintAdvancedV2l_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2o_ChangeReturn is Upgradeable {
     uint value;
 
@@ -245,8 +240,6 @@ contract UintAdvancedV2o_ChangeReturn is Upgradeable {
     }
 }
 
-
-/*contract UintAdvancedV2m_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2p_ChangeReturn is Upgradeable {
     uint value;
 
@@ -259,7 +252,6 @@ contract UintAdvancedV2p_ChangeReturn is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2n_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2q_ChangeReturn is Upgradeable {
     uint value;
 
@@ -272,7 +264,6 @@ contract UintAdvancedV2q_ChangeReturn is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2o_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2r_ChangeReturn is Upgradeable {
     uint value;
 
@@ -285,7 +276,6 @@ contract UintAdvancedV2r_ChangeReturn is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2p_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2s_ChangeReturn is Upgradeable {
     uint value;
 
@@ -298,7 +288,6 @@ contract UintAdvancedV2s_ChangeReturn is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2q_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2t_ChangeReturn is Upgradeable {
     uint value;
 
@@ -311,7 +300,6 @@ contract UintAdvancedV2t_ChangeReturn is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2r_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2u_ChangeReturn is Upgradeable {
     uint value;
 
@@ -327,7 +315,6 @@ contract UintAdvancedV2u_ChangeReturn is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2s_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2v_ChangeReturn is Upgradeable {
     uint value;
 
@@ -343,7 +330,6 @@ contract UintAdvancedV2v_ChangeReturn is Upgradeable {
     }
 }
 
-/*contract UintAdvancedV2t_ChangeReturn is Upgradeable {*/
 contract UintAdvancedV2w_ChangeReturn is Upgradeable {
     uint value;
 
@@ -361,5 +347,37 @@ contract UintAdvancedV2w_ChangeReturn is Upgradeable {
 
     function setValue(uint _value) public {
         value = _value;
+    }
+}
+
+contract UintAdvancedV2x_Overloaded is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint) {
+        return value;
+    }
+
+    function getValue(uint _value2) view public returns (uint) {
+        return value + _value2;
+    }
+
+    function setValue(uint _value) public {
+        value = _value;
+    }
+
+    function setValue(uint _value, uint _value2) public {
+        value = _value + _value2;
+    }
+}
+
+contract UintAdvancedV2y_Overloaded is Upgradeable {
+    uint value;
+
+    function getValue(uint value2) view public returns (uint) {
+        return value + value2;
+    }
+
+    function setValue(uint _value, uint _value2) public {
+        value = _value + _value2;
     }
 }

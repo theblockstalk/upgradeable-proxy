@@ -23,6 +23,8 @@ const UintAdvancedV2t_ChangeReturn = artifacts.require('UintAdvancedV2t_ChangeRe
 const UintAdvancedV2u_ChangeReturn = artifacts.require('UintAdvancedV2u_ChangeReturn')
 const UintAdvancedV2v_ChangeReturn = artifacts.require('UintAdvancedV2v_ChangeReturn')
 const UintAdvancedV2w_ChangeReturn = artifacts.require('UintAdvancedV2w_ChangeReturn')
+const UintAdvancedV2x_Overloaded = artifacts.require('UintAdvancedV2x_Overloaded')
+const UintAdvancedV2y_Overloaded = artifacts.require('UintAdvancedV2y_Overloaded')
 
 const INDENT = '        ';
 
@@ -52,7 +54,9 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2t_ChangeReturn,
         uintAdvancedV2u_ChangeReturn,
         uintAdvancedV2v_ChangeReturn,
-        uintAdvancedV2w_ChangeReturn;
+        uintAdvancedV2w_ChangeReturn,
+        uintAdvancedV2x_Overloaded,
+        uintAdvancedV2y_Overloaded;
 
     let uintAdvancedV1byProxy,
         uintAdvancedV2a_NewFunctionbyProxy,
@@ -68,7 +72,9 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2t_ChangeReturnbyProxy,
         uintAdvancedV2u_ChangeReturnbyProxy,
         uintAdvancedV2v_ChangeReturnbyProxy,
-        uintAdvancedV2w_ChangeReturnbyProxy;
+        uintAdvancedV2w_ChangeReturnbyProxy,
+        uintAdvancedV2x_OverloadedbyProxy,
+        uintAdvancedV2y_OverloadedbyProxy;
 
     const inputValue = 10, inputValue2 = 21, inputValue3 = 32;
 
@@ -97,6 +103,8 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2u_ChangeReturn = await UintAdvancedV2u_ChangeReturn.new();
         uintAdvancedV2v_ChangeReturn = await UintAdvancedV2v_ChangeReturn.new();
         uintAdvancedV2w_ChangeReturn = await UintAdvancedV2w_ChangeReturn.new();
+        uintAdvancedV2x_Overloaded = await UintAdvancedV2x_Overloaded.new();
+        uintAdvancedV2y_Overloaded = await UintAdvancedV2y_Overloaded.new();
 
         proxy = await Proxy.new(uintAdvancedV1.address);
 
@@ -115,6 +123,9 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2u_ChangeReturnbyProxy = UintAdvancedV2u_ChangeReturn.at(proxy.address);
         uintAdvancedV2v_ChangeReturnbyProxy = UintAdvancedV2v_ChangeReturn.at(proxy.address);
         uintAdvancedV2w_ChangeReturnbyProxy = UintAdvancedV2w_ChangeReturn.at(proxy.address);
+        uintAdvancedV2x_OverloadedbyProxy = UintAdvancedV2x_Overloaded.at(proxy.address);
+        uintAdvancedV2y_OverloadedbyProxy = UintAdvancedV2y_Overloaded.at(proxy.address);
+
     })
 
     describe('test adding new functions to the contract', () => {
@@ -356,7 +367,7 @@ contract('UintAdvanced', function (accounts) {
         })
     })
 
-    describe('test overwride the contract functions with new logic', () => {
+    describe('test overwriting the contract functions with new logic', () => {
         it('should upgrade the contract UintAdvanced to version 2g with a function call logic updated', async function () {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
@@ -427,6 +438,53 @@ contract('UintAdvanced', function (accounts) {
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
             assert.equal(666, value, "The values should be equal to 666")
+        })
+    })
+
+    describe('test overloading the contract functions', () => {
+        it('should upgrade the contract UintAdvanced to version 2x with overloaded functions', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2x_Overloaded.address)
+
+            // let value = await uintAdvancedV2x_OverloadedbyProxy.getValue.call()
+            // assert.equal(inputValue, value.toNumber(), "The value should be equal to inputValue")
+
+            // value = await uintAdvancedV2x_OverloadedbyProxy.getValue.call(inputValue2)
+            // assert.equal(inputValue+inputValue2, value.toNumber(), "The values should be equal to inputValue+inputValue2")
+            //
+            // await uintAdvancedV2x_OverloadedbyProxy.setValue(inputValue2, inputValue3)
+            //
+            // value = await uintAdvancedV2x_OverloadedbyProxy.getValue.call()
+            // assert.equal(inputValue2+inputValue3, value.toNumber(), "The values should be equal to inputValue2+inputValue3")
+        })
+
+        it('should upgrade the contract UintAdvanced to version 2y with only overloaded functions', async function () {
+            await uintAdvancedV1byProxy.setValue(inputValue)
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2y_Overloaded.address)
+
+            try {
+                await uintAdvancedV1byProxy.getValue.call()
+                throw new Error("This error should not happen")
+            } catch (error) {
+                assert.equal(error.message, "VM Exception while processing transaction: revert", "getValue() is no longer a function")
+            }
+
+            try {
+                await uintAdvancedV1byProxy.setValue(10)
+                throw new Error("This error should not happen")
+            } catch (error) {
+                assert.equal(error.message, "VM Exception while processing transaction: revert", "setValue() is no longer a function")
+            }
+
+            let value = await uintAdvancedV2y_OverloadedbyProxy.getValue.call(inputValue2)
+            assert.equal(inputValue+inputValue2, value.toNumber(), "The values should be equal to inputValue+inputValue2")
+
+            await uintAdvancedV2y_OverloadedbyProxy.setValue(inputValue, inputValue2)
+
+            value = await uintAdvancedV2y_OverloadedbyProxy.getValue.call(inputValue3)
+            assert.equal(inputValue+inputValue2+inputValue3, value.toNumber(), "The values should be equal to +inputValue+inputValue2+inputValue3")
         })
     })
 })
