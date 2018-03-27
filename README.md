@@ -93,16 +93,16 @@ You can do the following changes on an upgraded contract and it will behave as i
 
 1. Add (append) in new storage variables to the upgraded smart contract and use it in functions.
    - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_, _UintAdvancedV2f_NewStorage_ and _UintAdvancedV2j_NewStorage_.
-   - **Note:** new variables must be appended to not change the existing order of variables. See point 1 of Section 3.3.2 You can't below
+   - **Note:** New variables **must be appended** to not change the existing order of variables. See point 1 of _Section 3.3.2 You can't_ below
 2. Change function logic of pre-existing functions so long as the signature does not change.
    - See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
 3. Add new functions to the upgraded contract.
    - See contract _UintAdvancedV2a_NewFunction_
-   - **Note:** the new function can be added in any place in the contract. It does not need to be added as the last function. See contract _UintAdvancedV2i_NewFunction_
-   - **Note:** applications or other smart contracts will need to know about the upgrade to be able to call the new function with the new ABI.
+   - **Note:** The new function can be added in any place in the contract. It does not need to be added as the last function. See contract _UintAdvancedV2i_NewFunction_
+   - **Note:** Applications or other smart contracts will need to know about the upgrade to be able to call the new function with the new ABI.
 4. Add new events to the upgraded contract.
    - See contract _UintAdvancedV2c_NewEvent_
-   - **Note:** applications or other smart contracts will need to know about the upgrade to be able to watch for the new event with the new ABI.
+   - **Note:** Applications or other smart contracts will need to know about the upgrade to be able to watch for the new event with the new ABI.
 5. Change the order of transactions in a function.
    - See contract _UintAdvancedV2d_ReverseFunctionOrder_
 6. Change visibility for upgraded functions.
@@ -110,25 +110,25 @@ You can do the following changes on an upgraded contract and it will behave as i
      - public --> external. Functions were still callable externally. See contract _UintAdvancedV2j_ChangeVisibility_
      - public --> internal. Function calls could no longer be made. see contract _UintAdvancedV2k_ChangeVisibility_
    - **TODO:** test this more
-   - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution.
+   - **Note:** Normal contracts do now allow for inheritance/overloading with changed visibility keywords. The compiler will not issue any warnings when using upgradeable contracts as such. Use with caution.
 7. Change access modifier view to pure or visa versa
    - See contract _UintAdvancedV2l_ChangeKeyword_
-   - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
+   - **Note:** Normal contracts do not allow for functions to be overloaded with different keywords view and pure. The compiler will not issue any warnings when using upgradeable contracts this way. Use with caution.
 8. Remove events from the contract
    - See contract _UintEventV2a_RemovedEvent_
 9. Change the return type for function calls.
    - Changing to return solidity value types (uint, string etc), as well as arrays and tuples were successful
    - See contracts _UintAdvancedV2n_ChangeReturn_ to _UintAdvancedV2v_ChangeReturn_ (all letters k-s)
    - Changing to return structs was not tested due to limitations of the javascript web3 object at the time. See contract _UintAdvancedV2w_ChangeReturn_
-   - **Note:** applications or other smart contracts will need to know about the upgrade to be able to correctly interpret the new return values with the new ABI.
-   - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
+   - **Note:** Applications or other smart contracts will need to know about the upgrade to be able to correctly interpret the new return values with the new ABI.
+   - **Note:** Normal contracts do not allow for overloading with different return values. The compiler will not issue any warnings when using upgradeable contracts this way. Use with caution.
 10. Change the order of events
     - See contract _UintEventV2b_EventReordered_
 11. Send Ether to a payable function in an upgradeable contract
     - See contract _UintEther_
 12. Change functions from payable to non-payable and non-payable to payable
     - See contract _UintEther_
-    - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
+    - **Note:** Normal contracts do not allow for overloading with different payable keywords. The compiler will not issue any warnings when using upgradeable contracts this way. Use with caution.
 13. Create upgradeable fallback functions (). You can have payable fallback functions and you can upgrade and change from payable to not-payable and visa-versa.
     - See contract _UintFallback_
 14. Overload functions in the upgraded contract
