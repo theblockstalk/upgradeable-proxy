@@ -129,6 +129,8 @@ You can do the following changes on an upgraded contract and it will behave as i
 12. Change functions from payable to non-payable and non-payable to payable
     - See contract _UintEther_
     - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
+13. Create upgradeable fallback functions (). You can have payable fallback functions and you can upgrade and change from payable to not-payable and visa-versa.
+    - See contract _UintFallback_
 
 #### 3.3.2 You can't
 
@@ -146,6 +148,8 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 
 **TODO:**
 * test using libraries
+* test overloading functions with more / different arguments
+* test bytecode optimizations
 * Change access modifier pure to view.
 * Test upgradeability of data structures: strings, mappings, structs, arrays
 * upgrade a contract twice with many things that can be upgraded upgraded

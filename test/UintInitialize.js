@@ -25,6 +25,8 @@ contract('UintInitialize', function (accounts) {
     })
 
     it('should not initialize if the variable is set in the contract', async function () {
+        console.log(INDENT, 'Note that smart contract initialization of UintInitializeV1a_NotInitialized fails!!!')
+
         let value = await uintInitializebyProxy.getValue.call()
         assert.equal(value.toNumber(), 0, "value should not be initialized")
     })
@@ -73,8 +75,6 @@ contract('UintInitialize', function (accounts) {
     })
 
     it('should only be able to initialize the contract through the proxy once', async function() {
-        // TODO:
-
         await uintInitializebyProxy.upgradeTo(uintInitializeV1b_Initialized.address) // upgrade to 1b
         let tx = await uintInitializebyProxy.upgradeTo(uintInitializeV1a_NotInitialized.address) // revert back to v1a
         assert.equal(tx.logs.length, 1, 'There should only be one event')

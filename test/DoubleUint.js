@@ -21,7 +21,7 @@ contract('DoubleUint', function (accounts) {
     })
 
     it('should upgrade the contract DoubleUint to version 2 with variables in reverse order', async function () {
-        console.log(INDENT, 'Note that smart contract upgrade 2a fails!!!')
+        console.log(INDENT, 'Note that smart contract upgrade to DoubleUintV2a_NewStorage fails!!!')
         await doubleUintV1byProxy.setValue(inputValue)
         await doubleUintV1byProxy.setValue2(inputValue2)
 
