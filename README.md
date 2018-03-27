@@ -111,15 +111,15 @@ You can do the following changes on an upgraded contract and it will behave as i
      - public --> internal. Function calls could no longer be made. see contract _UintAdvancedV2k_ChangeVisibility_
    - **TODO:** test this more
    - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution.
-7. Change access modifier view to pure.
-   - See contract _UintAdvancedV2i_ChangeKeyword_
+7. Change access modifier view to pure or visa versa
+   - See contract _UintAdvancedV2l_ChangeKeyword_
    - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
 8. Remove events from the contract
    - See contract _UintEventV2a_RemovedEvent_
 9. Change the return type for function calls.
    - Changing to return solidity value types (uint, string etc), as well as arrays and tuples were successful
-   - See contracts _UintAdvancedV2k_ChangeReturn_ to _UintAdvancedV2s_ChangeReturn_ (all letters k-s)
-   - Changing to return structs was not tested due to limitations of the javascript web3 object at the time. See contract _UintAdvancedV2t_ChangeReturn_
+   - See contracts _UintAdvancedV2n_ChangeReturn_ to _UintAdvancedV2v_ChangeReturn_ (all letters k-s)
+   - Changing to return structs was not tested due to limitations of the javascript web3 object at the time. See contract _UintAdvancedV2w_ChangeReturn_
    - **Note:** applications or other smart contracts will need to know about the upgrade to be able to correctly interpret the new return values with the new ABI.
    - **Note:** Normal contract inheritance does not allow this functionality. Ergo the compiler will not issue any warnings when using upgradeable contracts as such. Use with caution. **TODO:** is this true???
 10. Change the order of events
@@ -152,9 +152,7 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 **TODO:**
 * test using libraries
 * test bytecode optimizations
-* Change access modifier pure to view.
 * Test upgradeability of data structures: strings, mappings, structs, arrays
-* upgrade a contract twice with many things that can be upgraded upgraded
 * do a spellcheck of this readme.
 
 **TODO when web3 is updated:**

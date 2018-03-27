@@ -439,6 +439,19 @@ contract('UintAdvanced', function (accounts) {
             let value = bigNumValue.toNumber();
             assert.equal(666, value, "The values should be equal to 666")
         })
+
+        it('should upgrade the contract UintAdvanced from version 2l with a function keyword pure changed to view', async function () {
+            proxy = await Proxy.new(uintAdvancedV2l_ChangeKeyword.address);
+            uintAdvancedV1byProxy = UintAdvancedV1.at(proxy.address);
+            await uintAdvancedV1byProxy.setValue(inputValue)
+            let value = await uintAdvancedV1byProxy.getValue.call()
+            assert.equal(666, value.toNumber(), "The values should be equal to 666")
+
+            await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV1.address)
+
+            value = await uintAdvancedV1byProxy.getValue.call()
+            assert.equal(inputValue, value.toNumber(), "The values should be equal to inputValue")
+        })
     })
 
     describe('test overloading the contract functions', () => {
