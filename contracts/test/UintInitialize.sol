@@ -17,10 +17,10 @@ contract UintInitializeV1b_Initialized is Upgradeable {
         return value;
     }
 
-    function initialize() public {
-        if(initializeUpgradeable(target)) {
+    function initialize() initializeOnceOnly public {
+        /*if(initializeUpgradeable(target)) {*/
             value = 111;
-        }
+        /*}*/
     }
 }
 
@@ -31,9 +31,9 @@ contract UintInitializeV2 is Upgradeable {
         return value;
     }
 
-    function initialize() public {
-        if(initializeUpgradeable(target)) {
+    function initialize() initializeOnceOnly public {
+        /*if(initializeUpgradeable(target)) {*/
             value = 222;
-        }
+        /*}*/
     }
 }
