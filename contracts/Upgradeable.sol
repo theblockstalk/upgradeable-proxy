@@ -3,10 +3,10 @@ pragma solidity ^0.4.18;
 import './Proxied.sol';
 
 /*
- * @title Upgradeable v1.0
+ * @title Upgradeable v0.5
  * @author Jack Tanner
- * @notice The Upgradeable contract the parent contract of any contract are to be used as an upgradeable contract
- * as a target of the Proxy contract
+ * @notice The Upgradeable contract is the parent contract of any contracts that are to be used as an
+ * upgradeable contract
  *
  * Upgradeable contracts are set as the target of the Proxy contract and, so long as they do not change
  * any state variables, can be upgraded by calling Proxy.upgradeTo(address)
