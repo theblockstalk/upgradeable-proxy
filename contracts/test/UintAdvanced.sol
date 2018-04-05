@@ -42,10 +42,8 @@ contract UintAdvancedV2b_NewStorage is Upgradeable {
         value = _value + value2;
     }
 
-    function initialize() public {
-        if(initializeUpgradeable(target)) {
-            value2 = 100;
-        }
+    function initialize() initializeOnceOnly public {
+        value2 = 100;
     }
 }
 
@@ -87,10 +85,8 @@ contract UintAdvancedV2e_NewStorage is Upgradeable {
         value = _value;
     }
 
-    function initialize() public {
-        if(initializeUpgradeable(target)) {
-            value2 = 100;
-        }
+    function initialize() initializeOnceOnly public {
+        value2 = 100;
     }
 }
 
@@ -106,10 +102,8 @@ contract UintAdvancedV2f_NewStorage is Upgradeable {
         value = _value;
     }
 
-    function initialize() public {
-        if(initializeUpgradeable(target)) {
-            value2 = 100;
-        }
+    function initialize() initializeOnceOnly public {
+        value2 = 100;
     }
 }
 
@@ -201,10 +195,8 @@ contract UintAdvancedV2m_NewStorage is Upgradeable {
         value = _value;
     }
 
-    function initialize() public {
-        if(initializeUpgradeable(target)) {
-            value2 = 100;
-        }
+    function initialize() initializeOnceOnly public {
+        value2 = 100;
     }
 
     function getValue2() public returns (uint) {
