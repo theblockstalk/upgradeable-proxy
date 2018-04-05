@@ -31,7 +31,6 @@ The three main contracts that are used in the upgradeable proxy mechanism are:
 3. [Upgradeable.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Upgradeable.sol)
 
 Please see in-code contract and function descriptions for how these contracts allow you to make an upgradeable smart contract.
-**TODO:** write descriptions of contracts above into code...
 
 ### 3.2 How to make a simple Uint getter/setter smart contract upgradeable
 
@@ -144,6 +143,8 @@ You cannot do the following changes on an upgraded contract and expect that it w
 
 1. Change the order of previously defined state variables in the next version upgraded smart contracts
    - See contract _DoubleUintV2_
+   - Adding new slots to a fixed size array is not possible. See contract _ArraySimple_
+   - Adding extra fields to a struct is not possible. See _StructSimple_ (TODO)
 2. Declare any variables with initialized values `uint variable1 = 8`. This includes declare any constant state variables `uint constant variable1 = 8`.
    - **Note:** state variables must be initialized using the intialize() function.
    - See contract _UintInitialize_
