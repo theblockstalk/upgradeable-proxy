@@ -56,7 +56,7 @@ contract('ArraySimple', function (accounts) {
     })
 
     it('should not be able to use ABI for function that accesses storage that does not exist', async function () {
-        console.log('Note that smart contract array change arraySimpleV2a_ExtraValue fails!!!')
+        console.log(INDENT, 'Note that smart contract array change arraySimpleV2a_ExtraValue fails!!!')
         try {
             await arraySimpleV2a_ExtraValuebyProxy.setValues([1, 2, 3, 4]);
             throw new Error("This error should not happen")
@@ -66,7 +66,7 @@ contract('ArraySimple', function (accounts) {
     })
 
     it('should not be able to upgrade to function that increases fixed array size', async function () {
-        console.log('Note that smart contract array change arraySimpleV2a_ExtraValue fails!!!')
+        console.log(INDENT, 'Note that smart contract array change arraySimpleV2a_ExtraValue fails!!!')
         await arraySimplebyProxy.upgradeTo(arraySimpleV2a_ExtraValue.address)
         await arraySimpleV2a_ExtraValuebyProxy.setValues([1, 2, 3, 4]);
 
@@ -76,7 +76,7 @@ contract('ArraySimple', function (accounts) {
     })
 
     it('should not be able to upgrade a fixed size array to a dynamic array', async function () {
-        console.log('Note that smart contract array change arraySimpleV1b fails!!!')
+        console.log(INDENT, 'Note that smart contract array change arraySimpleV1b fails!!!')
         await arraySimplebyProxy.setValues(inputValues)
         let values = await arraySimplebyProxy.getValues.call()
         parseBigNumberArray(values)
@@ -114,7 +114,7 @@ contract('ArraySimple', function (accounts) {
     })
 
     it('should not be able to upgrade a dynamic size array to a static array', async function () {
-        console.log('Note that smart contract array change arraySimpleV1a fails!!!')
+        console.log(INDENT, 'Note that smart contract array change arraySimpleV1a fails!!!')
         proxy = await Proxy.new(arraySimpleV1b.address);
         arraySimpleV1bbyProxy = ArraySimpleV1b.at(proxy.address);
         await arraySimpleV1bbyProxy.setValues(inputValues)

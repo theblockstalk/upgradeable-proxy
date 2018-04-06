@@ -136,6 +136,9 @@ You can do the following changes on an upgraded contract and it will behave as i
 15. Overload functions in the upgraded contract
     - See contracts _UintAdvancedV2x_Overloaded_ and _UintAdvancedV2y_Overloaded_
     **Note:** This was not fully tested due to limitations of the web3 object.
+16. Append new fields to a struct and still be able to access all previously set struct state as expected
+    - See contract _ArraySimpleV2c_
+    - **Note:** Applications or other smart contracts may need to know about the upgrade to be able to correctly interpret new return values of structs with the new ABI.
 
 #### 3.3.2 You can't
 
@@ -145,7 +148,7 @@ You cannot do the following changes on an upgraded contract and expect that it w
    - See contract _DoubleUintV2_
    - Adding new slots to a fixed size array is not possible. See contract _ArraySimple_
    - Changing from a fixed sized to a dynamic sized array or visa-versa is not possible. See contract _ArraySimple_
-   - Adding extra fields to a struct is not possible. See _StructSimple_
+   - Adding (appending) fields to a struct is possible but changing the order of fields in a struct is not possible. See _StructSimple_
 2. Declare any variables with initialized values `uint variable1 = 8`. This includes declare any constant state variables `uint constant variable1 = 8`.
    - **Note:** state variables must be initialized using the intialize() function.
    - See contract _UintInitialize_
