@@ -141,9 +141,11 @@ You can do the following changes on an upgraded contract and it will behave as i
     - See contract _ArraySimpleV2c_
     - **Note:** Applications or other smart contracts may need to know about the upgrade to be able to correctly interpret new return values of structs with the new ABI.
 17. Change variable value types during an upgrade such as from uint to bool, or bytes32 to uint
-    - See contracts _MapSimple_
+    - See contract _ChangeType_
     - **Note:** The contract will interperate any state stored by the new variable type. Changing state types may cause unexpected results. The compiler will not issue any warnings when using upgradeable contracts this way. Use with caution.
-    - **TODO** test this further, test changing different variable sizes
+    - It looks like standard Solidity casting rules apply. This has not been thoroughly tested.
+    - Mapping key and value types can also be changed. See contract _MapSimple_
+    - **TODO** test this further
 
 #### 3.3.2 You can't
 
