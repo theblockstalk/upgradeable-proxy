@@ -93,9 +93,10 @@ You can do the following changes on an upgraded contract and it will behave as i
 1. Add (append) in new storage variables to the upgraded smart contract and use it in functions.
    - See contracts _UintAdvancedV2b_NewStorage_, _UintAdvancedV2e_NewStorage_, _UintAdvancedV2f_NewStorage_ and _UintAdvancedV2j_NewStorage_.
    - **Note:** New variables **must be appended** to not change the existing order of variables. See point 1 of _Section 3.3.2 You can't_ below
-2. Upgrade uints, addresses, booleans, fixed sized arrays
-   - See _UintSimple_, _BoolSimple_, _AddressSimple_
-   - **TODO:** enums, bytes32, dynamic bytes, mapping dynamic arrays, fixed arrays
+   - See point 16 below regarding appending new fields to structures
+2. Upgrade uints, addresses, booleans, fixed sized arrays, dynamic arrays, structs and mappings
+   - See _UintSimple_, _BoolSimple_, _AddressSimple_, _ArraySimple_, _StructSimple_, _MapSimple_
+   - **TODO:** enums, bytes32, dynamic bytes
 3. Change function logic of pre-existing functions so long as the signature does not change.
    - See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
 4. Add new functions to the upgraded contract.
@@ -160,7 +161,6 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 **TODO:**
 * test using libraries
 * test bytecode optimizations
-* Test upgradeability of data structures: mappings, structs
 * do a spellcheck of this readme.
 
 **TODO when web3 is updated:**
