@@ -144,7 +144,8 @@ You cannot do the following changes on an upgraded contract and expect that it w
 1. Change the order of previously defined state variables in the next version upgraded smart contracts
    - See contract _DoubleUintV2_
    - Adding new slots to a fixed size array is not possible. See contract _ArraySimple_
-   - Adding extra fields to a struct is not possible. See _StructSimple_ (TODO)
+   - Changing from a fixed sized to a dynamic sized array or visa-versa is not possible. See contract _ArraySimple_
+   - Adding extra fields to a struct is not possible. See _StructSimple_
 2. Declare any variables with initialized values `uint variable1 = 8`. This includes declare any constant state variables `uint constant variable1 = 8`.
    - **Note:** state variables must be initialized using the intialize() function.
    - See contract _UintInitialize_
@@ -156,7 +157,7 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 **TODO:**
 * test using libraries
 * test bytecode optimizations
-* Test upgradeability of data structures: strings, mappings, structs, arrays
+* Test upgradeability of data structures: mappings, structs
 * do a spellcheck of this readme.
 
 **TODO when web3 is updated:**
