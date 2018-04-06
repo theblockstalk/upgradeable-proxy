@@ -51,6 +51,8 @@ contract UintSimpleV1 is Upgradeable {
 }
 ```
 
+The following three contracts achieve the exact same upgrade of the setValue() logic on UintSimpleV1 above.
+
 #### 3.2.1 One smart contract containing all desired storage and logic
 See tests for contracts _UintSimple_
 
@@ -68,10 +70,16 @@ contract UintSimpleV2 is Upgradeable {
 }
 ```
 
+**Advantages:**
+- Easy to see whole upgraded contract in one place
+
 #### 3.2.2 A modular smart contract design
 See tests for contracts _UintSimpleModular_
 
 See [UintSimpleModular.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/test/UintSimpleModular.sol)
+
+**Advantages:**
+- Forces developer to addopt a strict ordering of state variables, but adds abstraction and may be more confusing
 
 #### 3.2.3 An inherited smart contract
 See tests for contracts _UintInherited_
@@ -83,6 +91,10 @@ contract UintInheritedV2 is UintSimpleV1 {
     }
 }
 ```
+
+**Advantages:**
+- Easy to see what are the parts that are being upgraded.
+- Forces the same ordering of state variables
 
 ### 3.3 What can and can't you do when upgrading a contract with the Proxy
 
