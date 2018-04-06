@@ -5,7 +5,7 @@ This repository tests the proxy upgradeability mechanism. It is a simplified ver
 
 The results of tests will be summarised here. The contributions of this repository are made for general knowledge only. No contributors are to be held liable for any damages occurred from using code or information from this repository. Do your own thorough testing before deploying any upgradeable smart contract mechanisms.
 
-That said, there are **over 70 unit tests** in this repository that try to put each different way you could use the proxy upgradeable mechanism to the test.
+That said, there are **over 90 unit tests** in this repository that try to put each different way you could use the proxy upgradeable mechanism to the test.
 
 ## 1. Getting started
 
@@ -36,7 +36,8 @@ Please see in-code contract and function descriptions for how these contracts al
 
 To see the simplest way of implementing an upgradeable smart contract, check out UintSimple.sol and it's test suite.
 
-There are several ways to structure a smart contract that will be upgradeable. The following three sections explain these different structures and their pros and cons. In each of the structures, it was found that the gas cost increase was the same (~3% or 1100 gas). For each mechanism, the following smart contract will be upgraded with new logic for the setValue() function:
+There are several ways to structure a smart contract that will be upgradeable. The following three sections explain these different structures and their pros and cons. In each of the structures, it was found that the gas cost increase was the same (~3% or 1100 gas).
+
 ```
 contract UintSimpleV1 is Upgradeable {
     uint value;
