@@ -32,7 +32,9 @@ The three main contracts that are used in the upgradeable proxy mechanism are:
 
 Please see in-code contract and function descriptions for how these contracts allow you to make an upgradeable smart contract. The below diagram shows how the function execution flow (steps 1-4) and how the contract is upgraded (steps 5-7):
 
-![Upgradeable](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/diagram1.png)
+![Upgradeable](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/diagram1.jpg)
+
+Understanding the [DELEGATECALL](https://ethereum.stackexchange.com/questions/3667/difference-between-call-callcode-and-delegatecall) Ethereum opcode is key to understanding the upgradeable-proxy mechanism.
 
 ### 3.2 How to make a simple Uint getter/setter smart contract upgradeable
 
