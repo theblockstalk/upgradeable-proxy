@@ -5,7 +5,7 @@ This repository tests the proxy upgradeability mechanism. It is a simplified ver
 
 The results of tests will be summarised here. The contributions of this repository are made for general knowledge only. No contributors are to be held liable for any damages occurred from using code or information from this repository. Do your own thorough testing before deploying any upgradeable smart contract mechanisms.
 
-That said, there are **over 90 unit tests** in this repository that try to put each different way you could use the proxy upgradeable mechanism to the test.
+That said, there are **over 90 unit tests** in this repository that try to put each different way you could use the proxy upgradeable mechanism to the test. This readme should point to where such different examples of upgrades can be found for developer reference in times of frustration.
 
 ## 1. Getting started
 
@@ -30,13 +30,15 @@ The three main contracts that are used in the upgradeable proxy mechanism are:
 2. [Proxy.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Proxy.sol)
 3. [Upgradeable.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Upgradeable.sol)
 
-Please see in-code contract and function descriptions for how these contracts allow you to make an upgradeable smart contract.
+Please see in-code contract and function descriptions for how these contracts allow you to make an upgradeable smart contract. The below diagram shows how the function execution flow (steps 1-4) and how the contract is upgraded (steps 5-7):
+
+![Upgradeable](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/diagram1.png)
 
 ### 3.2 How to make a simple Uint getter/setter smart contract upgradeable
 
 To see the simplest way of implementing an upgradeable smart contract, check out UintSimple.sol and it's test suite.
 
-There are several ways to structure a smart contract that will be upgradeable. The following three sections explain these different structures and their pros and cons. In each of the structures, it was found that the gas cost increase was the same (~3% or 1100 gas).
+There are several ways to structure a smart contract that will be upgradeable. The following three sections explain these different structures and their characteristics. In each of the structures, it was found that the gas cost increase was the same (~3% or 1100 gas).
 
 ```
 contract UintSimpleV1 is Upgradeable {
@@ -71,16 +73,17 @@ contract UintSimpleV2 is Upgradeable {
 }
 ```
 
-**Advantages:**
-- Easy to see whole upgraded contract in one place
+**Characteristics:**
+- Easy to see the entire upgraded contract in one place
 
 #### 3.2.2 A modular smart contract design
 See tests for contracts _UintSimpleModular_
 
 See [UintSimpleModular.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/test/UintSimpleModular.sol)
 
-**Advantages:**
-- Forces developer to addopt a strict ordering of state variables, but adds abstraction and may be more confusing
+**Characteristics:**
+- Forces strict ordering of state variables
+- Adds abstraction and may be more confusing
 
 #### 3.2.3 An inherited smart contract
 See tests for contracts _UintInherited_
@@ -94,12 +97,13 @@ contract UintInheritedV2 is UintSimpleV1 {
 ```
 
 **Advantages:**
-- Easy to see what are the parts that are being upgraded.
-- Forces the same ordering of state variables
+- Easy to see components that are being upgraded.
+- Forces the same ordering of state variables.
+- Cannot see the rest of the contract.
 
-### 3.3 What can and can't you do when upgrading a contract with the Proxy
+### 3.3 What you _can and can't do_ when upgrading a contract
 
-#### 3.3.1 You can
+#### 3.3.1 You can :+1:
 
 You can do the following changes on an upgraded contract and it will behave as if you have replaced the contract and kept the state.
 
@@ -109,17 +113,18 @@ You can do the following changes on an upgraded contract and it will behave as i
    - See point 16 below regarding appending new fields to structures
 2. Upgrade uints, addresses, booleans, fixed sized arrays, dynamic arrays, structs and mappings
    - See _UintSimple_, _BoolSimple_, _AddressSimple_, _ArraySimple_, _StructSimple_, _MapSimple_
-   - **TODO:** enums, bytes32, dynamic bytes
+   - **TODO:** enums, bytes32, dynamic bytes (it seems very likely that this will be possible)
 3. Change function logic of pre-existing functions so long as the signature does not change.
    - See contracts _UintSimple_, _UintAdvancedV2g_OverrideFunctionGetter_ and _UintAdvancedV2h_OverrideFunctionSetter_
 4. Add new functions to the upgraded contract.
    - See contract _UintAdvancedV2a_NewFunction_
-   - **Note:** The new function can be added in any place in the contract. It does not need to be added as the last function. See contract _UintAdvancedV2i_NewFunction_
+   - **Note:** The new function can be added in any place in the contract. It does not need to be appended as the last function. See contract _UintAdvancedV2i_NewFunction_
    - **Note:** Applications or other smart contracts will need to know about the upgrade to be able to call the new function with the new ABI.
 5. Add new events to the upgraded contract.
    - See contract _UintAdvancedV2c_NewEvent_
+   - **Note:** The new event can be added in any place in the contract. It does not need to be appended as the last event.
    - **Note:** Applications or other smart contracts will need to know about the upgrade to be able to watch for the new event with the new ABI.
-6. Change the order of transactions in a function.
+6. Change the order of functions in a contract.
    - See contract _UintAdvancedV2d_ReverseFunctionOrder_
 7. Change visibility for upgraded functions.
    - **Note:** Only the following changes were tested
@@ -127,14 +132,14 @@ You can do the following changes on an upgraded contract and it will behave as i
      - public --> internal. Function calls could no longer be made. see contract _UintAdvancedV2k_ChangeVisibility_
    - **TODO:** test this more
    - **Note:** Normal contracts do now allow for inheritance/overloading with changed visibility keywords. The compiler will not issue any warnings when using upgradeable contracts as such. Use with caution.
-8. Change access modifier view to pure or visa versa
+8. Change access modifier view to pure or from pure to view
    - See contract _UintAdvancedV2l_ChangeKeyword_
    - **Note:** Normal contracts do not allow for functions to be overloaded with different keywords view and pure. The compiler will not issue any warnings when using upgradeable contracts this way. Use with caution.
 9. Remove events from the contract
    - See contract _UintEventV2a_RemovedEvent_
 10. Change the return type for function calls.
     - Changing to return solidity value types (uint, string etc), as well as arrays and tuples were successful
-    - See contracts _UintAdvancedV2n_ChangeReturn_ to _UintAdvancedV2v_ChangeReturn_ (all letters k-s)
+    - See contracts _UintAdvancedV2n_ChangeReturn_ to _UintAdvancedV2v_ChangeReturn_ (all V2n-v)
     - Changing to return structs was not tested due to limitations of the javascript web3 object at the time. See contract _UintAdvancedV2w_ChangeReturn_
     - **Note:** Applications or other smart contracts will need to know about the upgrade to be able to correctly interpret the new return values with the new ABI.
     - **Note:** Normal contracts do not allow for overloading with different return values. The compiler will not issue any warnings when using upgradeable contracts this way. Use with caution.
@@ -155,12 +160,13 @@ You can do the following changes on an upgraded contract and it will behave as i
     - **Note:** Applications or other smart contracts may need to know about the upgrade to be able to correctly interpret new return values of structs with the new ABI.
 17. Change variable value types during an upgrade such as from uint to bool, or bytes32 to uint
     - See contract _ChangeType_
-    - **Note:** The contract will interperate any state stored by the new variable type. Changing state types may cause unexpected results. The compiler will not issue any warnings when using upgradeable contracts this way. Use with caution.
+    - **Note:** The contract will interperate any state stored according to the new variable type. Changing state types may cause unexpected results. The compiler will not issue any warnings when using upgradeable contracts this way. Use with caution.
+    - **Note:** Seriously, use with caution!
     - It looks like standard Solidity casting rules apply. This has not been thoroughly tested.
     - Mapping key and value types can also be changed. See contract _MapSimple_
     - **TODO** test this further
 
-#### 3.3.2 You can't
+#### 3.3.2 You can't :thumbsdown:
 
 You cannot do the following changes on an upgraded contract and expect that it will behave like an updated contract with the same state.
 
@@ -186,9 +192,9 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 * Fix test of Struct changed return value _UintAdvancedV2w_ChangeReturn_
 * Fix test of overloaded functions in _UintAdvancedV2x_Overloaded_
 
-### 3.4 Upgrade safety
+### 3.4 Upgrade safety and protection
 
-Several features were added to the upgradeable mechanism to protect the contract from being upgraded to the wrong contract. A target contract for the proxy must satisfy, at a minimum, the following conditions to be able to call Proxy.upgradeTo():
+Safety features were added to the upgradeable mechanism to protect the contract from being accidentally or maliciousl upgraded to the wrong contract. A target contract for the proxy must satisfy, at a minimum, the following conditions to be able to call Proxy.upgradeTo() to change the target:
 1. Must have a `address target` variable
 2. Must have a `upgradeTo(address) public` function
 3. Must have a `initialize() public` function
@@ -199,6 +205,6 @@ See _CheckUpgradeable_ contracts for test.
 
 ### 3.5 Creating a permissioned (Ownable) proxy upgrade
 
-The proxy upgrade mechanism was combined with the Zepplin [Ownable](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) contract standard to allow for the upgradeTo() function to only be called by the owner. The owner of the proxy can be set as a multisig or DAO-like contract to provide distributed governance.
+The proxy upgrade mechanism was combined with the Zepplin [Ownable](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) contract standard to allow for the upgradeTo() function to only be called by the administrator (owner). The administrator of the proxy can be set as a multisig or DAO-like contract to provide distributed governance.
 
 The permissioned upgradeable contracts can be seen in the [/contracts/ownable](https://github.com/jackandtheblockstalk/upgradeable-proxy/tree/master/contracts/ownable) folder. Please see _UintOwnable_ contract tests for details.
