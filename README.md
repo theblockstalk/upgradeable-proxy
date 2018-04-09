@@ -1,15 +1,15 @@
 # Upgradeable Proxy
 
-This repository tests the proxy upgradeability mechanism. It is a simplified version of the system being used by the
-[AragonOS](https://github.com/aragon/aragonOS), [Level K](https://github.com/levelkdev/master-storage) and [ZepplinOS](https://github.com/zeppelinos/core) systems. The core upgradeability mechanism has been copied and a few features have been removed.
+This repository tests the upgradeable proxy pattern. It is a simplified version of the system being used by the
+[AragonOS](https://github.com/aragon/aragonOS), [Level K](https://github.com/levelkdev/master-storage) and [ZepplinOS](https://github.com/zeppelinos/core) systems. The core upgradeability pattern code has been copied and a few features have been removed.
 
-The results of tests will be summarised here. The contributions of this repository are made for general knowledge only. No contributors are to be held liable for any damages occurred from using code or information from this repository. Do your own thorough testing before deploying any upgradeable smart contract mechanisms.
+The results of tests will be summarised here. The contributions of this repository are made for general knowledge only. No contributors are to be held liable for any damages occurred from using code or information from this repository. Do your own thorough testing before deploying any upgradeable smart contract systems.
 
-That said, there are **over 90 unit tests** in this repository that try to put each different way you could use the proxy upgradeable mechanism to the test. This readme should point to where such different examples of upgrades can be found for developer reference in times of frustration.
+That said, there are **over 90 unit tests** in this repository that try to put each different way you could use the proxy upgradeable pattern to the test. This readme should point to where such different examples of upgrades can be found for developer reference in times of frustration.
 
 ## 1. Getting started
 
-To get up to speed on upgradeable smart contract strategies, please read [Summary of Ethereum Upgradeable Smart Contract R&D](https://blog.indorse.io/ethereum-upgradeable-smart-contract-strategies-456350d0557c).
+To get up to speed on different upgradeable smart contract strategies, please read [Summary of Ethereum Upgradeable Smart Contract R&D](https://blog.indorse.io/ethereum-upgradeable-smart-contract-strategies-456350d0557c).
 
 As noted in the article, **implementing an upgradeable smart contract requires a well thought out governance strategy**. Section 3.5 advises on how this can be done.
 
@@ -25,7 +25,7 @@ truffle test
 
 ### 3.1 The upgrade mechanism
 
-The three main contracts that are used in the upgradeable proxy mechanism are:
+The three main contracts that are used in the upgradeable proxy pattern are:
 1. [Proxied.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Proxied.sol)
 2. [Proxy.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Proxy.sol)
 3. [Upgradeable.sol](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/contracts/Upgradeable.sol)
@@ -34,11 +34,11 @@ Please see in-code contract and function descriptions for how these contracts al
 
 ![Upgradeable](https://github.com/jackandtheblockstalk/upgradeable-proxy/blob/master/diagram1.jpg)
 
-Understanding the [DELEGATECALL](https://ethereum.stackexchange.com/questions/3667/difference-between-call-callcode-and-delegatecall) Ethereum opcode is key to understanding the upgradeable-proxy mechanism.
+Understanding the [DELEGATECALL](https://solidity.readthedocs.io/en/develop/introduction-to-smart-contracts.html#delegatecall-callcode-and-libraries) Ethereum opcode is key to understanding the upgradeable proxy pattern.
 
 ### 3.2 How to make a simple Uint getter/setter smart contract upgradeable
 
-To see the simplest way of implementing an upgradeable smart contract, check out UintSimple.sol and it's test suite.
+To see the simplest way of implementing an upgradeable smart contract, check out _UintSimple.sol_ and it's test suite.
 
 There are several ways to structure a smart contract that will be upgradeable. The following three sections explain these different structures and their characteristics. In each of the structures, it was found that the gas cost increase was the same (~3% or 1100 gas).
 
@@ -56,7 +56,7 @@ contract UintSimpleV1 is Upgradeable {
 }
 ```
 
-The following three contracts achieve the exact same upgrade of the setValue() logic on UintSimpleV1 above.
+The following three contracts achieve the exact same upgrade of the setValue() logic on _UintSimpleV1_ above.
 
 #### 3.2.1 One smart contract containing all desired storage and logic
 See tests for contracts _UintSimple_
@@ -180,6 +180,15 @@ You cannot do the following changes on an upgraded contract and expect that it w
 2. Declare any variables with initialized values `uint variable1 = 8`. This includes declare any constant state variables `uint constant variable1 = 8`.
    - **Note:** state variables must be initialized using the intialize() function.
    - See contract _UintInitialize_
+3. An Upgradeable contract cannot have any of the following, which will conflict with the pattern
+```
+address public target;
+mapping (address => bool) public initialized;
+event EventUpgrade(address, address, address);
+event EventInitialized(address);
+modifier initializeOnceOnly();
+function upgradeTo(address) public;
+```
 
 If you find a way to do any of the above, please send [me](https://twitter.com/theblockstalk) or the team at [Indorse](https://twitter.com/joinindorse) a message, or submit an issue or PR to this repo.
 
@@ -196,7 +205,7 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 
 ### 3.4 Upgrade safety and protection
 
-Safety features were added to the upgradeable mechanism to protect the contract from being accidentally or maliciousl upgraded to the wrong contract. A target contract for the proxy must satisfy, at a minimum, the following conditions to be able to call Proxy.upgradeTo() to change the target:
+Safety features were added to the upgradeable pattern to protect the contract from being accidentally or maliciousl upgraded to the wrong contract. A target contract for the proxy must satisfy, at a minimum, the following conditions to be able to call Proxy.upgradeTo() to change the target:
 1. Must have a `address target` variable
 2. Must have a `upgradeTo(address) public` function
 3. Must have a `initialize() public` function
@@ -207,6 +216,10 @@ See _CheckUpgradeable_ contracts for test.
 
 ### 3.5 Creating a permissioned (Ownable) proxy upgrade
 
-The proxy upgrade mechanism was combined with the Zepplin [Ownable](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) contract standard to allow for the upgradeTo() function to only be called by the administrator (owner). The administrator of the proxy can be set as a multisig or DAO-like contract to provide distributed governance.
+The upgradeable proxy pattern was combined with the Zepplin [Ownable](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) contract standard to allow for the upgradeTo() function to only be called by the administrator (owner). The administrator of the proxy can be set as a multisig or DAO-like contract to provide distributed governance.
 
 The permissioned upgradeable contracts can be seen in the [/contracts/ownable](https://github.com/jackandtheblockstalk/upgradeable-proxy/tree/master/contracts/ownable) folder. Please see _UintOwnable_ contract tests for details.
+
+### 3.6 Solidity compiler compatibility
+
+The upgradeable proxy pattern depends on the internal storage layout smart contracts. This storage ordering is determined by Soliddity and is not part of Solidity's public interface. As such, changes to this layout may happen, which would break an upgrade using the upgradeable proxy pattern. The use of this repository is suggested to check that newer versions of the Solidity compiler do not break this upgrade pattern.
