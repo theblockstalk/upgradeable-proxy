@@ -101,6 +101,7 @@ contract UintInheritedV2 is UintSimpleV1 {
 **Advantages:**
 - Easy to see components that are being upgraded.
 - Forces the same ordering of state variables.
+- Keeps compiler errors on upgrades that are possible but do not make sense (see points 7, 8, 10, 13 of Section 3.1.1 You can below)
 - Cannot see the rest of the contract.
 
 ### 3.3 What you _can and can't do_ when upgrading a contract
