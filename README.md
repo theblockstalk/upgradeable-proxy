@@ -206,20 +206,25 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 
 ### 3.4 Upgrade safety and protection
 
-Safety features were added to the upgradeable pattern to protect the contract from being accidentally or maliciousl upgraded to the wrong contract. A target contract for the proxy must satisfy, at a minimum, the following conditions to be able to call Proxy.upgradeTo() to change the target:
+Experimental safety features were implemented to the upgradeable pattern to protect the contract from being accidentally or maliciousl upgraded to the wrong contract. A target contract for the SafeProxy must satisfy, at a minimum, the following conditions to be able to call Proxy.upgradeTo() to change the target:
 1. Must have a `address target` variable
 2. Must have a `upgradeTo(address) public` function
 3. Must have a `initialize() public` function
 
-**Note:** empty functions that do nothing will satisfy these conditions.
+**Note:**
+* empty functions that do nothing will satisfy these conditions.
+* one of the safety features depends on the use of the EXTCODESIZE opcode which *may not work after the Serenity hard fork*.
+* carefully consider if these safety features are necessary, *onced deployed they cannot be changed*.
 
-See _CheckUpgradeable_ contracts for test.
+The safe upgradeable proxy pattern can be found in [/contracts/safe/](https://github.com/jackandtheblockstalk/upgradeable-proxy/tree/master/contracts/safe). See _UpgraeableCheck_ contracts for test.
 
 ### 3.5 Creating a permissioned (Ownable) proxy upgrade
 
 The upgradeable proxy pattern was combined with the Zepplin [Ownable](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) contract standard to allow for the upgradeTo() function to only be called by the administrator (owner). The administrator of the proxy can be set as a multisig or DAO-like contract to provide distributed governance.
 
 The permissioned upgradeable contracts can be seen in the [/contracts/ownable](https://github.com/jackandtheblockstalk/upgradeable-proxy/tree/master/contracts/ownable) folder. Please see _UintOwnable_ contract tests for details.
+
+If appropriate, the ownable and safe features can be combined.
 
 ### 3.6 Solidity compiler compatibility
 
