@@ -20,6 +20,14 @@ contract SafeProxy is Proxied {
         emit EventUpgrade(_target, oldTarget, msg.sender);
     }
 
+    /*
+     * @notice Performs an upgrade and then executes a transaction. Intended use to upgrade and initialize atomically
+     */
+    function upgradeTo(address _target, bytes _data) public {
+        upgradeTo(_target);
+        assert(target.delegatecall(_data));
+    }
+
     function () payable public {
         bytes memory data = msg.data;
         address impl = target;

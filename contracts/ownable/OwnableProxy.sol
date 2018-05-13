@@ -28,6 +28,14 @@ contract OwnableProxy is OwnableProxied {
     }
 
     /*
+     * @notice Performs an upgrade and then executes a transaction. Intended use to upgrade and initialize atomically
+     */
+    function upgradeTo(address _target, bytes _data) public {
+        upgradeTo(_target);
+        assert(target.delegatecall(_data));
+    }
+
+    /*
      * @notice Fallback function that will execute code from the target contract to process a function call.
      * @dev Will use the delegatecall opcode to retain the current state of the Proxy contract and use the logic
      * from the target contract to process it.

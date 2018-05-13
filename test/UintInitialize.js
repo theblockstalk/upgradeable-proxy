@@ -105,4 +105,55 @@ contract('UintInitialize', function (accounts) {
         assert.equal(value.toNumber(), 222, "value should be what was initialized by UintInitializeV2")
     })
 
+    it('should be able to atomically initialize the contract with upgradeTo()', async function() {
+        let initialized = await uintInitializebyProxy.initialized(uintInitializeV1a_NotInitialized.address);
+        assert(initialized, "target uintInitializeV1a_NotInitialized should be initialized")
+
+        let initializeTx = await uintInitializebyProxy.initialize.request();
+        let initializeData = initializeTx.params[0].data;
+        let initializeSignature = web3.sha3("initialize()").substring(0, 10);;
+        assert.equal(initializeData, initializeSignature, "initialization data does not equal signature")
+
+        initialized = await uintInitializebyProxy.initialized(uintInitializeV1b_Initialized.address);
+        assert(!initialized, "target uintInitializeV1b_Initialized should not be initialized yet")
+        
+        const web3Abi = require('web3-eth-abi');
+        // const web3 = uintInitializebyProxy.web3;
+        const upgradeToOverloadedAbi = {
+          "constant": false,
+          "inputs": [
+            {
+              "name": "_target",
+              "type": "address"
+            },
+            {
+              "name": "_data",
+              "type": "bytes"
+            }
+          ],
+          "name": "upgradeTo",
+          "outputs": [],
+          "payable": false,
+          "stateMutability": "nonpayable",
+          "type": "function"
+        }
+        let upgradeToTransactionData = web3Abi.encodeFunctionCall(upgradeToOverloadedAbi, [uintInitializeV1b_Initialized.address, initializeData]);
+        await web3.eth.sendTransaction({from: accounts[0], to: uintInitializebyProxy.address, data: upgradeToTransactionData, value: 0});
+        // await uintInitializebyProxy.upgradeTo(uintInitializeV1b_Initialized.address, initializeData) // upgrade to 1b
+        initialized = await uintInitializebyProxy.initialized(uintInitializeV1b_Initialized.address);
+        assert(initialized, "target uintInitializeV1b_Initialized should be initialized")
+
+        upgradeToTransactionData = web3Abi.encodeFunctionCall(upgradeToOverloadedAbi, [uintInitializeV1a_NotInitialized.address, initializeData]);
+        try {
+            await web3.eth.sendTransaction({from: accounts[0], to: uintInitializebyProxy.address, data: upgradeToTransactionData, value: 0});
+            // await uintInitializebyProxy.upgradeTo(uintInitializeV1a_NotInitialized.address, initializeData) // revert back to v1a
+            throw new Error("This error should not happen")
+        } catch (error) {
+            assert.equal(error.message, "VM Exception while processing transaction: invalid opcode", "should not be able to initialize again when upgradeing")
+        }
+
+        await uintInitializebyProxy.upgradeTo(uintInitializeV1a_NotInitialized.address) // revert back to v1a
+
+    })
+
 })

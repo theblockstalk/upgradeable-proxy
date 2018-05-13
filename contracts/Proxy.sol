@@ -29,8 +29,16 @@ contract Proxy is Proxied {
 
         address oldTarget = target;
         target = _target;
-        
+
         emit EventUpgrade(_target, oldTarget, msg.sender);
+    }
+
+    /*
+     * @notice Performs an upgrade and then executes a transaction. Intended use to upgrade and initialize atomically
+     */
+    function upgradeTo(address _target, bytes _data) public {
+        upgradeTo(_target);
+        assert(target.delegatecall(_data));
     }
 
     /*
