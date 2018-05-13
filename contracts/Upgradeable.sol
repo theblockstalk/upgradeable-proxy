@@ -23,23 +23,23 @@ contract Upgradeable is Proxied {
         target = address(this);
     }
 
-    /**
-     * @notice Will always fail if called.
-     * @dev This is code is never executed by the Proxy using delegate call
-     */
-    function upgradeTo(address) public {
-        assert(false);
-    }
-
     /*
      * @notice Modifier to make body of function only execute if the contract has not already been initialized.
      */
     modifier initializeOnceOnly() {
         if(!initialized[target]) {
             initialized[target] = true;
-            EventInitialized(target);
+            emit EventInitialized(target);
             _;
         }
+    }
+
+    /**
+     * @notice Will always fail if called.
+     * @dev This is code is never executed by the Proxy using delegate call
+     */
+    function upgradeTo(address) public {
+        assert(false);
     }
 
     /**

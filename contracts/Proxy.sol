@@ -14,7 +14,7 @@ contract Proxy is Proxied {
      * @notice Constructor sets the target and emmits an event with the first target
      * @param _target - The target Upgradeable contracts address
      */
-    function Proxy(address _target) public {
+    constructor(address _target) public {
         upgradeTo(_target);
     }
 
@@ -32,7 +32,7 @@ contract Proxy is Proxied {
         bytes4 initializeSignature = bytes4(keccak256("initialize()"));
         assert(target.delegatecall(initializeSignature));
 
-        EventUpgrade(_target, oldTarget, msg.sender);
+        emit EventUpgrade(_target, oldTarget, msg.sender);
     }
 
     /*

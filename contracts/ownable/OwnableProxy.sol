@@ -4,7 +4,7 @@ import './OwnableProxied.sol';
 import './OwnableUpgradeable.sol';
 
 contract OwnableProxy is OwnableProxied {
-    function OwnableProxy(address _target) public {
+    constructor(address _target) public {
         upgradeTo(_target);
     }
 
@@ -19,7 +19,7 @@ contract OwnableProxy is OwnableProxied {
         bytes4 initializeSignature = bytes4(keccak256("initialize()"));
         assert(target.delegatecall(initializeSignature));
 
-        EventUpgrade(_target, oldTarget, msg.sender);
+        emit EventUpgrade(_target, oldTarget, msg.sender);
     }
 
     function () payable public {
