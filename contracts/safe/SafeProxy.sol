@@ -16,8 +16,6 @@ contract SafeProxy is Proxied {
 
         address oldTarget = target;
         target = _target;
-        bytes4 initializeSignature = bytes4(keccak256("initialize()"));
-        assert(target.delegatecall(initializeSignature));
 
         emit EventUpgrade(_target, oldTarget, msg.sender);
     }
@@ -46,12 +44,12 @@ contract SafeProxy is Proxied {
      */
     function isContract(address _target) internal view returns (bool) {
         uint256 size;
-        assembly { size := extcodesize(_target) } // Note: the EXTCODESIZE will not work after Serenity
+        assembly { size := extcodesize(_target) } // Note: the EXTCODESIZE may not work after Serenity hard fork
         return size > 0;
     }
 
     /*
-     * @notice Checks if the supplied address is a contract the probably inherits from Upgradeable
+     * @notice Checks if the supplied address is a contract that probably inherits from Upgradeable
      * @param _target - The address to be checked
      * @returns true if the target address implements the upgradeTo() function
      */

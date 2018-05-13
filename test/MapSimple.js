@@ -26,6 +26,7 @@ contract('MapSimple', function (accounts) {
         mapSimpleV1byProxy = MapSimpleV1.at(proxy.address);
         mapSimpleV2bbyProxy = MapSimpleV2b.at(proxy.address);
         mapSimpleV2cbyProxy = MapSimpleV2c.at(proxy.address);
+        await mapSimpleV1byProxy.initialize();
     })
 
     it('should be able to upgrade to new map function', async function () {
@@ -34,6 +35,8 @@ contract('MapSimple', function (accounts) {
         assert.equal(value, true, "Not equal to true")
 
         await mapSimpleV1byProxy.upgradeTo(mapSimpleV2.address)
+        await mapSimpleV1byProxy.initialize();
+
         value = await mapSimpleV1byProxy.getValue.call(0)
         assert.equal(value, true, "Not equal to true")
 
@@ -48,6 +51,8 @@ contract('MapSimple', function (accounts) {
         assert.equal(value, true, "Not equal to true")
 
         await mapSimpleV1byProxy.upgradeTo(mapSimpleV2b.address)
+        await mapSimpleV1byProxy.initialize();
+
         value = await mapSimpleV2bbyProxy.getValue.call(0)
         assert.equal(value, true, "Not equal to true")
         value = await mapSimpleV2bbyProxy.getValue.call(0x0000000000000000000000000000000000000000)
@@ -66,6 +71,8 @@ contract('MapSimple', function (accounts) {
         assert.equal(value, true, "Not equal to true")
 
         await mapSimpleV1byProxy.upgradeTo(mapSimpleV2c.address)
+        await mapSimpleV1byProxy.initialize();
+        
         value = await mapSimpleV2cbyProxy.getValue.call(0)
         assert.equal(value.toNumber(), true, "Not equal to 1")
         value = await mapSimpleV2cbyProxy.getValue.call(1)

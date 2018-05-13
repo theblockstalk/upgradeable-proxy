@@ -29,9 +29,7 @@ contract Proxy is Proxied {
 
         address oldTarget = target;
         target = _target;
-        bytes4 initializeSignature = bytes4(keccak256("initialize()"));
-        assert(target.delegatecall(initializeSignature));
-
+        
         emit EventUpgrade(_target, oldTarget, msg.sender);
     }
 

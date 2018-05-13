@@ -29,6 +29,7 @@ contract('UpgradeCheck', function (accounts) {
 
         safeProxy = await SafeProxy.new(upgradeCheck_CanUpgrade.address);
         upgradeCheckbySafeProxy = UpgradeCheck_CanUpgrade.at(safeProxy.address);
+        await upgradeCheckbySafeProxy.initialize();
     })
 
     it('should be able to deploy SafeProxy with upgradeable contract target', async function () {

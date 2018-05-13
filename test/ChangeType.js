@@ -28,6 +28,7 @@ contract('ChangeType', function (accounts) {
         changeType_Bytes32 = await ChangeType_Bytes32.new();
         proxy = await Proxy.new(changeType_Uint.address);
         changeTypebyProxy = ChangeType_Uint.at(proxy.address);
+        await changeTypebyProxy.initialize();
     })
 
     it('should be able to upgrade uint to uint8 with 1', async function () {
@@ -36,7 +37,9 @@ contract('ChangeType', function (accounts) {
         assert.equal(value.toNumber(), 1, "Not equal to 1")
 
         await changeTypebyProxy.upgradeTo(changeType_Uint8.address)
+        await changeTypebyProxy.initialize();
         changeTypebyProxy = ChangeType_Uint8.at(proxy.address);
+
         value = await changeTypebyProxy.getValue.call()
         assert.equal(value.toNumber(), 1, "Not equal to 1")
 
@@ -51,7 +54,9 @@ contract('ChangeType', function (accounts) {
         assert.deepEqual(value, UINT8_MAX, "Not equal to UINT8_MAX")
 
         await changeTypebyProxy.upgradeTo(changeType_Uint8.address)
+        await changeTypebyProxy.initialize();
         changeTypebyProxy = ChangeType_Uint8.at(proxy.address);
+
         value = await changeTypebyProxy.getValue.call()
         assert.deepEqual(value, UINT8_MAX, "Not equal to UINT8_MAX")
     })
@@ -62,7 +67,9 @@ contract('ChangeType', function (accounts) {
         assert.deepEqual(value, UINT256_MAX, "Not equal to UINT256_MAX before upgrade")
 
         await changeTypebyProxy.upgradeTo(changeType_Uint8.address)
+        await changeTypebyProxy.initialize();
         changeTypebyProxy = ChangeType_Uint8.at(proxy.address);
+
         value = await changeTypebyProxy.getValue.call()
         assert.notDeepEqual(value, UINT256_MAX, "Equal to UINT256_MAX after upgrade") // Note that this is not as expected
         assert.deepEqual(value, UINT8_MAX, "Not equal to UINT8_MAX after upgrade")
@@ -74,7 +81,9 @@ contract('ChangeType', function (accounts) {
         assert.equal(value, 1, "Not equal to 1 before upgrade")
 
         await changeTypebyProxy.upgradeTo(changeType_Bool.address)
+        await changeTypebyProxy.initialize();
         changeTypebyProxy = ChangeType_Bool.at(proxy.address);
+
         value = await changeTypebyProxy.getValue.call()
         assert.notStrictEqual(value, 1, "Equal to 1 after upgrade") // Note that this is not as expected
         assert.equal(value, true, "Not equal to true after upgrade")
@@ -86,9 +95,10 @@ contract('ChangeType', function (accounts) {
         assert.equal(value, 0, "Not equal to 0 before upgrade")
 
         await changeTypebyProxy.upgradeTo(changeType_Bool.address)
+        await changeTypebyProxy.initialize();
         changeTypebyProxy = ChangeType_Bool.at(proxy.address);
+
         value = await changeTypebyProxy.getValue.call()
-        console.log(value)
         assert.notStrictEqual(value, 0, "Equal to 0 after upgrade") // Note that this is not as expected
         assert.equal(value, false, "Not equal to false after upgrade")
     })
@@ -99,7 +109,9 @@ contract('ChangeType', function (accounts) {
         assert.deepEqual(value, UINT256_MAX, "Not equal to UINT256_MAX before upgrade")
 
         await changeTypebyProxy.upgradeTo(changeType_Bool.address)
+        await changeTypebyProxy.initialize();
         changeTypebyProxy = ChangeType_Bool.at(proxy.address);
+
         value = await changeTypebyProxy.getValue.call()
         assert.notDeepEqual(value, UINT256_MAX, "Equal to UINT256_MAX after upgrade") // Note that this is not as expected
         assert.deepEqual(value, true, "Not equal to true after upgrade")
@@ -111,7 +123,9 @@ contract('ChangeType', function (accounts) {
         assert.deepEqual(value, UINT256_MAX, "Not equal to UINT256_MAX before upgrade")
 
         await changeTypebyProxy.upgradeTo(changeType_String.address)
+        await changeTypebyProxy.initialize();
         changeTypebyProxy = ChangeType_String.at(proxy.address);
+
         try {
             value = await changeTypebyProxy.getValue.call()
             throw new Error("This error should not happen")
@@ -126,7 +140,9 @@ contract('ChangeType', function (accounts) {
         assert.deepEqual(value, UINT256_MAX, "Not equal to UINT256_MAX before upgrade")
 
         await changeTypebyProxy.upgradeTo(changeType_Bytes32.address)
+        await changeTypebyProxy.initialize();
         changeTypebyProxy = ChangeType_Bytes32.at(proxy.address);
+
         value = await changeTypebyProxy.getValue.call()
         assert.notDeepEqual(value, UINT256_MAX, "Equal to UINT256_MAX after upgrade") // Note that this is not as expected
         assert.deepEqual(value, '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', "Not equal to 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff after upgrade")

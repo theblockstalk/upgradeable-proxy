@@ -4,24 +4,34 @@ import './OwnableProxied.sol';
 import './OwnableUpgradeable.sol';
 
 contract OwnableProxy is OwnableProxied {
+    /*
+     * @notice Constructor sets the target and emmits an event with the first target
+     * @param _target - The target Upgradeable contracts address
+     */
     constructor(address _target) public {
         upgradeTo(_target);
     }
 
-    // onlyOwner moifier has been applied to function
+    /*
+     * @notice Upgrades the contract to a different target that has a changed logic. Can only be called by owner
+     * @dev See https://github.com/jackandtheblockstalk/upgradeable-proxy for what can and cannot be done in Upgradeable
+     * contracts
+     * @param _target - The target Upgradeable contracts address
+     */
     function upgradeTo(address _target) public onlyOwner {
         assert(target != _target);
-        assert(isContract(_target));
-        assert(isUpgradeable(_target));
 
         address oldTarget = target;
         target = _target;
-        bytes4 initializeSignature = bytes4(keccak256("initialize()"));
-        assert(target.delegatecall(initializeSignature));
 
         emit EventUpgrade(_target, oldTarget, msg.sender);
     }
 
+    /*
+     * @notice Fallback function that will execute code from the target contract to process a function call.
+     * @dev Will use the delegatecall opcode to retain the current state of the Proxy contract and use the logic
+     * from the target contract to process it.
+     */
     function () payable public {
         bytes memory data = msg.data;
         address impl = target;
@@ -37,15 +47,5 @@ contract OwnableProxy is OwnableProxied {
             case 0 { revert(ptr, size) }
             default { return(ptr, size) }
         }
-    }
-
-    function isContract(address _target) internal view returns (bool) {
-        uint256 size;
-        assembly { size := extcodesize(_target) }
-        return size > 0;
-    }
-
-    function isUpgradeable(address _target) internal view returns (bool) {
-        return OwnableUpgradeable(_target).call(bytes4(keccak256("upgradeTo(address)")), address(this));
     }
 }

@@ -18,6 +18,7 @@ contract('UintOwnable', function (accounts) {
         uintOwnableV2 = await UintOwnableV2.new();
         ownableProxy = await OwnableProxy.new(uintOwnableV1.address);
         uintOwnableV1byProxy = UintOwnableV1.at(ownableProxy.address);
+        await uintOwnableV1byProxy.initialize();
     })
 
     it('should upgrade the contract UintOwnable to version 2 with different logic', async function () {
@@ -27,6 +28,8 @@ contract('UintOwnable', function (accounts) {
         assert.equal(inputValue, value, "The two values should be the same")
 
         await uintOwnableV1byProxy.upgradeTo(uintOwnableV2.address)
+        await uintOwnableV1byProxy.initialize();
+
         bigNumValue = await uintOwnableV1byProxy.getValue.call()
         value = bigNumValue.toNumber();
         assert.equal(inputValue, value, "The two values should be the same")
@@ -39,7 +42,9 @@ contract('UintOwnable', function (accounts) {
 
     it('should emit EventUpgrade on upgrade', async function () {
         let tx = await uintOwnableV1byProxy.upgradeTo(uintOwnableV2.address)
-        let upgradeLog = tx.logs[1]
+        await uintOwnableV1byProxy.initialize();
+
+        let upgradeLog = tx.logs[0]
         assert.equal(upgradeLog.event, "EventUpgrade", "First log should be EventUpgrade")
         assert.equal(upgradeLog.args.oldTarget, uintOwnableV1.address, "The old target should be the deployed UintOwnableV1 address")
         assert.equal(upgradeLog.args.newTarget, uintOwnableV2.address, "The new target should be the deployed UintOwnableV2 address")
@@ -51,6 +56,7 @@ contract('UintOwnable', function (accounts) {
         assert.equal(ownerAddress, accounts[0], 'The owner of the proxy should be accounts[0]')
 
         await uintOwnableV1byProxy.upgradeTo(uintOwnableV2.address, {from:accounts[0]})
+        await uintOwnableV1byProxy.initialize();
 
         try {
             await uintOwnableV1byProxy.upgradeTo(uintOwnableV1.address, {from:accounts[1]})
@@ -69,6 +75,7 @@ contract('UintOwnable', function (accounts) {
         assert.equal(ownerAddress, accounts[1], 'The owner of the proxy should now be accounts[1]')
 
         await uintOwnableV1byProxy.upgradeTo(uintOwnableV2.address, {from:accounts[1]})
+        await uintOwnableV1byProxy.initialize();
 
         try {
             await uintOwnableV1byProxy.upgradeTo(uintOwnableV1.address, {from:accounts[0]})

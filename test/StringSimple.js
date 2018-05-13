@@ -18,6 +18,7 @@ contract('StringSimple', function (accounts) {
         stringSimpleV2 = await StringSimpleV2.new();
         proxy = await Proxy.new(stringSimpleV1.address);
         stringSimpleV1byProxy = StringSimpleV1.at(proxy.address);
+        await stringSimpleV1byProxy.initialize();
     })
 
     it('should be able to upgrade to new string function', async function () {
@@ -26,6 +27,8 @@ contract('StringSimple', function (accounts) {
         assert.equal(value, inputValue, "Not equal to inptValue")
 
         await stringSimpleV1byProxy.upgradeTo(stringSimpleV2.address)
+        await stringSimpleV1byProxy.initialize();
+        
         value = await stringSimpleV1byProxy.getValue.call()
         assert.equal(value, inputValue, "Not equal to inptValue")
 

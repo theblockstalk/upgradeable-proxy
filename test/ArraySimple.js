@@ -30,6 +30,7 @@ contract('ArraySimple', function (accounts) {
         proxy = await Proxy.new(arraySimpleV1a.address);
         arraySimplebyProxy = ArraySimpleV1a.at(proxy.address);
         arraySimpleV2a_ExtraValuebyProxy = ArraySimpleV2a_ExtraValue.at(proxy.address);
+        await arraySimplebyProxy.initialize();
     })
 
     function parseBigNumberArray(bnArray) {
@@ -45,6 +46,7 @@ contract('ArraySimple', function (accounts) {
         assert.deepEqual(values, inputValues, "Not equal to inputValues")
 
         await arraySimplebyProxy.upgradeTo(arraySimpleV2a.address)
+        await arraySimplebyProxy.initialize();
         values = await arraySimplebyProxy.getValues.call()
         parseBigNumberArray(values)
         assert.deepEqual(values, inputValues, "Not equal to inputValues")
@@ -68,6 +70,7 @@ contract('ArraySimple', function (accounts) {
     it('should not be able to upgrade to function that increases fixed array size', async function () {
         console.log(INDENT, 'Note that smart contract array change arraySimpleV2a_ExtraValue fails!!!')
         await arraySimplebyProxy.upgradeTo(arraySimpleV2a_ExtraValue.address)
+        await arraySimplebyProxy.initialize();
         await arraySimpleV2a_ExtraValuebyProxy.setValues([1, 2, 3, 4]);
 
         let values = await arraySimplebyProxy.getValues.call()
@@ -84,6 +87,8 @@ contract('ArraySimple', function (accounts) {
 
         await arraySimplebyProxy.upgradeTo(arraySimpleV1b.address)
         arraySimpleV1bbyProxy = ArraySimpleV1b.at(proxy.address);
+        await arraySimpleV1bbyProxy.initialize();
+
         values = await arraySimplebyProxy.getValues.call()
         parseBigNumberArray(values)
         assert.notDeepEqual(values, inputValues, "Equal to inputValues") // Note that values are not correct here
@@ -97,12 +102,16 @@ contract('ArraySimple', function (accounts) {
     it('should be able to upgrade a dynamic size array function', async function () {
         proxy = await Proxy.new(arraySimpleV1b.address);
         arraySimpleV1bbyProxy = ArraySimpleV1b.at(proxy.address);
+        await arraySimpleV1bbyProxy.initialize();
+
         await arraySimpleV1bbyProxy.setValues(inputValues)
         let values = await arraySimpleV1bbyProxy.getValues.call()
         parseBigNumberArray(values)
         assert.deepEqual(values, inputValues, "Not equal to inputValues")
 
         await arraySimpleV1bbyProxy.upgradeTo(arraySimpleV2b.address)
+        await arraySimpleV1bbyProxy.initialize();
+
         values = await arraySimpleV1bbyProxy.getValues.call()
         parseBigNumberArray(values)
         assert.deepEqual(values, inputValues, "Not equal to inputValues")
@@ -117,13 +126,17 @@ contract('ArraySimple', function (accounts) {
         console.log(INDENT, 'Note that smart contract array change arraySimpleV1a fails!!!')
         proxy = await Proxy.new(arraySimpleV1b.address);
         arraySimpleV1bbyProxy = ArraySimpleV1b.at(proxy.address);
+        await arraySimpleV1bbyProxy.initialize();
+
         await arraySimpleV1bbyProxy.setValues(inputValues)
         let values = await arraySimpleV1bbyProxy.getValues.call()
         parseBigNumberArray(values)
         assert.deepEqual(values, inputValues, "Not equal to inputValues")
 
         await arraySimpleV1bbyProxy.upgradeTo(arraySimpleV1a.address)
+        await arraySimpleV1bbyProxy.initialize();
         arraySimplebyProxy = ArraySimpleV1a.at(proxy.address);
+
         values = await arraySimplebyProxy.getValues.call()
         parseBigNumberArray(values)
         assert.notDeepEqual(values, inputValues, "Equal to inputValues") // Note that values are not correct here

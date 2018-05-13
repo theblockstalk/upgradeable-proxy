@@ -18,6 +18,7 @@ contract('DoubleUint', function (accounts) {
         doubleUintV2a_NewStorage = await DoubleUintV2a_NewStorage.new();
         proxy = await Proxy.new(doubleUintV1.address);
         doubleUintV1byProxy = DoubleUintV1.at(proxy.address);
+        await doubleUintV1byProxy.initialize();
     })
 
     it('should upgrade the contract DoubleUint to version 2 with variables in reverse order', async function () {
@@ -26,7 +27,8 @@ contract('DoubleUint', function (accounts) {
         await doubleUintV1byProxy.setValue2(inputValue2)
 
         await doubleUintV1byProxy.upgradeTo(doubleUintV2a_NewStorage.address)
-
+        await doubleUintV1byProxy.initialize();
+        
         let bigNumValue = await doubleUintV1byProxy.getValue.call()
         let value = bigNumValue.toNumber();
         assert.notEqual(inputValue, value, "The value should not be equal to inputValue, as expected")

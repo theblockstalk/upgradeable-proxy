@@ -24,6 +24,7 @@ contract('StructSimple', function (accounts) {
         proxy = await Proxy.new(structSimpleV1.address);
         structSimpleV1byProxy = StructSimpleV1.at(proxy.address);
         structSimpleV2bbyProxy = StructSimpleV2b.at(proxy.address);
+        await structSimpleV1byProxy.initialize();
     })
 
     function parseReturnTuple(value) {
@@ -40,6 +41,8 @@ contract('StructSimple', function (accounts) {
         assert.deepEqual(parseReturnTuple(value), [111, true], "Not equal to that supplied")
 
         await structSimpleV1byProxy.upgradeTo(structSimpleV2.address)
+        await structSimpleV1byProxy.initialize();
+
         value = await structSimpleV1byProxy.getValue.call()
         assert.deepEqual(parseReturnTuple(value), [111, true], "Not equal to that initially supplied")
 
@@ -54,6 +57,8 @@ contract('StructSimple', function (accounts) {
         assert.deepEqual(parseReturnTuple(value), [111, true], "Not equal to that supplied")
 
         await structSimpleV1byProxy.upgradeTo(structSimpleV2b.address)
+        await structSimpleV1byProxy.initialize();
+
         value = await structSimpleV2bbyProxy.getValue.call()
         assert.deepEqual(parseReturnTuple(value), [111, true, 0], "Not equal to that initially supplied")
         value = await structSimpleV2bbyProxy.getValue2.call()
@@ -73,6 +78,8 @@ contract('StructSimple', function (accounts) {
         assert.deepEqual(parseReturnTuple(value), [111, true], "Not equal to that supplied")
 
         await structSimpleV1byProxy.upgradeTo(structSimpleV2c.address)
+        await structSimpleV1byProxy.initialize();
+        
         value = await structSimpleV1byProxy.getValue.call()
         assert.notDeepEqual(parseReturnTuple(value), [111, true], "Equal to that initially supplied") // Note that this is not as expected
         assert.deepEqual(parseReturnTuple(value), [1, true], "Not equal to morphed values")

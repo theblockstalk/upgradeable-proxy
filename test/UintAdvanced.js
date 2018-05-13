@@ -126,6 +126,8 @@ contract('UintAdvanced', function (accounts) {
         uintAdvancedV2x_OverloadedbyProxy = UintAdvancedV2x_Overloaded.at(proxy.address);
         uintAdvancedV2y_OverloadedbyProxy = UintAdvancedV2y_Overloaded.at(proxy.address);
 
+        await uintAdvancedV1byProxy.initialize();
+
     })
 
     describe('test adding new functions to the contract', () => {
@@ -133,6 +135,8 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2a_NewFunction.address)
+            await uintAdvancedV1byProxy.initialize();
+
             bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             value = bigNumValue.toNumber();
             assert.equal(inputValue, value, "The two values should be the same")
@@ -152,6 +156,8 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2i_NewFunction.address)
+            await uintAdvancedV1byProxy.initialize();
+
             bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             value = bigNumValue.toNumber();
             assert.equal(inputValue, value, "The two values should be the same")
@@ -173,6 +179,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2b_NewStorage.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
@@ -190,6 +197,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2e_NewStorage.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber()
@@ -200,6 +208,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2f_NewStorage.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber()
@@ -210,6 +219,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2m_NewStorage.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber()
@@ -228,6 +238,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2c_NewEvent.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
@@ -250,6 +261,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2n_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let returnVal = await uintAdvancedV2n_ChangeReturnbyProxy.getValue.call()
             assert.equal(returnVal, "0xffbf5ce297a5456a2f8fec4f5961dd0d898b29a7", "Should return the address string")
@@ -260,6 +272,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2o_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let returnVal = await uintAdvancedV2o_ChangeReturnbyProxy.getValue.call()
             assert.equal(returnVal, "I am a happy string", "Should return the string")
@@ -270,6 +283,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2p_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let returnVal = await uintAdvancedV2p_ChangeReturnbyProxy.getValue.call()
             assert.equal(returnVal, true, "Should return the boolean")
@@ -280,6 +294,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2q_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let returnVal = await uintAdvancedV2q_ChangeReturnbyProxy.getValue.call()
             assert.equal(returnVal, '0x30ed9383ab64b27cb4b70035e743294fe1a1c83eaf57eca05033b523d1fa4261', "Should return the bytes32")
@@ -290,6 +305,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2r_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let returnVal = await uintAdvancedV2r_ChangeReturnbyProxy.getValue.call()
             assert.equal(returnVal.toNumber(), -3, "Should return the integer -3")
@@ -300,6 +316,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2s_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let returnVal = await uintAdvancedV2s_ChangeReturnbyProxy.getValue.call()
             assert.equal(returnVal.toNumber(), 255, "Should return the last uint: 255")
@@ -310,6 +327,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2t_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let [uintValue, stringValue] = await uintAdvancedV2t_ChangeReturnbyProxy.getValue.call()
             assert.equal(uintValue.toNumber(), inputValue, "Should return the inputValue")
@@ -320,6 +338,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2u_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let returnArray = await uintAdvancedV2u_ChangeReturnbyProxy.getValue.call()
             assert.equal(returnArray[0].toNumber(), inputValue, "Should return the inputValue in the first array slot")
@@ -330,6 +349,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2v_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let returnArray = await uintAdvancedV2v_ChangeReturnbyProxy.getValue.call()
             assert.equal(returnArray[0].toNumber(), inputValue, "Should return the inputValue in the first array slot")
@@ -340,6 +360,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2w_ChangeReturn.address)
+            await uintAdvancedV1byProxy.initialize();
 
             // let returnStruct = await uintAdvancedV2w_ChangeReturnbyProxy.getValue.call()
             // console.log(returnStruct)
@@ -353,6 +374,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2d_ReverseFunctionOrder.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
@@ -372,6 +394,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2g_OverrideFunctionGetter.address)
+            await uintAdvancedV1byProxy.initialize();
 
             bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             value = bigNumValue.toNumber();
@@ -382,6 +405,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2h_OverrideFunctionSetter.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
@@ -398,6 +422,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2j_ChangeVisibility.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
@@ -414,6 +439,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2k_ChangeVisibility.address)
+            await uintAdvancedV1byProxy.initialize();
 
             try {
                 await uintAdvancedV1byProxy.setValue(inputValue2)
@@ -434,6 +460,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2l_ChangeKeyword.address)
+            await uintAdvancedV1byProxy.initialize();
 
             let bigNumValue = await uintAdvancedV1byProxy.getValue.call()
             let value = bigNumValue.toNumber();
@@ -448,6 +475,7 @@ contract('UintAdvanced', function (accounts) {
             assert.equal(666, value.toNumber(), "The values should be equal to 666")
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV1.address)
+            await uintAdvancedV1byProxy.initialize();
 
             value = await uintAdvancedV1byProxy.getValue.call()
             assert.equal(inputValue, value.toNumber(), "The values should be equal to inputValue")
@@ -459,6 +487,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2x_Overloaded.address)
+            await uintAdvancedV1byProxy.initialize();
 
             // let value = await uintAdvancedV2x_OverloadedbyProxy.getValue.call()
             // assert.equal(inputValue, value.toNumber(), "The value should be equal to inputValue")
@@ -476,6 +505,7 @@ contract('UintAdvanced', function (accounts) {
             await uintAdvancedV1byProxy.setValue(inputValue)
 
             await uintAdvancedV1byProxy.upgradeTo(uintAdvancedV2y_Overloaded.address)
+            await uintAdvancedV1byProxy.initialize();
 
             try {
                 await uintAdvancedV1byProxy.getValue.call()

@@ -21,6 +21,7 @@ contract('UintEther', function (accounts) {
         uintEther_NotPayable = await UintEther_NotPayable.new();
         proxy = await Proxy.new(uintEther_Normal.address);
         uintEtherbyProxy = UintEther_Payable.at(proxy.address);
+        await uintEtherbyProxy.initialize();
     })
 
     it('should be able to send Ether to payable function in upgradeable contract', async function () {
@@ -40,6 +41,7 @@ contract('UintEther', function (accounts) {
 
     it('should be able to upgrade to function with payable function in upgradeable contract', async function () {
         await uintEtherbyProxy.upgradeTo(uintEther_Payable.address);
+        await uintEtherbyProxy.initialize();
 
         await uintEtherbyProxy.setValue({value:300})
         let value = await uintEtherbyProxy.getValue.call()
@@ -48,6 +50,7 @@ contract('UintEther', function (accounts) {
 
     it('should not be able to send to non-payable function in upgraded contract', async function () {
         await uintEtherbyProxy.upgradeTo(uintEther_NotPayable.address);
+        await uintEtherbyProxy.initialize();
 
         try {
             await uintEtherbyProxy.setValue({value:300})
@@ -60,6 +63,7 @@ contract('UintEther', function (accounts) {
     it('should be able to upgrade from non-payable to payble function', async function () {
         proxy = await Proxy.new(uintEther_NotPayable.address);
         uintEtherbyProxy = UintEther_Payable.at(proxy.address);
+        await uintEtherbyProxy.initialize();
 
         try {
             await uintEtherbyProxy.setValue({value:300})

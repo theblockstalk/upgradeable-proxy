@@ -16,6 +16,7 @@ contract('BoolSimple', function (accounts) {
         boolSimpleV2 = await BoolSimpleV2.new();
         proxy = await Proxy.new(boolSimpleV1.address);
         boolSimpleV1byProxy = BoolSimpleV1.at(proxy.address);
+        await boolSimpleV1byProxy.initialize();
     })
 
     it('should be able to upgrade to new bool function', async function () {
@@ -24,6 +25,8 @@ contract('BoolSimple', function (accounts) {
         assert.equal(value, true, "Not equal to true")
 
         await boolSimpleV1byProxy.upgradeTo(boolSimpleV2.address)
+        await boolSimpleV1byProxy.initialize();
+
         value = await boolSimpleV1byProxy.getValue.call()
         assert.equal(value, true, "Not equal to true")
 

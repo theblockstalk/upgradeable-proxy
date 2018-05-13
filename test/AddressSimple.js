@@ -18,6 +18,8 @@ contract('AddressSimple', function (accounts) {
         addressSimpleV2 = await AddressSimpleV2.new();
         proxy = await Proxy.new(addressSimpleV1.address);
         addressSimpleV1byProxy = AddressSimpleV1.at(proxy.address);
+        await addressSimpleV1byProxy.initialize();
+        target = await addressSimpleV1byProxy.target();
     })
 
     it('should be able to upgrade to new address function', async function () {
@@ -26,6 +28,7 @@ contract('AddressSimple', function (accounts) {
         assert.equal(value, inputValue, "Not equal to inputValue")
 
         await addressSimpleV1byProxy.upgradeTo(addressSimpleV2.address)
+        await addressSimpleV1byProxy.initialize()
         value = await addressSimpleV1byProxy.getValue.call()
         assert.equal(value, inputValue, "Not equal to inputValue")
 

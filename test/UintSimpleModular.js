@@ -18,6 +18,7 @@ contract('UintSimpleModular', function (accounts) {
         uintSimpleModularV2 = await UintSimpleModularV2_Logic.new();
         proxy = await Proxy.new(uintSimpleModularV1.address);
         uintSimpleModular_byProxy = UintSimpleModularV1_Logic.at(proxy.address);
+        await uintSimpleModular_byProxy.initialize();
     })
 
     it('should be able to use UintSimple_V1 like any contract', async function() {
@@ -48,6 +49,8 @@ contract('UintSimpleModular', function (accounts) {
         assert.equal(inputValue, value, "The two values should be the same")
 
         await uintSimpleModular_byProxy.upgradeTo(uintSimpleModularV2.address)
+        await uintSimpleModular_byProxy.initialize();
+
         bigNumValue = await uintSimpleModular_byProxy.getValue.call()
         value = bigNumValue.toNumber();
         assert.equal(inputValue, value, "The two values should be the same")
@@ -60,7 +63,9 @@ contract('UintSimpleModular', function (accounts) {
 
     it('should emit EventUpgrade on upgrade', async function () {
         let tx = await uintSimpleModular_byProxy.upgradeTo(uintSimpleModularV2.address)
-        let upgradeLog = tx.logs[1]
+        await uintSimpleModular_byProxy.initialize();
+
+        let upgradeLog = tx.logs[0]
         assert.equal(upgradeLog.event, "EventUpgrade", "First log should be EventUpgrade")
         assert.equal(upgradeLog.args.oldTarget, uintSimpleModularV1.address, "The old target should be the deployed UintSimpleModularV1_Logic address")
         assert.equal(upgradeLog.args.newTarget, uintSimpleModularV2.address, "The new target should be the deployed UintSimpleModularV2_Logic address")
@@ -75,6 +80,8 @@ contract('UintSimpleModular', function (accounts) {
         gasCosts[1] = tx.receipt.gasUsed
 
         await uintSimpleModular_byProxy.upgradeTo(uintSimpleModularV2.address)
+        await uintSimpleModular_byProxy.initialize();
+        
         tx = await uintSimpleModularV2.setValue(inputValue)
         gasCosts[2] = tx.receipt.gasUsed
         tx = await uintSimpleModular_byProxy.setValue(inputValue)

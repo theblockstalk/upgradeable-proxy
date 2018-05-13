@@ -24,6 +24,7 @@ contract('UintFallback', function (accounts) {
         uintFallbackV4 = await UintFallbackV4.new();
         proxy = await Proxy.new(uintFallbackV1.address);
         uintFallbackbyProxy = UintFallbackV1.at(proxy.address);
+        await uintFallbackbyProxy.initialize();
     })
 
     it('should be able to send upgrade the contract\'s fallback function to set new value', async function () {
@@ -32,6 +33,8 @@ contract('UintFallback', function (accounts) {
         assert.equal(value.toNumber(), 10, "The value should be 10")
 
         await uintFallbackbyProxy.upgradeTo(uintFallbackV2.address)
+        await uintFallbackbyProxy.initialize();
+
         value = await uintFallbackbyProxy.getValue.call()
         assert.equal(value.toNumber(), 10, "The value should be 10")
 
@@ -46,6 +49,8 @@ contract('UintFallback', function (accounts) {
         assert.equal(value.toNumber(), 10, "The value should be 10")
 
         await uintFallbackbyProxy.upgradeTo(uintFallbackV3.address)
+        await uintFallbackbyProxy.initialize();
+
         value = await uintFallbackbyProxy.getValue.call()
         assert.equal(value.toNumber(), 10, "The value should be 10")
 
@@ -69,6 +74,7 @@ contract('UintFallback', function (accounts) {
     it('should be able to pay a payable upgradeable contract\'s fallback function', async function () {
         proxy = await Proxy.new(uintFallbackV4.address);
         uintFallbackbyProxy = UintFallbackV1.at(proxy.address);
+        await uintFallbackbyProxy.initialize();
 
         await web3.eth.sendTransaction({to: uintFallbackbyProxy.address, from: accounts[0], value: 32});
         let value = await uintFallbackbyProxy.getValue.call()
@@ -79,6 +85,7 @@ contract('UintFallback', function (accounts) {
     it('should not be able to pay a non-payable upgradeable contract\'s fallback function after upgraded from a payable one', async function () {
         proxy = await Proxy.new(uintFallbackV4.address);
         uintFallbackbyProxy = UintFallbackV1.at(proxy.address);
+        await uintFallbackbyProxy.initialize();
 
         await uintFallbackbyProxy.upgradeTo(uintFallbackV1.address)
 
@@ -93,6 +100,7 @@ contract('UintFallback', function (accounts) {
 
     it('should be able to pay a payable upgradeable contract\'s fallback function after upgraded from a non-payable one', async function () {
         await uintFallbackbyProxy.upgradeTo(uintFallbackV4.address)
+        await uintFallbackbyProxy.initialize();
 
         await web3.eth.sendTransaction({to: uintFallbackbyProxy.address, from: accounts[0], value: 32});
         let value = await uintFallbackbyProxy.getValue.call()

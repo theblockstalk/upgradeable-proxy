@@ -18,6 +18,7 @@ contract('UintSimple', function (accounts) {
         uintSimpleV2 = await UintSimpleV2.new();
         proxy = await Proxy.new(uintSimpleV1.address);
         uintSimpleV1byProxy = UintSimpleV1.at(proxy.address);
+        await uintSimpleV1byProxy.initialize();
     })
 
     it('should upgrade the contract UintSimple to version 2 with different logic', async function () {
@@ -27,6 +28,8 @@ contract('UintSimple', function (accounts) {
         assert.equal(inputValue, value, "The two values should be the same")
 
         await uintSimpleV1byProxy.upgradeTo(uintSimpleV2.address)
+        await uintSimpleV1byProxy.initialize();
+
         bigNumValue = await uintSimpleV1byProxy.getValue.call()
         value = bigNumValue.toNumber();
         assert.equal(inputValue, value, "The two values should be the same")
@@ -39,7 +42,9 @@ contract('UintSimple', function (accounts) {
 
     it('should emit EventUpgrade on upgrade', async function () {
         let tx = await uintSimpleV1byProxy.upgradeTo(uintSimpleV2.address)
-        let upgradeLog = tx.logs[1]
+        await uintSimpleV1byProxy.initialize();
+
+        let upgradeLog = tx.logs[0]
         assert.equal(upgradeLog.event, "EventUpgrade", "First log should be EventUpgrade")
         assert.equal(upgradeLog.args.oldTarget, uintSimpleV1.address, "The old target should be the deployed UintSimpleV1 address")
         assert.equal(upgradeLog.args.newTarget, uintSimpleV2.address, "The new target should be the deployed UintSimpleV2 address")
@@ -54,6 +59,8 @@ contract('UintSimple', function (accounts) {
         gasCosts[1] = tx.receipt.gasUsed
 
         await uintSimpleV1byProxy.upgradeTo(uintSimpleV2.address)
+        await uintSimpleV1byProxy.initialize();
+
         tx = await uintSimpleV2.setValue(inputValue)
         gasCosts[2] = tx.receipt.gasUsed
         tx = await uintSimpleV1byProxy.setValue(inputValue)

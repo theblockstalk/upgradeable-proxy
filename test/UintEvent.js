@@ -21,6 +21,7 @@ contract('UintEvent', function (accounts) {
         uintEventV2b_EventReordered = await UintEventV2b_EventReordered.new();
         proxy = await Proxy.new(uintEventV1.address);
         uintEventV1byProxy = UintEventV1.at(proxy.address);
+        await uintEventV1byProxy.initialize();
     })
 
     it('should upgrade the contract UintEvent to version 2a with event removed', async function () {
@@ -30,6 +31,7 @@ contract('UintEvent', function (accounts) {
         assert.equal(valueChangedLog.args.newValue.toNumber(), inputValue, "The new value should be inputValue")
 
         await uintEventV1byProxy.upgradeTo(uintEventV2a_RemovedEvent.address)
+        await uintEventV1byProxy.initialize();
 
         tx = await uintEventV1byProxy.setValue(inputValue)
         valueChangedLog = tx.logs[0]
@@ -43,7 +45,8 @@ contract('UintEvent', function (accounts) {
         assert.equal(valueChangedLog.args.newValue.toNumber(), inputValue, "The new value should be inputValue")
 
         await uintEventV1byProxy.upgradeTo(uintEventV2b_EventReordered.address)
-
+        await uintEventV1byProxy.initialize();
+        
         tx = await uintEventV1byProxy.setValue(inputValue)
         valueChangedLog = tx.logs[0]
         assert.equal(valueChangedLog.event, "EventValueChanged", "First log should be EventValueChanged")

@@ -13,7 +13,7 @@ pragma solidity ^0.4.18;
  * @param target - This stores the current address of the target Upgradeable contract, which can be modified by
  * calling upgradeTo()
  *
- * param initialized - This mapping records which targets have been initialized with the Upgradeable.initialize()
+ * @param initialized - This mapping records which targets have been initialized with the Upgradeable.initialize()
  * function. Target Upgradeable contracts can only be intitialed once.
  */
 contract Proxied {
