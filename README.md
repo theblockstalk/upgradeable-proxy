@@ -181,7 +181,10 @@ You cannot do the following changes on an upgraded contract and expect that it w
 2. Declare any variables with initialized values `uint variable1 = 8`. This includes declare any constant state variables `uint constant variable1 = 8`.
    - **Note:** state variables must be initialized using the intialize() function.
    - See contract _UintInitialize_
-3. An Upgradeable contract cannot have any of the following, which will conflict with the pattern
+3. Execute any business logic in the consructor, including setting state or triggering events. These will not appear in the Proxy state or log.
+  - **Note:** state variables must be initialized using the intialize() function.
+  - See contract _UintInitialize_
+4. An Upgradeable contract cannot have any of the following, which will conflict with the pattern
 ```
 address public target;
 mapping (address => bool) public initialized;
@@ -189,6 +192,7 @@ event EventUpgrade(address, address, address);
 event EventInitialized(address);
 modifier initializeOnceOnly();
 function upgradeTo(address) public;
+function upgradeTo(address, bytes) public;
 ```
 
 If you find a way to do any of the above, please send [me](https://twitter.com/theblockstalk) or the team at [Indorse](https://twitter.com/joinindorse) a message, or submit an issue or PR to this repo.
@@ -208,7 +212,9 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 As per point 2 in Section 3.3.2 You can't, contract initialization is not done during deployment as normal. As such a special initialize() function has been built to allow for variable initialization as needed. To initialize the conract:
 1. Overload the Upgradeable.initialize() function with the required variable setters. Alternatively, if arguments need to be provided during initialization, then you can create an overloaded initialize function with arguments e.g. initialize(uint). If this is the case you should overload the initialize() and make this function revert: this ensures it cannot be accidentally called. Make sure that any initialization function uses the initializeOnceOnly modifier.
 2. After deploying the contract, call the initializer.
-3. After upgrading the contract with upgradeTo(address), call the initializer. Alternatively, to call upgradeTo and initialize atomically, get the message data needed to call the initialize() function and pass it as a second argument in the overloaded function upgradeTo(address, bytes)
+3. After upgrading the contract with upgradeTo(address), call the initializer. Alternatively, to call upgradeTo and initialize atomically, get the message data needed to call the initialize() function and pass it as a second argument in the overloaded function upgradeTo(address, bytes).
+
+See _UintInitialize.js_ tests for examples.
 
 ### 3.5 Upgrade safety and protection
 
