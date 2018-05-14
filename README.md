@@ -98,7 +98,7 @@ contract UintInheritedV2 is UintSimpleV1 {
 }
 ```
 
-**Advantages:**
+**Characteristics:**
 - Easy to see components that are being upgraded.
 - Forces the same ordering of state variables.
 - Keeps compiler errors on upgrades that are possible but do not make sense (see points 7, 8, 10, 13 of Section 3.1.1 You can below)
@@ -198,18 +198,23 @@ If you find a way to do any of the above, please send [me](https://twitter.com/t
 **TODO:**
 * test using libraries
 * test bytecode optimizations
-* do a spellcheck of this readme.
 
 **TODO when web3 is updated:**
 * Fix test of Struct changed return value _UintAdvancedV2w_ChangeReturn_
 * Fix test of overloaded functions in _UintAdvancedV2x_Overloaded_
 
-### 3.4 Upgrade safety and protection
+### 3.4 initialization
+
+As per point 2 in Section 3.3.2 You can't, contract initialization is not done during deployment as normal. As such a special initialize() function has been built to allow for variable initialization as needed. To initialize the conract:
+1. Overload the Upgradeable.initialize() function with the required variable setters. Alternatively, if arguments need to be provided during initialization, then you can create an overloaded initialize function with arguments e.g. initialize(uint). If this is the case you should overload the initialize() and make this function revert: this ensures it cannot be accidentally called. Make sure that any initialization function uses the initializeOnceOnly modifier.
+2. After deploying the contract, call the initializer.
+3. After upgrading the contract with upgradeTo(address), call the initializer. Alternatively, to call upgradeTo and initialize atomically, get the message data needed to call the initialize() function and pass it as a second argument in the overloaded function upgradeTo(address, bytes)
+
+### 3.5 Upgrade safety and protection
 
 Experimental safety features were implemented to the upgradeable pattern to protect the contract from being accidentally or maliciousl upgraded to the wrong contract. A target contract for the SafeProxy must satisfy, at a minimum, the following conditions to be able to call Proxy.upgradeTo() to change the target:
 1. Must have a `address target` variable
 2. Must have a `upgradeTo(address) public` function
-3. Must have a `initialize() public` function
 
 **Note:**
 * empty functions that do nothing will satisfy these conditions.
@@ -218,7 +223,7 @@ Experimental safety features were implemented to the upgradeable pattern to prot
 
 The safe upgradeable proxy pattern can be found in [/contracts/safe/](https://github.com/jackandtheblockstalk/upgradeable-proxy/tree/master/contracts/safe). See _UpgraeableCheck_ contracts for test.
 
-### 3.5 Creating a permissioned (Ownable) proxy upgrade
+### 3.6 Creating a permissioned (Ownable) proxy upgrade
 
 The upgradeable proxy pattern was combined with the Zepplin [Ownable](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/ownership/Ownable.sol) contract standard to allow for the upgradeTo() function to only be called by the administrator (owner). The administrator of the proxy can be set as a multisig or DAO-like contract to provide distributed governance.
 

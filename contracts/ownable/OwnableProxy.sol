@@ -30,7 +30,7 @@ contract OwnableProxy is OwnableProxied {
     /*
      * @notice Performs an upgrade and then executes a transaction. Intended use to upgrade and initialize atomically
      */
-    function upgradeTo(address _target, bytes _data) public {
+    function upgradeTo(address _target, bytes _data) public onlyOwner {
         upgradeTo(_target);
         assert(target.delegatecall(_data));
     }

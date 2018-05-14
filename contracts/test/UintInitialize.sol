@@ -18,9 +18,7 @@ contract UintInitializeV1b_Initialized is Upgradeable {
     }
 
     function initialize() initializeOnceOnly public {
-        /*if(initializeUpgradeable(target)) {*/
-            value = 111;
-        /*}*/
+        value = 111;
     }
 }
 
@@ -32,8 +30,22 @@ contract UintInitializeV2 is Upgradeable {
     }
 
     function initialize() initializeOnceOnly public {
-        /*if(initializeUpgradeable(target)) {*/
-            value = 222;
-        /*}*/
+        value = 222;
+    }
+}
+
+contract UintInitializeV3 is Upgradeable {
+    uint value;
+
+    function getValue() view public returns (uint) {
+        return value;
+    }
+
+    function initialize() initializeOnceOnly public {
+        revert(); // Should overloade this inherited function to prevent accidental execution which would then block initialize(uint) from executing
+    }
+
+    function initialize(uint _value) initializeOnceOnly public {
+        value = _value;
     }
 }
