@@ -18,6 +18,7 @@ As noted in the article, **implementing an upgradeable smart contract requires a
 ```
 git clone https://github.com/jackandtheblockstalk/upgradeable-proxy
 cd upgradeable-proxy
+npm install
 truffle test
 ```
 
