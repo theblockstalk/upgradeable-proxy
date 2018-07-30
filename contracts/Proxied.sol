@@ -17,11 +17,13 @@ pragma solidity ^0.4.18;
  * function. Target Upgradeable contracts can only be intitialed once.
  */
 contract Proxied {
-  address public target;
-  mapping (address => bool) public initialized;
+  /*address public target;*/
+  /*mapping (address => bool) public initialized;*/
 
   event EventUpgrade(address indexed newTarget, address indexed oldTarget, address indexed admin);
-  event EventInitialized(address indexed target);
+  /*event EventInitialized(address indexed target);*/
+
+  function target() public view returns (address);
 
   function upgradeTo(address _target) public;
 }

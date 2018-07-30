@@ -10,7 +10,7 @@ contract SafeUpgradeable is Upgradeable {
      * Do not remove or change this functionality without adequate changese to SafeProxy.isUpgradeable()
      */
     constructor() public {
-        target = address(this);
+        /*target = address(this);*/
     }
 
     /**

@@ -9,9 +9,8 @@ import './Upgradeable.sol';
  * @notice The Proxy contract forwards all calls to a target with delegate call and thus create an upgradeable
  * stateful contract
  */
-contract Proxy {
+contract Proxy is Proxied {
 
-    event EventUpgrade(address indexed newTarget, address indexed oldTarget, address indexed admin);
     bytes32 private constant TARGET_SLOT = 0x7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c3;
 
     function target() public view returns (address targ) {

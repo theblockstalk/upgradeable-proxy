@@ -5,40 +5,63 @@ import './SafeUpgradeable.sol';
 
 contract SafeProxy is Proxied {
 
+    bytes32 private constant TARGET_SLOT = 0x7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c3;
+
+    function target() public view returns (address targ) {
+        bytes32 slot = TARGET_SLOT;
+        assembly {
+          targ := sload(slot)
+        }
+    }
+
+    function setTarget(address _target) private {
+        bytes32 slot = TARGET_SLOT;
+        assembly {
+          sstore(slot, _target)
+        }
+    }
+
     constructor(address _target) public {
         upgradeTo(_target);
     }
 
     function upgradeTo(address _target) public {
-        assert(target != _target);
+        address oldTarget = target();
+
+        assert(oldTarget != _target);
         assert(isContract(_target));
         assert(isUpgradeable(_target));
 
-        address oldTarget = target;
-        target = _target;
+        setTarget(_target);
 
         emit EventUpgrade(_target, oldTarget, msg.sender);
     }
 
     function upgradeTo(address _target, bytes _data) public {
         upgradeTo(_target);
-        assert(target.delegatecall(_data));
+        assert(_target.delegatecall(_data));
     }
 
     function () payable public {
-        bytes memory data = msg.data;
-        address impl = target;
+        address targetAddress = target();
 
         assembly {
-            let result := delegatecall(gas, impl, add(data, 0x20), mload(data), 0, 0)
-            let size := returndatasize
+            // Copy msg.data. We take full control of memory in this inline assembly
+            // block because it will not return to Solidity code. We overwrite the
+            // Solidity scratch pad at memory position 0.
+            calldatacopy(0, 0, calldatasize)
 
-            let ptr := mload(0x40)
-            returndatacopy(ptr, 0, size)
+            // Call the implementation.
+            // out and outsize are 0 because we don't know the size yet.
+            let result := delegatecall(gas, targetAddress, 0, calldatasize, 0, 0)
+
+            // Copy the returned data.
+            returndatacopy(0, 0, returndatasize)
 
             switch result
-            case 0 { revert(ptr, size) }
-            default { return(ptr, size) }
+            // delegatecall returns 0 on error.
+            case 0 { revert(0, returndatasize) }
+            default { return(0, returndatasize) }
         }
     }
 
@@ -59,7 +82,7 @@ contract SafeProxy is Proxied {
      * @returns true if the target address implements the upgradeTo() function
      */
     function isUpgradeable(address _target) internal view returns (bool) {
-        return SafeUpgradeable(_target).call(bytes4(keccak256("upgradeTo(address)")), address(this));
+        return _target.call(bytes4(keccak256("upgradeTo(address)")), address(this));
     }
 
 }

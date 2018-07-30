@@ -12,13 +12,15 @@ import './Proxied.sol';
  * any state variables, can be upgraded by calling Proxy.upgradeTo(address)
  */
 contract Upgradeable is Proxied {
+    mapping (address => bool) public initialized;
+    event EventInitialized(address indexed target);
     /*
      * @notice Modifier to make body of function only execute if the contract has not already been initialized.
      */
     modifier initializeOnceOnly() {
-        if(!initialized[target]) {
-            initialized[target] = true;
-            emit EventInitialized(target);
+        if(!initialized[target()]) {
+            initialized[target()] = true;
+            emit EventInitialized(target());
             _;
         } else revert();
     }
