@@ -9,12 +9,31 @@ import './Upgradeable.sol';
  * @notice The Proxy contract forwards all calls to a target with delegate call and thus create an upgradeable
  * stateful contract
  */
-contract Proxy is Proxied {
+contract Proxy {
+
+    event EventUpgrade(address indexed newTarget, address indexed oldTarget, address indexed admin);
+    bytes32 private constant TARGET_SLOT = 0x7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c3;
+
+    function target() public view returns (address targ) {
+        bytes32 slot = TARGET_SLOT;
+        assembly {
+          targ := sload(slot)
+        }
+    }
+
+    function setTarget(address _target) private {
+        bytes32 slot = TARGET_SLOT;
+        assembly {
+          sstore(slot, _target)
+        }
+    }
+
     /*
      * @notice Constructor sets the target and emmits an event with the first target
      * @param _target - The target Upgradeable contracts address
      */
     constructor(address _target) public {
+        assert(TARGET_SLOT == keccak256("org.zeppelinos.proxy.implementation"));
         upgradeTo(_target);
     }
 
@@ -25,10 +44,10 @@ contract Proxy is Proxied {
      * @param _target - The target Upgradeable contracts address
      */
     function upgradeTo(address _target) public {
-        assert(target != _target);
+        address oldTarget = target();
+        assert(oldTarget != _target);
 
-        address oldTarget = target;
-        target = _target;
+        setTarget(_target);
 
         emit EventUpgrade(_target, oldTarget, msg.sender);
     }
@@ -36,9 +55,9 @@ contract Proxy is Proxied {
     /*
      * @notice Performs an upgrade and then executes a transaction. Intended use to upgrade and initialize atomically
      */
-    function upgradeTo(address _target, bytes _data) public {
+    function upgradeToAndCall(address _target, bytes _data) public {
         upgradeTo(_target);
-        assert(target.delegatecall(_data));
+        assert(_target.delegatecall(_data));
     }
 
     /*
@@ -47,19 +66,25 @@ contract Proxy is Proxied {
      * from the target contract to process it.
      */
     function () payable public {
-        bytes memory data = msg.data;
-        address impl = target;
+        address targetAddress = target();
 
         assembly {
-            let result := delegatecall(gas, impl, add(data, 0x20), mload(data), 0, 0)
-            let size := returndatasize
+            // Copy msg.data. We take full control of memory in this inline assembly
+            // block because it will not return to Solidity code. We overwrite the
+            // Solidity scratch pad at memory position 0.
+            calldatacopy(0, 0, calldatasize)
 
-            let ptr := mload(0x40)
-            returndatacopy(ptr, 0, size)
+            // Call the implementation.
+            // out and outsize are 0 because we don't know the size yet.
+            let result := delegatecall(gas, targetAddress, 0, calldatasize, 0, 0)
+
+            // Copy the returned data.
+            returndatacopy(0, 0, returndatasize)
 
             switch result
-            case 0 { revert(ptr, size) }
-            default { return(ptr, size) }
+            // delegatecall returns 0 on error.
+            case 0 { revert(0, returndatasize) }
+            default { return(0, returndatasize) }
         }
     }
 }
